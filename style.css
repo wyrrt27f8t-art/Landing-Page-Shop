@@ -257,24 +257,6 @@ a {
   color: var(--text-muted);
 }
 
-.form-note a {
-  color: var(--accent);
-}
-
-.legal ul {
-  color: var(--text-muted);
-  padding-left: 1.1rem;
-  margin-top: 0.6rem;
-}
-
-.legal li {
-  margin-bottom: 0.7rem;
-}
-
-.legal strong {
-  color: var(--text);
-  font-weight: 600;
-}
 
 .form-status {
   font-size: 0.9rem;
