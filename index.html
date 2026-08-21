@@ -3,24 +3,103 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Landing Page Shop</title>
+  <title>MAFO CAR — Der edle Dog Travel Organizer fürs Auto</title>
+  <meta name="description" content="MAFO CAR: der edle Dog Travel Organizer fürs Auto. Griffbereit, stilvoll, gemacht für unterwegs. Jetzt unverbindlich vorbestellen.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header class="hero">
-    <h1>Willkommen in unserem Shop</h1>
-    <p>Entdecke unsere Produkte und werde Teil unserer Community. Trag dich unten ein, um auf dem Laufenden zu bleiben.</p>
+
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <span class="wordmark">MAFO</span>
+      <a class="topbar-cta" href="#reservieren">Vorbestellen</a>
+    </div>
   </header>
 
   <main>
-    <section class="form-placeholder">
-      <!-- TODO: Formular einbinden (z.B. Newsletter-Anmeldung oder Kontaktformular) -->
-      <p>Hier kommt bald ein Formular hin.</p>
+    <!-- Hero -->
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <p class="kicker">MAFO CAR — Dog Travel Organizer</p>
+          <h1>Ordnung fürs Auto.<br>Stil fürs Leben.</h1>
+          <p class="lead">Der edle Travel Organizer, der mit deinem Hund reist – griffbereit, durchdacht und gemacht für jede Fahrt.</p>
+          <a class="btn btn-primary" href="#reservieren">Reserviere dir dein Exemplar</a>
+        </div>
+        <div class="hero-media">
+          <div class="media-placeholder" aria-label="Produktbild folgt">
+            <span>Produktbild folgt</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features" id="features">
+      <div class="wrap">
+        <h2>Warum MAFO CAR</h2>
+        <div class="feature-grid">
+          <article class="feature-card">
+            <h3>Edel verarbeitet</h3>
+            <p>Hochwertige Materialien und saubere Nähte für ein zeitloses Erscheinungsbild in deinem Auto.</p>
+          </article>
+          <article class="feature-card">
+            <h3>Durchdacht organisiert</h3>
+            <p>Fächer für Leine, Näpfe, Snacks, Kotbeutel und Zubehör – alles an seinem Platz, alles griffbereit.</p>
+          </article>
+          <article class="feature-card">
+            <h3>Für unterwegs gemacht</h3>
+            <p>Sicher befestigt, robust und wetterfest – bereit für jeden Ausflug mit deinem Hund.</p>
+          </article>
+          <article class="feature-card">
+            <h3>Swiss Design</h3>
+            <p>Entwickelt in der Schweiz, mit Liebe zum Detail – für Hundebesitzer, die Qualität schätzen.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Preorder -->
+    <section class="preorder" id="reservieren">
+      <div class="wrap preorder-inner">
+        <h2>Reserviere dein MAFO CAR</h2>
+        <p class="lead">Sichere dir unverbindlich deinen Platz in der ersten Serie. Keine Zahlung nötig – wir melden uns, sobald es losgeht.</p>
+
+        <form id="preorder-form" class="preorder-form" novalidate>
+          <div class="field">
+            <label for="name">Name</label>
+            <input id="name" name="name" type="text" autocomplete="name" required>
+          </div>
+          <div class="field">
+            <label for="email">E-Mail-Adresse</label>
+            <input id="email" name="email" type="email" autocomplete="email" required>
+          </div>
+
+          <!-- Honeypot gegen Spam-Bots, für Menschen unsichtbar -->
+          <div class="field field-hidden" aria-hidden="true">
+            <label for="company">Firma</label>
+            <input id="company" name="company" type="text" tabindex="-1" autocomplete="off">
+          </div>
+
+          <button class="btn btn-primary" type="submit">Reserviere dir dein Exemplar</button>
+
+          <p class="form-note">Mit dem Absenden erklärst du dich einverstanden, dass wir dich per E-Mail zu MAFO CAR kontaktieren.</p>
+          <p id="form-status" class="form-status" role="status" aria-live="polite"></p>
+        </form>
+      </div>
     </section>
   </main>
 
-  <footer>
-    <p>&copy; 2026 Landing Page Shop</p>
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <span>© 2026 MAFO, Schweiz</span>
+      <a href="mailto:info@mafo-pet.ch">info@mafo-pet.ch</a>
+    </div>
   </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
