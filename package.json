@@ -2,6 +2,7 @@
   "name": "mafo-car-landing",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "description": "Landingpage für MAFO CAR – Dog Travel Organizer fürs Auto",
   "engines": {
     "node": ">=18"
