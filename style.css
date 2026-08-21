@@ -304,6 +304,35 @@ a {
   text-decoration: underline;
 }
 
+.legal ul {
+  color: var(--text-muted);
+  padding-left: 1.1rem;
+  margin-top: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.legal li {
+  margin-bottom: 0.7rem;
+}
+
+.legal strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.legal p + p {
+  margin-top: 0.9rem;
+}
+
+.legal-meta {
+  font-size: 0.85rem;
+  margin-top: 0.75rem;
+}
+
+.form-note a {
+  color: var(--accent);
+}
+
 .legal-back {
   margin-top: 3rem;
   padding-top: 1.5rem;
