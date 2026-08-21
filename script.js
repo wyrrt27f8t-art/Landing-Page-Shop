@@ -37,7 +37,7 @@ form.addEventListener("submit", async (event) => {
     }
 
     form.reset();
-    status.textContent = "Danke! Deine Reservierung ist bei uns eingegangen.";
+    status.textContent = "Schön, bist du dabei! Dein Exemplar ist reserviert – wir melden uns bei dir, sobald MAFO CAR bereit für die erste Fahrt ist.";
     status.setAttribute("data-state", "success");
   } catch (error) {
     status.textContent = "Da ist etwas schiefgelaufen. Bitte versuch es später nochmal oder schreib uns direkt an info@mafo-pet.ch.";
