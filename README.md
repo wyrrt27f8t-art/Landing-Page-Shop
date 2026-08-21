@@ -25,17 +25,38 @@ vercel dev
 
 Vorher `.env.example` nach `.env.local` kopieren und `RESEND_API_KEY` eintragen.
 
-## E-Mail-Versand einrichten (Resend)
+## E-Mail-Versand (Resend)
 
-1. Account auf [resend.com](https://resend.com) anlegen (kostenloser Plan reicht zum Start).
-2. API-Key erstellen und in Vercel als Environment Variable `RESEND_API_KEY` hinterlegen
-   (Project Settings → Environment Variables).
-3. Optional, aber empfohlen: Domain `mafo-pet.ch` in Resend verifizieren (DNS-Einträge
-   dort werden angezeigt), danach `MAFO_FROM_EMAIL` auf z.B.
-   `MAFO CAR <noreply@mafo-pet.ch>` setzen. Bis dahin funktioniert der Versand bereits
-   über die Resend-Test-Adresse `onboarding@resend.dev`.
-4. `MAFO_TO_EMAIL` ist standardmässig `info@mafo-pet.ch` — nur setzen, falls das
-   Empfänger-Postfach abweichen soll.
+Der Versand läuft über Resend, die Domain `mafo-pet.ch` ist dort verifiziert
+(Region EU/Irland). Gesendet wird von `noreply@mafo-pet.ch`, Empfänger ist
+`info@mafo-pet.ch`.
+
+Environment Variables in Vercel (Settings → Environments → Production):
+
+| Variable | Wert |
+| --- | --- |
+| `RESEND_API_KEY` | API-Key aus dem Resend-Dashboard |
+| `MAFO_FROM_EMAIL` | `MAFO CAR <noreply@mafo-pet.ch>` |
+| `MAFO_TO_EMAIL` | `info@mafo-pet.ch` |
+
+Änderungen an diesen Variablen greifen erst nach einem Redeploy.
+
+### DNS-Setup
+
+Die DNS-Zone von `mafo-pet.ch` liegt bei **Infomaniak** (`ns11/ns12.infomaniak.ch`),
+nicht bei Vercel. Für die Resend-Verifizierung sind dort drei Einträge angelegt:
+
+| Typ | Name | Wert |
+| --- | --- | --- |
+| TXT | `resend._domainkey` | DKIM-Public-Key (`p=MIGf…`) |
+| CNAME | `rsend` | `rsend.forge.rmta.net` |
+| CNAME | `send` | `send.forge.rmta.net` |
+
+Der Mail-Empfang läuft weiterhin über Infomaniak. Der MX-Eintrag
+`mta-gw.infomaniak.ch` und der SPF-Eintrag `v=spf1 include:spf.infomaniak.ch -all`
+dürfen deshalb nicht verändert oder überschrieben werden — sonst kommen bei
+`info@mafo-pet.ch` keine Mails mehr an. Aus demselben Grund bleibt „Enable
+Receiving" in Resend ausgeschaltet.
 
 ## Deployment mit Vercel (automatisch bei jedem Push)
 
