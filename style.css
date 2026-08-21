@@ -270,6 +270,45 @@ a {
   color: #d98c6a;
 }
 
+/* Rechtsseiten */
+.legal {
+  padding: 3.5rem 0 4.5rem;
+}
+
+.legal-inner {
+  max-width: 42rem;
+}
+
+.legal h1 {
+  font-size: clamp(2rem, 4vw, 2.6rem);
+  margin-bottom: 2.5rem;
+}
+
+.legal h2 {
+  font-size: 1.1rem;
+  color: var(--accent);
+  margin: 2.25rem 0 0.6rem;
+}
+
+.legal p {
+  color: var(--text-muted);
+}
+
+.legal a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.legal a:hover {
+  text-decoration: underline;
+}
+
+.legal-back {
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
 /* Footer */
 .footer {
   border-top: 1px solid var(--border);
@@ -282,6 +321,11 @@ a {
   gap: 0.5rem;
   font-size: 0.85rem;
   color: var(--text-muted);
+}
+
+.footer-links {
+  display: flex;
+  gap: 1.25rem;
 }
 
 .footer-inner a {
