@@ -33,6 +33,21 @@
         <h2>Kontakt</h2>
         <p>E-Mail: <a href="mailto:info@mafo-pet.ch">info@mafo-pet.ch</a></p>
 
+        <h2>Standort</h2>
+        <div class="map" id="map">
+          <div class="map-prompt">
+            <p>
+              Die Karte wird von Google bereitgestellt. Beim Laden wird deine
+              IP-Adresse an Google übermittelt.
+            </p>
+            <button class="btn btn-secondary" type="button" id="map-load">Karte laden</button>
+            <p class="map-alt">
+              <a href="https://www.google.com/maps/search/?api=1&amp;query=Ausserdorfstrasse+22%2C+8918+Unterlunkhofen%2C+Schweiz"
+                 target="_blank" rel="noopener noreferrer">Stattdessen in Google Maps öffnen</a>
+            </p>
+          </div>
+        </div>
+
         <h2>Haftung für Inhalte</h2>
         <p>
           Die Inhalte dieser Seite werden mit Sorgfalt erstellt. Für Richtigkeit,
@@ -62,6 +77,19 @@
       </nav>
     </div>
   </footer>
+
+  <script>
+    // Karte erst auf Klick nachladen – vorher geht keine Anfrage an Google.
+    document.getElementById("map-load").addEventListener("click", () => {
+      const frame = document.createElement("iframe");
+      frame.src = "https://www.google.com/maps?q=Ausserdorfstrasse%2022%2C%208918%20Unterlunkhofen%2C%20Schweiz&output=embed";
+      frame.title = "Standort Mafo Pet auf Google Maps";
+      frame.loading = "lazy";
+      frame.referrerPolicy = "no-referrer-when-downgrade";
+      frame.allowFullscreen = true;
+      document.getElementById("map").replaceChildren(frame);
+    });
+  </script>
 
 </body>
 </html>
