@@ -1,6 +1,6 @@
 # MAFO CAR — Landingpage
 
-Landingpage für **MAFO CAR**, den edlen Dog Travel Organizer fürs Auto (Marke MAFO, Schweiz).
+Landingpage für **MAFO CAR**, den praktischen Dog Travel Organizer fürs Auto (Marke MAFO, Schweiz).
 
 ## Struktur
 
