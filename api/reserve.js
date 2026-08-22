@@ -130,8 +130,9 @@ function bestaetigungsText({ cleanName, cleanProdukt }) {
         eingegangen. Wir haben deinen Platz in der ersten Serie notiert.
       </p>
       <p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:#d5cbba;">
-        Du hörst wieder von uns, sobald es losgeht – mit Preis, Liefertermin und der
-        Möglichkeit, verbindlich zu bestellen. Bis dahin musst du nichts tun.
+        Verfügbar ist ${escapeHtml(produktSatz)} ab <strong style="color:#f3ede1;">Herbst 2026</strong>.
+        Wir melden uns rechtzeitig vorher bei dir – dann kannst du verbindlich bestellen.
+        Bis dahin musst du nichts tun.
       </p>
       <div style="margin:24px 0;padding:14px 16px;background:#221c14;border-radius:8px;">
         <p style="margin:0;font-size:13px;line-height:1.6;color:#ab9f8c;">
