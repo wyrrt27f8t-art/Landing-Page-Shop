@@ -27,7 +27,9 @@ export default async function handler(request, response) {
 
   const apiKey = process.env.RESEND_API_KEY;
   const toEmail = process.env.MAFO_TO_EMAIL || "info@mafo-pet.ch";
-  const fromEmail = process.env.MAFO_FROM_EMAIL || "MAFO CAR <onboarding@resend.dev>";
+  // Aus der Variablen zählt nur die Adresse. Der angezeigte Absendername gehört
+  // zur Marke und soll für beide Produkte gleich sein, deshalb steht er hier.
+  const fromEmail = `MAFO <${absenderAdresse()}>`;
 
   if (!apiKey) {
     console.error("RESEND_API_KEY ist nicht gesetzt.");
@@ -71,6 +73,13 @@ export default async function handler(request, response) {
     console.error("Unerwarteter Fehler beim Senden:", error);
     return response.status(500).json({ error: "Unerwarteter Fehler." });
   }
+}
+
+// Akzeptiert "Name <adresse>" ebenso wie eine blosse Adresse.
+function absenderAdresse() {
+  const roh = (process.env.MAFO_FROM_EMAIL || "noreply@mafo-pet.ch").trim();
+  const inKlammern = roh.match(/<([^>]+)>/);
+  return (inKlammern ? inKlammern[1] : roh).trim();
 }
 
 async function sendeMail(apiKey, payload) {
