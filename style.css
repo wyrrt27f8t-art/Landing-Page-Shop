@@ -185,6 +185,10 @@ a {
   .hero-video {
     background: url("media/hero-poster.jpg") center / cover no-repeat;
   }
+
+  .hero-video-walk {
+    background-image: url("media/walk-poster.jpg");
+  }
 }
 
 .hero-grid {
