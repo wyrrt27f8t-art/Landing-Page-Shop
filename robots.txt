@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://mafo-pet.ch/sitemap.xml
