@@ -132,7 +132,7 @@ function bestaetigungsText({ cleanName, cleanProdukt }) {
         </p>
       </div>
       <p style="margin:0;font-size:15px;line-height:1.6;color:#d5cbba;">
-        Herzlich<br>MAFO
+        Herzlich<br>Dein MAFO Team
       </p>
     </div>
   </div>
