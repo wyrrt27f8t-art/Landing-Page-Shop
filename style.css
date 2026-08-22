@@ -119,6 +119,15 @@ a {
   margin-bottom: 2rem;
 }
 
+.hero-media img,
+.product-media img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 1rem;
+  border: 1px solid var(--border);
+}
+
 .media-placeholder {
   aspect-ratio: 4 / 3;
   border: 1px dashed var(--border);
@@ -200,6 +209,59 @@ a {
   font-size: 0.95rem;
 }
 
+/* Zweites Produkt */
+.product {
+  padding: 4.5rem 0;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+  align-items: center;
+}
+
+.product-copy h2 {
+  font-size: clamp(1.7rem, 3.2vw, 2.3rem);
+  margin-bottom: 1.25rem;
+}
+
+.product-copy p {
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+.spec-list {
+  list-style: none;
+  margin: 1.75rem 0 0.75rem;
+  padding: 0;
+}
+
+.spec-list li {
+  color: var(--text-muted);
+  padding: 0.55rem 0 0.55rem 1.6rem;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  font-size: 0.95rem;
+}
+
+.spec-list li::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+}
+
+.spec-list strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.spec-note {
+  font-size: 0.8rem;
+  margin-bottom: 1.75rem !important;
+}
+
 /* Preorder */
 .preorder {
   padding: 4.5rem 0;
@@ -228,7 +290,8 @@ a {
   margin-bottom: 0.4rem;
 }
 
-.field input {
+.field input,
+.field select {
   width: 100%;
   background: var(--surface);
   border: 1px solid var(--border);
@@ -237,9 +300,19 @@ a {
   color: var(--text);
   font-family: var(--font-body);
   font-size: 1rem;
+  appearance: none;
 }
 
-.field input:focus {
+.field select {
+  background-image: linear-gradient(45deg, transparent 50%, var(--text-muted) 50%),
+                    linear-gradient(135deg, var(--text-muted) 50%, transparent 50%);
+  background-position: right 1.1rem center, right 0.85rem center;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+}
+
+.field input:focus,
+.field select:focus {
   outline: none;
   border-color: var(--accent);
 }
@@ -367,6 +440,11 @@ a {
 
   .feature-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .product-grid {
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: 3.5rem;
   }
 
   .footer-inner {

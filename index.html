@@ -28,9 +28,7 @@
           <a class="btn btn-primary" href="#reservieren">Reserviere dir dein Exemplar</a>
         </div>
         <div class="hero-media">
-          <div class="media-placeholder" aria-label="Produktbild folgt">
-            <span>Produktbild folgt</span>
-          </div>
+          <img src="mafo-car.jpg" alt="MAFO CAR Dog Travel Organizer – schwarze Tasche mit Fronttasche, Tragegriffen und Schultergurt" width="531" height="461">
         </div>
       </div>
     </section>
@@ -60,13 +58,62 @@
       </div>
     </section>
 
+    <!-- Zweites Produkt: Flasche -->
+    <section class="product" id="walk">
+      <div class="wrap product-grid">
+        <div class="product-media">
+          <div class="media-placeholder" aria-label="Produktbild folgt">
+            <span>Produktbild folgt</span>
+          </div>
+        </div>
+        <div class="product-copy">
+          <p class="kicker">MAFO WALK — 3-in-1 Trinkflasche</p>
+          <h2>Eine Flasche. Zwei Näpfe. Kein Kompromiss.</h2>
+          <p>
+            Wasser, Futter, Flasche – bisher drei Dinge, die du einzeln mitschleppen
+            musstest. MAFO WALK schraubt sie zu einem einzigen Stück zusammen.
+          </p>
+          <p>
+            Unten sitzen zwei Edelstahlnäpfe, die sich mit einem Dreh lösen: einer für
+            Wasser, einer fürs Futter. Darüber die doppelwandige Vakuumflasche mit
+            950 ml – genug für einen langen Tag zu zweit. Innen keramikbeschichtet,
+            damit das Wasser nach Wasser schmeckt und nicht nach Metall.
+          </p>
+          <p>
+            Die Vakuumisolierung hält kalt, was kalt bleiben soll, und warm, was warm
+            bleiben soll. Im Hochsommer auf der Wanderung genauso wie im Januar am
+            Waldrand.
+          </p>
+
+          <ul class="spec-list">
+            <li><strong>950 ml</strong> Füllmenge (32 oz)</li>
+            <li><strong>Doppelwandiges Vakuum</strong> – hält kalt und warm</li>
+            <li><strong>Zwei Edelstahlnäpfe</strong> zum Abschrauben</li>
+            <li><strong>Keramik-Innenbeschichtung</strong> – kein Metallgeschmack</li>
+            <li><strong>BPA-frei</strong></li>
+          </ul>
+          <p class="spec-note">Nicht spülmaschinen- und nicht mikrowellengeeignet.</p>
+
+          <a class="btn btn-primary" href="#reservieren">Auch MAFO WALK reservieren</a>
+        </div>
+      </div>
+    </section>
+
     <!-- Preorder -->
     <section class="preorder" id="reservieren">
       <div class="wrap preorder-inner">
-        <h2>Reserviere dein MAFO CAR</h2>
+        <h2>Reserviere dein MAFO</h2>
         <p class="lead">Sichere dir unverbindlich deinen Platz in der ersten Serie. Keine Zahlung nötig – wir melden uns, sobald es losgeht.</p>
 
         <form id="preorder-form" class="preorder-form" novalidate>
+          <div class="field">
+            <label for="produkt">Woran hast du Interesse?</label>
+            <select id="produkt" name="produkt">
+              <option value="MAFO CAR">MAFO CAR — Travel Organizer</option>
+              <option value="MAFO WALK">MAFO WALK — 3-in-1 Trinkflasche</option>
+              <option value="Beide">Beide</option>
+            </select>
+          </div>
           <div class="field">
             <label for="name">Name</label>
             <input id="name" name="name" type="text" autocomplete="name" required>

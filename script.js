@@ -8,6 +8,7 @@ form.addEventListener("submit", async (event) => {
   const data = {
     name: form.name.value.trim(),
     email: form.email.value.trim(),
+    produkt: form.produkt.value,
     company: form.company.value, // honeypot
   };
 

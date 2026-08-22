@@ -6,7 +6,7 @@ export default async function handler(request, response) {
     return response.status(405).json({ error: "Method not allowed" });
   }
 
-  const { name, email, company } = request.body || {};
+  const { name, email, produkt, company } = request.body || {};
 
   // Honeypot: real users never fill this in.
   if (company) {
@@ -23,6 +23,10 @@ export default async function handler(request, response) {
   const cleanName = name.trim().slice(0, 200);
   const cleanEmail = email.trim().slice(0, 200);
 
+  // Nur bekannte Produktwerte übernehmen, sonst Rückfall auf "nicht angegeben".
+  const PRODUKTE = ["MAFO CAR", "MAFO WALK", "Beide"];
+  const cleanProdukt = PRODUKTE.includes(produkt) ? produkt : "nicht angegeben";
+
   const apiKey = process.env.RESEND_API_KEY;
   const toEmail = process.env.MAFO_TO_EMAIL || "info@mafo-pet.ch";
   const fromEmail = process.env.MAFO_FROM_EMAIL || "MAFO CAR <onboarding@resend.dev>";
@@ -37,6 +41,7 @@ export default async function handler(request, response) {
   const emailBody = `
     <h2>Neue MAFO CAR Vorbestellung</h2>
     <table cellpadding="6" cellspacing="0">
+      <tr><td><strong>Produkt</strong></td><td>${escapeHtml(cleanProdukt)}</td></tr>
       <tr><td><strong>Name</strong></td><td>${escapeHtml(cleanName)}</td></tr>
       <tr><td><strong>E-Mail</strong></td><td>${escapeHtml(cleanEmail)}</td></tr>
       <tr><td><strong>Zeitpunkt</strong></td><td>${submittedAt}</td></tr>
@@ -54,7 +59,7 @@ export default async function handler(request, response) {
         from: fromEmail,
         to: [toEmail],
         reply_to: cleanEmail,
-        subject: `Neue Vorbestellung: ${cleanName}`,
+        subject: `Neue Vorbestellung (${cleanProdukt}): ${cleanName}`,
         html: emailBody,
       }),
     });
