@@ -40,6 +40,14 @@ h1, h2, h3 {
   font-weight: 600;
   line-height: 1.15;
   letter-spacing: -0.01em;
+  /* Lange deutsche Komposita sollen auf schmalen Displays umbrechen dürfen. */
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+p, li {
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 
 a {
@@ -73,29 +81,38 @@ a {
 .topbar-nav {
   display: flex;
   align-items: center;
-  gap: 1.25rem;
+  gap: 0.85rem;
 }
 
 .topbar-nav > a:not(.topbar-cta) {
-  font-size: 0.85rem;
+  font-size: 0.78rem;
   font-weight: 500;
   text-decoration: none;
   color: var(--text-muted);
   letter-spacing: 0.04em;
+  white-space: nowrap;
+  padding-bottom: 2px;
+  border-bottom: 1px solid transparent;
 }
 
 .topbar-nav > a:not(.topbar-cta):hover {
   color: var(--text);
 }
 
+.topbar-nav > a[aria-current="page"] {
+  color: var(--text);
+  border-bottom-color: var(--accent);
+}
+
 .topbar-cta {
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   font-weight: 500;
   color: var(--accent);
   text-decoration: none;
   border: 1px solid var(--accent);
-  padding: 0.5rem 1.1rem;
+  padding: 0.45rem 0.9rem;
   border-radius: 999px;
+  white-space: nowrap;
   transition: background 0.15s ease, color 0.15s ease;
 }
 
@@ -493,9 +510,47 @@ a {
   color: var(--accent);
 }
 
+/* Sehr schmale Geräte (iPhone SE u.ä.): Kopfzeile enger fassen */
+@media (max-width: 400px) {
+  .wrap {
+    padding: 0 1rem;
+  }
+
+  .brand img {
+    height: 34px;
+  }
+
+  .topbar-nav {
+    gap: 0.6rem;
+  }
+
+  .topbar-nav > a:not(.topbar-cta) {
+    font-size: 0.72rem;
+    letter-spacing: 0;
+  }
+
+  .topbar-cta {
+    font-size: 0.72rem;
+    padding: 0.4rem 0.7rem;
+  }
+}
+
 @media (min-width: 768px) {
   .brand img {
     height: 50px;
+  }
+
+  .topbar-nav {
+    gap: 1.5rem;
+  }
+
+  .topbar-nav > a:not(.topbar-cta) {
+    font-size: 0.88rem;
+  }
+
+  .topbar-cta {
+    font-size: 0.9rem;
+    padding: 0.5rem 1.1rem;
   }
 
   .hero-grid {
