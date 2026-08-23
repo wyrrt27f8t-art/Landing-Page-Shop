@@ -47,26 +47,43 @@ alle vier Stellen anfassen.
 - `api/kontakt.js` – Serverless Function: prüft die Eingaben, schickt eine
   Meldung an dich und eine Bestätigung an die anfragende Person (Resend)
 - `media/` – Referenz-Screenshots und Social-Vorschaubild
+- `neues-repo.sh` – macht aus diesem Ordner ein eigenständiges Projekt
+  (wird beim Kopieren nicht mitgenommen)
 
-## Eigenes Vercel-Projekt anlegen
+## Eigenes Repository und eigenes Vercel-Projekt
 
 Dieser Ordner liegt im Repository von mafo-pet.ch, gehört dort aber nicht hin:
-Vercel macht nur aus einem `/api` im **Wurzelverzeichnis** eine Serverless
-Function. Solange `api/kontakt.js` in einem Unterordner liegt, wird das
+Vercel macht nur aus einem `api/` im **Wurzelverzeichnis** eine Serverless
+Function. Solange `api/kontakt.js` in einem Unterordner liegt, kann das
 Formular nicht funktionieren.
 
-Deshalb vor dem Livegang in ein eigenes Repository umziehen:
+**Schritt 1 – leeres Repository anlegen.** Auf github.com → *New repository*,
+Name z. B. `seitenwerk`, *Private*. Wichtig: **kein** README, **kein**
+.gitignore und **keine** Lizenz ankreuzen – das Repository muss leer sein.
+
+**Schritt 2 – Ordner hineinschieben.** Dafür liegt `neues-repo.sh` bereit. Es
+kopiert diesen Ordner an einen neuen Ort, macht daraus ein eigenes
+Git-Repository und pusht es:
 
 ```bash
-# im übergeordneten Verzeichnis
-cp -r Landing-Page-Shop/webdesign seitenwerk
-cd seitenwerk
-git init && git add -A && git commit -m "Angebotsseite"
+./neues-repo.sh https://github.com/DEINNAME/seitenwerk.git
 ```
 
-Danach auf vercel.com **Add New… → Project**, dieses Repository importieren,
-Framework Preset **Other**, und die Environment Variables aus `.env.example`
-eintragen.
+Das MAFO-Repository wird dabei nicht verändert. Dasselbe Skript erzeugt später
+auch jede Kundenseite:
+
+```bash
+./neues-repo.sh https://github.com/DEINNAME/kunde-muster.git ~/kunde-muster
+```
+
+**Schritt 3 – Vercel.** *Add New… → Project* → das neue Repository importieren,
+Framework Preset **Other**, die Variablen aus `.env.example` eintragen, Deploy.
+Danach unter *Settings → Domains* die Domain zuweisen.
+
+Solange der Ordner noch im MAFO-Repository liegt, schützt eine `.vercelignore`
+im Wurzelverzeichnis davor, dass er unter `mafo-pet.ch/webdesign/` öffentlich
+erreichbar wird. Sobald das eigene Repository steht, kann der Ordner hier
+gelöscht werden – dann braucht es auch die `.vercelignore` nicht mehr.
 
 ## E-Mail-Versand (Resend)
 
@@ -77,8 +94,12 @@ eintragen.
 | `KONTAKT_FROM_EMAIL` | `DeinName <noreply@deinedomain.ch>` |
 
 Die Absenderdomain muss in Resend verifiziert sein (DKIM-Eintrag im DNS).
-Wenn die Domain bereits Mail empfängt, den bestehenden `MX`- und
-`SPF`-Eintrag nicht überschreiben – sonst kommen keine Mails mehr an.
+In Resend eine **neue** Domain hinzufügen, nicht die bestehende bearbeiten:
+ein Konto trägt beliebig viele verifizierte Domains, und derselbe API-Key gilt
+für alle. Die DNS-Zone von mafo-pet.ch dabei nicht anfassen – ihr `MX`-Eintrag
+(`mta-gw.infomaniak.ch`) und ihr `SPF`-Eintrag sind das, was den Mailempfang
+auf `info@mafo-pet.ch` am Leben hält.
+
 Änderungen an den Variablen greifen erst nach einem Redeploy.
 
 ## Lokal ansehen
