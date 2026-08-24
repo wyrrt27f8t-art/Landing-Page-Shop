@@ -619,6 +619,37 @@ a {
   gap: 1.25rem;
 }
 
+/* Sprachumschalter */
+.lang-switch {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.lang-switch button {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 0.35rem;
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  padding: 0.3rem 0.5rem;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.lang-switch button:hover {
+  color: var(--text);
+  border-color: var(--text-muted);
+}
+
+.lang-switch button[aria-current="true"] {
+  color: var(--bg);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
 .footer-inner a {
   text-decoration: none;
   color: var(--text-muted);
@@ -649,7 +680,11 @@ a {
 
   .topbar-cta {
     font-size: 0.72rem;
-    padding: 0.4rem 0.7rem;
+    padding: 0.4rem 0.65rem;
+  }
+
+  .footer-inner {
+    gap: 0.75rem;
   }
 }
 

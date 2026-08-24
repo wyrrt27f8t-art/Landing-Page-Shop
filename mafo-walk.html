@@ -32,9 +32,9 @@
     <div class="wrap topbar-inner">
       <a class="brand" href="index.html"><img src="logo.png" alt="MAFO" width="440" height="314"></a>
       <nav class="topbar-nav">
-        <a href="index.html">MAFO CAR</a>
-        <a href="mafo-walk.html" aria-current="page">MAFO WALK</a>
-        <a class="topbar-cta" href="#reservieren">Vorbestellen</a>
+        <a href="index.html" data-i18n="nav.car">MAFO CAR</a>
+        <a href="mafo-walk.html" aria-current="page" data-i18n="nav.walk">MAFO WALK</a>
+        <a class="topbar-cta" href="#reservieren" data-i18n="nav.cta">Vorbestellen</a>
       </nav>
     </div>
   </header>
@@ -50,14 +50,14 @@
       <div class="hero-veil" aria-hidden="true"></div>
 
       <div class="wrap hero-inner">
-        <p class="kicker">MAFO WALK — 3-in-1 Trinkflasche</p>
-        <h1>Eine Flasche.<br>Zwei Näpfe.</h1>
-        <p class="lead">Wasser, Futter und Flasche in einem Stück – für jeden Spaziergang, jede Wanderung, jeden Tag zu zweit.</p>
+        <p class="kicker" data-i18n="walk.kicker">MAFO WALK — 3-in-1 Trinkflasche</p>
+        <h1><span data-i18n="walk.title1">Eine Flasche.</span><br><span data-i18n="walk.title2">Zwei Näpfe.</span></h1>
+        <p class="lead" data-i18n="walk.lead">Wasser, Futter und Flasche in einem Stück – für jeden Spaziergang, jede Wanderung, jeden Tag zu zweit.</p>
         <p class="price">
           <span class="price-amount">CHF 39.90</span>
-          <span class="price-note">inkl. Versand in der Schweiz · verfügbar ab Herbst 2026</span>
+          <span class="price-note" data-i18n="hero.priceNote">inkl. Versand in der Schweiz · verfügbar ab Herbst 2026</span>
         </p>
-        <a class="btn btn-primary" href="#reservieren">Reserviere dir dein Exemplar</a>
+        <a class="btn btn-primary" href="#reservieren" data-i18n="hero.cta">Reserviere dir dein Exemplar</a>
       </div>
     </section>
 
@@ -65,33 +65,21 @@
     <section class="product">
       <div class="wrap product-grid">
         <div class="product-copy">
-          <h2>Kein Kompromiss unterwegs</h2>
-          <p>
-            Wasser, Futter, Flasche – bisher drei Dinge, die du einzeln mitschleppen
-            musstest. MAFO WALK schraubt sie zu einem einzigen Stück zusammen.
-          </p>
-          <p>
-            Unten sitzen zwei Edelstahlnäpfe, die sich mit einem Dreh lösen: einer für
-            Wasser, einer fürs Futter. Darüber die doppelwandige Vakuumflasche mit
-            950 ml – genug für einen langen Tag zu zweit. Innen keramikbeschichtet,
-            damit das Wasser nach Wasser schmeckt und nicht nach Metall.
-          </p>
-          <p>
-            Die Vakuumisolierung hält kalt, was kalt bleiben soll, und warm, was warm
-            bleiben soll. Im Hochsommer auf der Wanderung genauso wie im Januar am
-            Waldrand.
-          </p>
+          <h2 data-i18n="walk.descTitle">Kein Kompromiss unterwegs</h2>
+          <p data-i18n="walk.desc1">Wasser, Futter, Flasche – bisher drei Dinge, die du einzeln mitschleppen musstest. MAFO WALK schraubt sie zu einem einzigen Stück zusammen.</p>
+          <p data-i18n="walk.desc2">Unten sitzen zwei Edelstahlnäpfe, die sich mit einem Dreh lösen: einer für Wasser, einer fürs Futter. Darüber die doppelwandige Vakuumflasche mit 950 ml – genug für einen langen Tag zu zweit. Innen keramikbeschichtet, damit das Wasser nach Wasser schmeckt und nicht nach Metall.</p>
+          <p data-i18n="walk.desc3">Die Vakuumisolierung hält kalt, was kalt bleiben soll, und warm, was warm bleiben soll. Im Hochsommer auf der Wanderung genauso wie im Januar am Waldrand.</p>
         </div>
         <div class="product-copy">
-          <h2>Auf einen Blick</h2>
+          <h2 data-i18n="walk.specTitle">Auf einen Blick</h2>
           <ul class="spec-list">
-            <li><strong>950 ml</strong> Füllmenge (32 oz)</li>
-            <li><strong>Doppelwandiges Vakuum</strong> – hält kalt und warm</li>
-            <li><strong>Zwei Edelstahlnäpfe</strong> zum Abschrauben</li>
-            <li><strong>Keramik-Innenbeschichtung</strong> – kein Metallgeschmack</li>
-            <li><strong>BPA-frei</strong></li>
+            <li><strong data-i18n="walk.spec1Label">950 ml</strong> <span data-i18n="walk.spec1">Füllmenge (32 oz)</span></li>
+            <li><strong data-i18n="walk.spec2Label">Doppelwandiges Vakuum</strong> <span data-i18n="walk.spec2">– hält kalt und warm</span></li>
+            <li><strong data-i18n="walk.spec3Label">Zwei Edelstahlnäpfe</strong> <span data-i18n="walk.spec3">zum Abschrauben</span></li>
+            <li><strong data-i18n="walk.spec4Label">Keramik-Innenbeschichtung</strong> <span data-i18n="walk.spec4">– kein Metallgeschmack</span></li>
+            <li><strong data-i18n="walk.spec5Label">BPA-frei</strong> <span data-i18n="walk.spec5"></span></li>
           </ul>
-          <p class="spec-note">Nicht spülmaschinen- und nicht mikrowellengeeignet.</p>
+          <p class="spec-note" data-i18n="walk.specNote">Nicht spülmaschinen- und nicht mikrowellengeeignet.</p>
         </div>
       </div>
     </section>
@@ -99,28 +87,28 @@
     <!-- Preorder -->
     <section class="preorder" id="reservieren">
       <div class="wrap preorder-inner">
-        <h2>Reserviere dein MAFO WALK</h2>
-        <p class="lead">Verfügbar ab Herbst 2026. Sichere dir jetzt unverbindlich deinen Platz in der ersten Serie – keine Zahlung nötig, wir melden uns rechtzeitig.</p>
+        <h2 data-i18n="walk.formTitle">Reserviere dein MAFO WALK</h2>
+        <p class="lead" data-i18n="order.lead">Verfügbar ab Herbst 2026. Sichere dir jetzt unverbindlich deinen Platz in der ersten Serie – keine Zahlung nötig, wir melden uns rechtzeitig.</p>
         <p class="price price-inline">
           <span class="price-amount">CHF 39.90</span>
-          <span class="price-note">MAFO WALK 3-in-1 Trinkflasche · inkl. Versand in der Schweiz</span>
+          <span class="price-note" data-i18n="walk.priceNote">MAFO WALK 3-in-1 Trinkflasche · inkl. Versand in der Schweiz</span>
         </p>
 
         <form id="preorder-form" class="preorder-form" novalidate>
           <div class="field">
-            <label for="produkt">Woran hast du Interesse?</label>
+            <label for="produkt" data-i18n="order.productLabel">Woran hast du Interesse?</label>
             <select id="produkt" name="produkt">
-              <option value="MAFO WALK" selected>MAFO WALK — 3-in-1 Trinkflasche</option>
-              <option value="MAFO CAR">MAFO CAR — Travel Organizer</option>
-              <option value="Beide">Beide</option>
+              <option value="MAFO WALK" selected data-i18n="order.optWalk">MAFO WALK — 3-in-1 Trinkflasche</option>
+              <option value="MAFO CAR" data-i18n="order.optCar">MAFO CAR — Travel Organizer</option>
+              <option value="Beide" data-i18n="order.optBoth">Beide</option>
             </select>
           </div>
           <div class="field">
-            <label for="name">Name</label>
+            <label for="name" data-i18n="order.name">Name</label>
             <input id="name" name="name" type="text" autocomplete="name" required>
           </div>
           <div class="field">
-            <label for="email">E-Mail-Adresse</label>
+            <label for="email" data-i18n="order.email">E-Mail-Adresse</label>
             <input id="email" name="email" type="email" autocomplete="email" required>
           </div>
 
@@ -130,9 +118,9 @@
             <input id="company" name="company" type="text" tabindex="-1" autocomplete="off">
           </div>
 
-          <button class="btn btn-primary" type="submit">Reserviere dir dein Exemplar</button>
+          <button class="btn btn-primary" type="submit" data-i18n="order.submit">Reserviere dir dein Exemplar</button>
 
-          <p class="form-note"><strong>Die Vorbestellung ist unverbindlich</strong> – keine Zahlung, keine Kaufpflicht, jederzeit widerrufbar. Mit dem Absenden erklärst du dich einverstanden, dass wir dich per E-Mail zu MAFO kontaktieren. Mehr dazu in der <a href="datenschutz.html">Datenschutzerklärung</a>.</p>
+          <p class="form-note"><strong data-i18n="order.noteStrong">Die Vorbestellung ist unverbindlich</strong><span data-i18n="order.note"> – keine Zahlung, keine Kaufpflicht, jederzeit widerrufbar. Mit dem Absenden erklärst du dich einverstanden, dass wir dich per E-Mail zu MAFO kontaktieren. Mehr dazu in der </span><a href="datenschutz.html" data-i18n="order.privacyLink">Datenschutzerklärung</a>.</p>
           <p id="form-status" class="form-status" role="status" aria-live="polite"></p>
         </form>
       </div>
@@ -141,17 +129,24 @@
 
   <footer class="footer">
     <div class="wrap footer-inner">
-      <span>© 2026 MAFO, Schweiz</span>
+      <span data-i18n="footer.rights">© 2026 MAFO, Schweiz</span>
       <nav class="footer-links">
         <a href="mailto:info@mafo-pet.ch">info@mafo-pet.ch</a>
-        <a href="impressum.html">Impressum</a>
-        <a href="datenschutz.html">Datenschutz</a>
+        <a href="impressum.html" data-i18n="footer.imprint">Impressum</a>
+        <a href="datenschutz.html" data-i18n="footer.privacy">Datenschutz</a>
       </nav>
+      <div class="lang-switch" role="group" aria-label="Sprache / Langue / Lingua / Language">
+        <button type="button" data-lang="de">DE</button>
+        <button type="button" data-lang="fr">FR</button>
+        <button type="button" data-lang="it">IT</button>
+        <button type="button" data-lang="en">EN</button>
+      </div>
     </div>
   </footer>
 
   <script src="script.js"></script>
   <!-- Cookiefreie Zugriffsstatistik (Vercel Web Analytics) -->
   <script defer src="/_vercel/insights/script.js"></script>
+  <script src="i18n.js"></script>
 </body>
 </html>

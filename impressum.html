@@ -32,9 +32,9 @@
     <div class="wrap topbar-inner">
       <a class="brand" href="index.html"><img src="logo.png" alt="MAFO" width="440" height="314"></a>
       <nav class="topbar-nav">
-        <a href="index.html">MAFO CAR</a>
-        <a href="mafo-walk.html">MAFO WALK</a>
-        <a class="topbar-cta" href="index.html#reservieren">Vorbestellen</a>
+        <a href="index.html" data-i18n="nav.car">MAFO CAR</a>
+        <a href="mafo-walk.html" data-i18n="nav.walk">MAFO WALK</a>
+        <a class="topbar-cta" href="index.html#reservieren" data-i18n="nav.cta">Vorbestellen</a>
       </nav>
     </div>
   </header>
@@ -84,19 +84,25 @@
           Zustimmung.
         </p>
 
-        <p class="legal-back"><a href="index.html">Zurück zur Startseite</a></p>
+        <p class="legal-back"><a href="index.html" data-i18n="footer.back">Zurück zur Startseite</a></p>
       </div>
     </section>
   </main>
 
   <footer class="footer">
     <div class="wrap footer-inner">
-      <span>© 2026 MAFO, Schweiz</span>
+      <span data-i18n="footer.rights">© 2026 MAFO, Schweiz</span>
       <nav class="footer-links">
         <a href="mailto:info@mafo-pet.ch">info@mafo-pet.ch</a>
-        <a href="impressum.html">Impressum</a>
-        <a href="datenschutz.html">Datenschutz</a>
+        <a href="impressum.html" data-i18n="footer.imprint">Impressum</a>
+        <a href="datenschutz.html" data-i18n="footer.privacy">Datenschutz</a>
       </nav>
+      <div class="lang-switch" role="group" aria-label="Sprache / Langue / Lingua / Language">
+        <button type="button" data-lang="de">DE</button>
+        <button type="button" data-lang="fr">FR</button>
+        <button type="button" data-lang="it">IT</button>
+        <button type="button" data-lang="en">EN</button>
+      </div>
     </div>
   </footer>
 
@@ -115,5 +121,6 @@
 
   <!-- Cookiefreie Zugriffsstatistik (Vercel Web Analytics) -->
   <script defer src="/_vercel/insights/script.js"></script>
+  <script src="i18n.js"></script>
 </body>
 </html>
