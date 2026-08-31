@@ -93,7 +93,6 @@ const TEXTE = {
     "order.error": "Da ist etwas schiefgelaufen. Bitte versuch es später nochmal oder schreib uns direkt an info@mafo-pet.ch.",
 
     "footer.rights": "© 2026 MAFO, Schweiz",
-    "footer.imprint": "Impressum",
     "footer.privacy": "Datenschutz",
     "footer.language": "Sprache",
     "chat.button": "Chat öffnen",
@@ -193,7 +192,6 @@ const TEXTE = {
     "order.error": "Une erreur est survenue. Réessaie plus tard ou écris-nous directement à info@mafo-pet.ch.",
 
     "footer.rights": "© 2026 MAFO, Suisse",
-    "footer.imprint": "Mentions légales",
     "footer.privacy": "Confidentialité",
     "footer.language": "Langue",
     "chat.button": "Ouvrir le chat",
@@ -293,7 +291,6 @@ const TEXTE = {
     "order.error": "Qualcosa è andato storto. Riprova più tardi oppure scrivici direttamente a info@mafo-pet.ch.",
 
     "footer.rights": "© 2026 MAFO, Svizzera",
-    "footer.imprint": "Note legali",
     "footer.privacy": "Privacy",
     "footer.language": "Lingua",
     "chat.button": "Apri la chat",
@@ -393,7 +390,6 @@ const TEXTE = {
     "order.error": "Something went wrong. Please try again later, or write to us directly at info@mafo-pet.ch.",
 
     "footer.rights": "© 2026 MAFO, Switzerland",
-    "footer.imprint": "Imprint",
     "footer.privacy": "Privacy",
     "footer.language": "Language",
     "chat.button": "Open chat",

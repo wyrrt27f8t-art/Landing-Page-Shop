@@ -559,41 +559,6 @@ a {
   color: var(--accent);
 }
 
-/* Karte mit Klick-zum-Laden */
-.map {
-  margin-top: 1rem;
-  border: 1px solid var(--border);
-  border-radius: 0.75rem;
-  overflow: hidden;
-  background: var(--surface);
-  aspect-ratio: 16 / 10;
-  display: flex;
-}
-
-.map iframe {
-  width: 100%;
-  height: 100%;
-  border: 0;
-  display: block;
-}
-
-.map-prompt {
-  margin: auto;
-  padding: 1.5rem;
-  text-align: center;
-  max-width: 26rem;
-}
-
-.map-prompt p {
-  font-size: 0.85rem;
-  margin-bottom: 1.1rem;
-}
-
-.map-alt {
-  margin-top: 1rem;
-  margin-bottom: 0 !important;
-}
-
 .legal-back {
   margin-top: 3rem;
   padding-top: 1.5rem;
