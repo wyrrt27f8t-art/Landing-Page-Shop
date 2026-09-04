@@ -29,7 +29,7 @@ export default async function middleware(request) {
   const url = new URL(request.url);
   const pfad = url.pathname;
 
-  if (pfad.startsWith("/_vercel") || OFFEN.has(pfad)) return;
+  if (pfad === "/_vercel" || pfad.startsWith("/_vercel/") || OFFEN.has(pfad)) return;
 
   const sprache = spracheWaehlen(url, request);
   const code = (process.env.MAFO_ZUGANGSCODE || "").trim();
