@@ -9,6 +9,8 @@ Landingpage für **MAFO CAR**, den praktischen Dog Travel Organizer fürs Auto (
 - `script.js` – sendet das Formular per `fetch` an `/api/reserve`
 - `api/reserve.js` – Vercel Serverless Function: validiert die Eingaben und
   verschickt eine strukturierte E-Mail an `info@mafo-pet.ch` über [Resend](https://resend.com)
+- `middleware.js` – Zugangsschutz: ohne gültigen Code bekommt jede Anfrage die
+  Code-Eingabeseite (siehe unten)
 
 Statisches Projekt, kein Frontend-Build nötig. Einzige Abhängigkeit ist die
 Serverless Function für den Formularversand.
@@ -38,6 +40,7 @@ Environment Variables in Vercel (Settings → Environments → Production):
 | `RESEND_API_KEY` | API-Key aus dem Resend-Dashboard |
 | `MAFO_FROM_EMAIL` | `MAFO CAR <noreply@mafo-pet.ch>` |
 | `MAFO_TO_EMAIL` | `info@mafo-pet.ch` |
+| `MAFO_ZUGANGSCODE` | Zugangscode für die Website (siehe unten) |
 
 Änderungen an diesen Variablen greifen erst nach einem Redeploy.
 
@@ -69,3 +72,29 @@ Receiving" in Resend ausgeschaltet.
    (sie ist bereits mit dem Vercel-Account verbunden).
 5. Ab jetzt deployt Vercel automatisch bei jedem Push auf den Standard-Branch —
    Preview-Deployments entstehen für alle anderen Branches/PRs.
+
+## Zugangsschutz (Code)
+
+Die Website ist nicht öffentlich: `middleware.js` läuft vor jeder Anfrage und
+zeigt ohne gültigen Code eine Eingabeseite (HTTP 401). Geschützt ist alles –
+Seiten, Bilder, Videos und `/api/*`. Frei bleiben nur Logo und Favicons für die
+Eingabeseite selbst sowie `/robots.txt`.
+
+Der Code steht ausschliesslich in der Environment Variable `MAFO_ZUGANGSCODE`
+und nirgends im Repository. Ist sie nicht gesetzt, bleibt die Seite gesperrt.
+
+Zwei Wege hinein:
+
+- Code auf der Eingabeseite eintippen
+- Link mit `?code=…` öffnen, z. B. `https://mafo-pet.ch/?code=…` — praktisch zum
+  Weitergeben
+
+Beides setzt ein Cookie (HttpOnly, Secure, SameSite=Lax), das 90 Tage gilt. Es
+enthält nicht den Code, sondern nur ein per HMAC daraus abgeleitetes Kennzeichen –
+wird der Code geändert, gelten alle bisherigen Cookies sofort nicht mehr.
+Gross-/Kleinschreibung, Leerzeichen und Bindestriche spielen bei der Eingabe
+keine Rolle. `?abmelden=1` löscht das Cookie wieder.
+
+Damit Besucher die Eingabeseite überhaupt erreichen, muss unter Project Settings →
+Deployment Protection die **Vercel Authentication ausgeschaltet** sein – sonst
+blockiert Vercel schon davor.

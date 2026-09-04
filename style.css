@@ -559,6 +559,16 @@ a {
   color: var(--accent);
 }
 
+.legal code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.9em;
+  padding: 0.1em 0.35em;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0.3rem;
+  white-space: nowrap;
+}
+
 .legal-back {
   margin-top: 3rem;
   padding-top: 1.5rem;
