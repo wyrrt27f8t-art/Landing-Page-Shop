@@ -426,7 +426,7 @@ a {
   margin-bottom: 1.75rem !important;
 }
 
-/* Rundum-Video und Produktbild */
+/* 360-Grad-Ansicht und Produktbild */
 .rundum {
   padding: 4.5rem 0 0;
 }
@@ -441,16 +441,59 @@ a {
   margin-bottom: 0.6rem;
 }
 
-.rundum-video {
-  display: block;
+.rundum-viewer {
+  position: relative;
   width: 100%;
   max-width: 26rem;
-  height: auto;
   aspect-ratio: 9 / 10;
   margin: 1.75rem auto 0;
   border-radius: 1rem;
+  overflow: hidden;
   background: #e5dccb;
+  cursor: grab;
+  touch-action: pan-y; /* waagrecht drehen, senkrecht weiter scrollen */
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.rundum-viewer.greift {
+  cursor: grabbing;
+}
+
+.rundum-viewer:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.rundum-viewer img {
+  display: block;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
+  pointer-events: none;
+}
+
+.rundum-hinweis {
+  position: absolute;
+  left: 50%;
+  bottom: 0.9rem;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0.45rem 0.95rem;
+  border-radius: 999px;
+  background: rgba(23, 20, 15, 0.72);
+  color: var(--text);
+  font-size: 0.8rem;
+  white-space: nowrap;
+  transition: opacity 0.4s;
+}
+
+.rundum-viewer.beruehrt .rundum-hinweis {
+  opacity: 0;
 }
 
 .produktbild {

@@ -230,3 +230,113 @@ document.querySelectorAll(".hero-bg").forEach((video) => {
   }
   video.addEventListener("error", aufStandbild);
 });
+
+/*
+ * 360-Grad-Ansicht: 27 Einzelbilder, die man mit Finger, Maus oder Pfeiltasten
+ * dreht. Von selbst dreht sie langsam, bis jemand anfasst, und nach einer
+ * Pause wieder. Die Bilder werden erst geladen, wenn der Abschnitt in die Nähe
+ * des Bildschirms kommt.
+ */
+document.querySelectorAll(".rundum-viewer").forEach((viewer) => {
+  const bild = viewer.querySelector("img");
+  const anzahl = Number(viewer.dataset.frames);
+  const bilder = [];
+  let geladen = 0;
+  let index = 0; // gezeigtes Bild
+  let position = 0; // Drehlage in Bildern, mit Bruchteilen
+  let aktiv = false; // Finger oder Maus unten
+  let letzteX = 0;
+  let letzteZeit = 0;
+  let schwung = 0; // Bilder pro 16 ms, Nachlauf nach dem Loslassen
+  let pauseBis = 0; // bis dahin kein automatisches Drehen
+  const ruhig = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function laden() {
+    for (let i = 0; i < anzahl; i++) {
+      const im = new Image();
+      im.decoding = "async";
+      im.addEventListener("load", () => { geladen++; });
+      im.src = viewer.dataset.src.replace("{i}", String(i).padStart(2, "0"));
+      bilder.push(im);
+    }
+  }
+  if ("IntersectionObserver" in window) {
+    const io = new IntersectionObserver((eintraege) => {
+      if (eintraege.some((e) => e.isIntersecting)) { laden(); io.disconnect(); }
+    }, { rootMargin: "400px" });
+    io.observe(viewer);
+  } else {
+    laden();
+  }
+
+  function zeige(p) {
+    position = ((p % anzahl) + anzahl) % anzahl;
+    const i = Math.round(position) % anzahl;
+    const im = bilder[i];
+    if (i !== index && im && im.complete && im.naturalWidth) {
+      index = i;
+      bild.src = im.src;
+    }
+  }
+
+  // Eine ganze Umdrehung entspricht etwa 1,3 Breiten des Betrachters
+  const proBild = () => (viewer.clientWidth * 1.3) / anzahl;
+
+  function anfassen() {
+    viewer.classList.add("beruehrt");
+    pauseBis = performance.now() + 4000;
+  }
+
+  viewer.addEventListener("pointerdown", (e) => {
+    if (e.button !== 0) return;
+    aktiv = true;
+    letzteX = e.clientX;
+    letzteZeit = performance.now();
+    schwung = 0;
+    viewer.classList.add("greift");
+    anfassen();
+    viewer.setPointerCapture(e.pointerId);
+  });
+  viewer.addEventListener("pointermove", (e) => {
+    if (!aktiv) return;
+    const jetzt = performance.now();
+    const dBild = (e.clientX - letzteX) / proBild();
+    zeige(position + dBild);
+    const dt = Math.max(1, jetzt - letzteZeit);
+    schwung = 0.6 * schwung + 0.4 * ((dBild / dt) * 16);
+    letzteX = e.clientX;
+    letzteZeit = jetzt;
+  });
+  const loslassen = () => {
+    if (!aktiv) return;
+    aktiv = false;
+    viewer.classList.remove("greift");
+    pauseBis = performance.now() + 4000;
+  };
+  viewer.addEventListener("pointerup", loslassen);
+  viewer.addEventListener("pointercancel", loslassen);
+  viewer.addEventListener("lostpointercapture", loslassen);
+
+  viewer.addEventListener("keydown", (e) => {
+    if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+    e.preventDefault();
+    anfassen();
+    zeige(position + (e.key === "ArrowRight" ? 1 : -1));
+  });
+
+  let letzter = 0;
+  function schritt(t) {
+    const dt = letzter ? Math.min(50, t - letzter) : 16;
+    letzter = t;
+    if (!aktiv) {
+      if (Math.abs(schwung) > 0.003) {
+        zeige(position + (schwung * dt) / 16);
+        schwung *= Math.pow(0.94, dt / 16);
+      } else if (!ruhig && t > pauseBis && geladen === anzahl) {
+        zeige(position + dt / 160); // von selbst: ein Bild alle 160 ms
+      }
+    }
+    requestAnimationFrame(schritt);
+  }
+  requestAnimationFrame(schritt);
+});

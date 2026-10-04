@@ -51,7 +51,8 @@ const TEXTE = {
     "size.spec4": "abnehmbar, plus zwei Tragegriffe",
     "size.note": "Masse gerundet – geringe Abweichungen möglich.",
     "gallery.title": "Von allen Seiten",
-    "gallery.lead": "Das echte Produkt, einmal ringsum gedreht.",
+    "gallery.lead": "Das echte Produkt. Zieh es, um es zu drehen.",
+    "gallery.hint": "Ziehen zum Drehen",
 
     "walk.kicker": "MAFO WALK — 3-in-1 Trinkflasche",
     "walk.title1": "Eine Flasche.",
@@ -166,7 +167,8 @@ const TEXTE = {
     "size.spec4": "amovible, plus deux poignées",
     "size.note": "Dimensions arrondies – de légers écarts sont possibles.",
     "gallery.title": "Sous tous les angles",
-    "gallery.lead": "Le vrai produit, vu tout autour.",
+    "gallery.lead": "Le vrai produit. Fais-le glisser pour le tourner.",
+    "gallery.hint": "Glisser pour tourner",
 
     "walk.kicker": "MAFO WALK — Gourde 3 en 1",
     "walk.title1": "Une gourde.",
@@ -281,7 +283,8 @@ const TEXTE = {
     "size.spec4": "staccabile, più due maniglie",
     "size.note": "Misure arrotondate – lievi scostamenti possibili.",
     "gallery.title": "Da ogni lato",
-    "gallery.lead": "Il prodotto vero, visto tutto intorno.",
+    "gallery.lead": "Il prodotto vero. Trascinalo per girarlo.",
+    "gallery.hint": "Trascina per girare",
 
     "walk.kicker": "MAFO WALK — Borraccia 3 in 1",
     "walk.title1": "Una borraccia.",
@@ -396,7 +399,8 @@ const TEXTE = {
     "size.spec4": "detachable, plus two carry handles",
     "size.note": "Measurements rounded – slight deviations possible.",
     "gallery.title": "From every side",
-    "gallery.lead": "The real product, turned all the way round.",
+    "gallery.lead": "The real product. Drag to turn it.",
+    "gallery.hint": "Drag to rotate",
 
     "walk.kicker": "MAFO WALK — 3-in-1 water bottle",
     "walk.title1": "One bottle.",
