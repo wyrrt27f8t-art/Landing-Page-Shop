@@ -1,5 +1,11 @@
 const form = document.getElementById("preorder-form");
 const status = document.getElementById("form-status");
+const totalAnzeige = document.getElementById("order-total");
+
+// Preise in Rappen. Der Server rechnet unabhängig davon noch einmal nach.
+const PREIS_CAR = 7990;
+const PREIS_WALK = 3990;
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 // Meldung in der aktuell gewählten Sprache, mit Deutsch als Rückfall.
 function sagt(schluessel) {
@@ -8,25 +14,56 @@ function sagt(schluessel) {
   return woerter[schluessel] || "";
 }
 
+function anzahl(feld) {
+  const n = Number.parseInt(feld.value, 10);
+  return Number.isInteger(n) && n > 0 ? n : 0;
+}
+
+function zeigeTotal() {
+  const rappen =
+    anzahl(form.elements.anzahlCar) * PREIS_CAR + anzahl(form.elements.anzahlWalk) * PREIS_WALK;
+  totalAnzeige.textContent = `CHF ${(rappen / 100).toFixed(2)}`;
+}
+
+form.elements.anzahlCar.addEventListener("change", zeigeTotal);
+form.elements.anzahlWalk.addEventListener("change", zeigeTotal);
+zeigeTotal();
+
+function fehler(schluessel) {
+  status.textContent = sagt(schluessel);
+  status.setAttribute("data-state", "error");
+}
+
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
 
   const submitButton = form.querySelector("button[type='submit']");
   const beschriftung = submitButton.textContent;
   const data = {
-    name: form.name.value.trim(),
-    email: form.email.value.trim(),
-    produkt: form.produkt.value,
-    company: form.company.value, // honeypot
+    name: form.elements.name.value.trim(),
+    email: form.elements.email.value.trim(),
+    street: form.elements.street.value.trim(),
+    zip: form.elements.zip.value.trim(),
+    city: form.elements.city.value.trim(),
+    anzahlCar: anzahl(form.elements.anzahlCar),
+    anzahlWalk: anzahl(form.elements.anzahlWalk),
+    company: form.elements.company.value, // honeypot
   };
 
   status.textContent = "";
   status.removeAttribute("data-state");
 
-  if (!data.name || !data.email) {
-    status.textContent = sagt("order.missing");
-    status.setAttribute("data-state", "error");
-    return;
+  if (!data.name || !data.email || !data.street || !data.zip || !data.city) {
+    return fehler("order.missing");
+  }
+  if (!EMAIL_RE.test(data.email)) {
+    return fehler("order.badEmail");
+  }
+  if (!/^\d{4}$/.test(data.zip)) {
+    return fehler("order.badZip");
+  }
+  if (data.anzahlCar + data.anzahlWalk === 0) {
+    return fehler("order.noItems");
   }
 
   submitButton.disabled = true;
@@ -46,7 +83,9 @@ form.addEventListener("submit", async (event) => {
     }
 
     form.reset();
-    status.textContent = sagt("order.success");
+    zeigeTotal();
+    const nummer = result.nummer ? ` ${sagt("order.number")}: ${result.nummer}` : "";
+    status.textContent = sagt("order.success") + nummer;
     status.setAttribute("data-state", "success");
   } catch (error) {
     status.textContent = sagt("order.error");

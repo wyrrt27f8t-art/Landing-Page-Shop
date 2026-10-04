@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MAFO WALK — 3-in-1 Trinkflasche für Hunde</title>
-  <meta name="description" content="MAFO WALK: Trinkflasche mit zwei abschraubbaren Edelstahlnäpfen. 950 ml, doppelwandiges Vakuum, keramikbeschichtet. Jetzt unverbindlich vorbestellen.">
+  <meta name="description" content="MAFO WALK: Trinkflasche mit zwei abschraubbaren Edelstahlnäpfen. 950 ml, doppelwandiges Vakuum, keramikbeschichtet. Jetzt bestellen.">
 
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
@@ -17,7 +17,7 @@
   <meta property="og:locale" content="de_CH">
   <meta property="og:url" content="https://mafo-pet.ch/mafo-walk.html">
   <meta property="og:title" content="MAFO WALK — 3-in-1 Trinkflasche für Hunde">
-  <meta property="og:description" content="MAFO WALK: Trinkflasche mit zwei abschraubbaren Edelstahlnäpfen. 950 ml, doppelwandiges Vakuum, keramikbeschichtet. Jetzt unverbindlich vorbestellen.">
+  <meta property="og:description" content="MAFO WALK: Trinkflasche mit zwei abschraubbaren Edelstahlnäpfen. 950 ml, doppelwandiges Vakuum, keramikbeschichtet. Jetzt bestellen.">
   <meta property="og:image" content="https://mafo-pet.ch/media/og-walk.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -34,7 +34,7 @@
       <nav class="topbar-nav">
         <a href="index.html" data-i18n="nav.car">MAFO CAR</a>
         <a href="mafo-walk.html" aria-current="page" data-i18n="nav.walk">MAFO WALK</a>
-        <a class="topbar-cta" href="#reservieren" data-i18n="nav.cta">Vorbestellen</a>
+        <a class="topbar-cta" href="#reservieren" data-i18n="nav.cta">Bestellen</a>
       </nav>
     </div>
   </header>
@@ -55,9 +55,9 @@
         <p class="lead" data-i18n="walk.lead">Wasser, Futter und Flasche in einem Stück – für jeden Spaziergang, jede Wanderung, jeden Tag zu zweit.</p>
         <p class="price">
           <span class="price-amount">CHF 39.90</span>
-          <span class="price-note" data-i18n="hero.priceNote">inkl. Versand in der Schweiz · verfügbar ab Herbst 2026</span>
+          <span class="price-note" data-i18n="hero.priceNote">inkl. Versand in der Schweiz · jetzt bestellbar</span>
         </p>
-        <a class="btn btn-primary" href="#reservieren" data-i18n="hero.cta">Reserviere dir dein Exemplar</a>
+        <a class="btn btn-primary" href="#reservieren" data-i18n="hero.cta">Jetzt bestellen</a>
       </div>
     </section>
 
@@ -84,25 +84,67 @@
       </div>
     </section>
 
-    <!-- Preorder -->
+    <!-- Bestellung -->
     <section class="preorder" id="reservieren">
       <div class="wrap preorder-inner">
-        <h2 data-i18n="walk.formTitle">Reserviere dein MAFO WALK</h2>
-        <p class="lead" data-i18n="order.lead">Verfügbar ab Herbst 2026. Sichere dir jetzt unverbindlich deinen Platz in der ersten Serie – keine Zahlung nötig, wir melden uns rechtzeitig.</p>
-        <p class="price price-inline">
-          <span class="price-amount">CHF 39.90</span>
-          <span class="price-note" data-i18n="walk.priceNote">MAFO WALK 3-in-1 Trinkflasche · inkl. Versand in der Schweiz</span>
-        </p>
+        <h2 data-i18n="walk.formTitle">Bestelle dein MAFO WALK</h2>
+        <p class="lead" data-i18n="order.lead">Jetzt bestellbar. Wähle deine Artikel und gib deine Lieferadresse an. Wir bestätigen deine Bestellung per E-Mail und nennen dir den Liefertermin und die Zahlungsangaben.</p>
 
         <form id="preorder-form" class="preorder-form" novalidate>
-          <div class="field">
-            <label for="produkt" data-i18n="order.productLabel">Woran hast du Interesse?</label>
-            <select id="produkt" name="produkt">
-              <option value="MAFO WALK" selected data-i18n="order.optWalk">MAFO WALK — 3-in-1 Trinkflasche</option>
-              <option value="MAFO CAR" data-i18n="order.optCar">MAFO CAR — Travel Organizer</option>
-              <option value="Beide" data-i18n="order.optBoth">Beide</option>
-            </select>
-          </div>
+          <fieldset class="items">
+            <legend data-i18n="order.itemsLabel">Deine Artikel</legend>
+            <div class="item-row">
+              <div class="item-name">
+                <span id="name-car" data-i18n="order.optCar">MAFO CAR — Travel Organizer</span>
+                <small>CHF 79.90</small>
+              </div>
+              <div class="field item-qty">
+                <label id="qty-car" class="sr" for="anzahl-car" data-i18n="order.qty">Anzahl</label>
+                <select id="anzahl-car" name="anzahlCar" aria-labelledby="name-car qty-car">
+                <option value="0" selected>0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                </select>
+              </div>
+            </div>
+            <div class="item-row">
+              <div class="item-name">
+                <span id="name-walk" data-i18n="order.optWalk">MAFO WALK — 3-in-1 Trinkflasche</span>
+                <small>CHF 39.90</small>
+              </div>
+              <div class="field item-qty">
+                <label id="qty-walk" class="sr" for="anzahl-walk" data-i18n="order.qty">Anzahl</label>
+                <select id="anzahl-walk" name="anzahlWalk" aria-labelledby="name-walk qty-walk">
+                <option value="0">0</option>
+                <option value="1" selected>1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                </select>
+              </div>
+            </div>
+          </fieldset>
+
+          <p class="order-total" aria-live="polite">
+            <span class="order-total-label" data-i18n="order.total">Total</span>
+            <strong id="order-total">CHF 39.90</strong>
+            <small data-i18n="order.totalNote">inkl. Versand, Lieferung nur innerhalb der Schweiz</small>
+          </p>
+
           <div class="field">
             <label for="name" data-i18n="order.name">Name</label>
             <input id="name" name="name" type="text" autocomplete="name" required>
@@ -111,6 +153,20 @@
             <label for="email" data-i18n="order.email">E-Mail-Adresse</label>
             <input id="email" name="email" type="email" autocomplete="email" required>
           </div>
+          <div class="field">
+            <label for="street" data-i18n="order.street">Strasse und Nummer</label>
+            <input id="street" name="street" type="text" autocomplete="address-line1" required>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="zip" data-i18n="order.zip">PLZ</label>
+              <input id="zip" name="zip" type="text" inputmode="numeric" maxlength="4" autocomplete="postal-code" required>
+            </div>
+            <div class="field">
+              <label for="city" data-i18n="order.city">Ort</label>
+              <input id="city" name="city" type="text" autocomplete="address-level2" required>
+            </div>
+          </div>
 
           <!-- Honeypot gegen Spam-Bots, für Menschen unsichtbar -->
           <div class="field field-hidden" aria-hidden="true">
@@ -118,9 +174,10 @@
             <input id="company" name="company" type="text" tabindex="-1" autocomplete="off">
           </div>
 
-          <button class="btn btn-primary" type="submit" data-i18n="order.submit">Reserviere dir dein Exemplar</button>
+          <button class="btn btn-primary" type="submit" data-i18n="order.submit">Jetzt bestellen</button>
 
-          <p class="form-note"><strong data-i18n="order.noteStrong">Die Vorbestellung ist unverbindlich</strong><span data-i18n="order.note"> – keine Zahlung, keine Kaufpflicht, jederzeit widerrufbar. Mit dem Absenden erklärst du dich einverstanden, dass wir dich per E-Mail zu MAFO kontaktieren. Mehr dazu in der </span><a href="datenschutz.html" data-i18n="order.privacyLink">Datenschutzerklärung</a>.</p>
+          <p class="form-note"><strong data-i18n="order.noteStrong">Mit dem Absenden gibst du eine verbindliche Bestellung auf.</strong><span data-i18n="order.note"> Den Eingang bestätigen wir dir per E-Mail. Wie wir mit deinen Daten umgehen, steht in der </span><a href="datenschutz.html" data-i18n="order.privacyLink">Datenschutzerklärung</a>.</p>
+          <p class="form-note" data-i18n="order.seller">Verkäufer: Mafo Pet, Ausserdorfstrasse 22, 8918 Unterlunkhofen, info@mafo-pet.ch</p>
           <p id="form-status" class="form-status" role="status" aria-live="polite"></p>
         </form>
       </div>

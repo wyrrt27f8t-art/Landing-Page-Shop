@@ -4,11 +4,14 @@ Landingpage für **MAFO CAR**, den praktischen Dog Travel Organizer fürs Auto (
 
 ## Struktur
 
-- `index.html` – Hero, Feature-Sektion, Vorbestell-Formular
+- `index.html` – Hero, Feature-Sektion, Bestell-Formular
 - `style.css` – Design (dunkle/erdige Töne)
 - `script.js` – sendet das Formular per `fetch` an `/api/reserve`
-- `api/reserve.js` – Vercel Serverless Function: validiert die Eingaben und
-  verschickt eine strukturierte E-Mail an `info@mafo-pet.ch` über [Resend](https://resend.com)
+- `api/reserve.js` – Vercel Serverless Function für Bestellungen: validiert Artikel,
+  Mengen und Lieferadresse, rechnet den Betrag selbst nach und verschickt eine
+  strukturierte E-Mail an `info@mafo-pet.ch` sowie eine Bestätigung an die Kundschaft
+  über [Resend](https://resend.com). Die Preise stehen dort in `ARTIKEL` und müssen
+  mit der Website übereinstimmen.
 
 Statisches Projekt, kein Frontend-Build nötig. Einzige Abhängigkeit ist die
 Serverless Function für den Formularversand.
