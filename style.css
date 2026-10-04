@@ -596,6 +596,50 @@ a {
   border-top: 1px solid var(--border);
 }
 
+.bonus-row {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.bonus-row input {
+  flex: 1;
+  min-width: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.bonus-btn {
+  flex: none;
+  padding-inline: 1.1rem;
+}
+
+.bonus-status {
+  min-height: 1.1rem;
+  margin-top: 0.35rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.bonus-status[data-state="success"] {
+  color: #8fbf8f;
+}
+
+.bonus-status[data-state="error"] {
+  color: #d98c6a;
+}
+
+.order-total-wert {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+
+.order-total-wert s {
+  font-size: 1rem;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
 .order-total-label {
   font-size: 0.95rem;
   color: var(--text-muted);

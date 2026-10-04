@@ -42,6 +42,11 @@ Environment Variables in Vercel (Settings → Environments → Production):
 | `RESEND_API_KEY` | API-Key aus dem Resend-Dashboard |
 | `MAFO_FROM_EMAIL` | `noreply@mafo-pet.ch` (Anzeigename ist im Code fest: „MAFO“) |
 | `MAFO_TO_EMAIL` | `info@mafo-pet.ch` |
+| `MAFO_BONUSCODES` | Bonuscodes, durch Komma getrennt. `CODE` gibt 30 % Rabatt, `CODE:20` einen eigenen Satz. Leer oder nicht gesetzt: kein Code gilt. |
+
+Die Bonuscodes stehen absichtlich nur in Vercel und nicht im Code, weil dieses
+Repository öffentlich ist. Der Rabatt gilt auf den ganzen Bestellbetrag und wird
+auf 5 Rappen gerundet; der Server rechnet ihn bei jeder Bestellung selbst nach.
 
 Änderungen an diesen Variablen greifen erst nach einem Redeploy.
 

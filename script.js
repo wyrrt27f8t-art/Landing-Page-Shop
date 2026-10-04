@@ -1,6 +1,10 @@
 const form = document.getElementById("preorder-form");
 const status = document.getElementById("form-status");
 const totalAnzeige = document.getElementById("order-total");
+const altAnzeige = document.getElementById("order-total-alt");
+const codeFeld = form.elements.bonuscode;
+const codeKnopf = form.querySelector(".bonus-btn");
+const codeStatus = document.getElementById("bonus-status");
 
 // Preise in Rappen. Der Server rechnet unabhängig davon noch einmal nach.
 const PREIS_CAR = 7990;
@@ -19,11 +23,88 @@ function anzahl(feld) {
   return Number.isInteger(n) && n > 0 ? n : 0;
 }
 
+function chf(rappen) {
+  return `CHF ${(rappen / 100).toFixed(2)}`;
+}
+
+// Gültiger Bonuscode, wie ihn der Server bestätigt hat: { eingabe, code, prozent }
+let bonus = null;
+
 function zeigeTotal() {
   const rappen =
     anzahl(form.elements.anzahlCar) * PREIS_CAR + anzahl(form.elements.anzahlWalk) * PREIS_WALK;
-  totalAnzeige.textContent = `CHF ${(rappen / 100).toFixed(2)}`;
+  if (bonus && rappen > 0) {
+    // Gleiche Rundung wie auf dem Server: auf 5 Rappen
+    const reduziert = Math.round((rappen * (100 - bonus.prozent)) / 100 / 5) * 5;
+    altAnzeige.textContent = chf(rappen);
+    altAnzeige.hidden = false;
+    totalAnzeige.textContent = chf(reduziert);
+  } else {
+    altAnzeige.hidden = true;
+    totalAnzeige.textContent = chf(rappen);
+  }
 }
+
+function codeMeldung(schluessel, zustand) {
+  codeStatus.textContent = schluessel ? sagt(schluessel).replace("{p}", bonus ? bonus.prozent : "") : "";
+  if (zustand) codeStatus.setAttribute("data-state", zustand);
+  else codeStatus.removeAttribute("data-state");
+}
+
+// Prüft den eingegebenen Code beim Server. true, wenn kein Code eingegeben
+// ist oder der Code gilt.
+async function einloesen() {
+  const eingabe = codeFeld.value.trim();
+  if (!eingabe) {
+    bonus = null;
+    codeMeldung("", "");
+    zeigeTotal();
+    return true;
+  }
+  if (bonus && bonus.eingabe === eingabe) return true;
+
+  codeKnopf.disabled = true;
+  codeMeldung("order.codeChecking", "");
+  try {
+    const antwort = await fetch("/api/bonus", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ code: eingabe }),
+    });
+    const ergebnis = await antwort.json().catch(() => ({}));
+    if (antwort.ok && ergebnis.ok) {
+      bonus = { eingabe, code: ergebnis.code, prozent: ergebnis.prozent };
+      codeMeldung("order.codeOk", "success");
+      return true;
+    }
+    bonus = null;
+    codeMeldung(antwort.status === 404 ? "order.codeInvalid" : "order.codeError", "error");
+    return false;
+  } catch (error) {
+    bonus = null;
+    codeMeldung("order.codeError", "error");
+    return false;
+  } finally {
+    codeKnopf.disabled = false;
+    zeigeTotal();
+  }
+}
+
+codeKnopf.addEventListener("click", einloesen);
+codeFeld.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    einloesen();
+  }
+});
+codeFeld.addEventListener("input", () => {
+  // Wer den Code ändert, muss ihn neu einlösen.
+  if (bonus && codeFeld.value.trim() !== bonus.eingabe) {
+    bonus = null;
+    codeMeldung("", "");
+    zeigeTotal();
+  }
+});
 
 form.elements.anzahlCar.addEventListener("change", zeigeTotal);
 form.elements.anzahlWalk.addEventListener("change", zeigeTotal);
@@ -65,6 +146,16 @@ form.addEventListener("submit", async (event) => {
   if (data.anzahlCar + data.anzahlWalk === 0) {
     return fehler("order.noItems");
   }
+  // Eingetippt, aber nicht eingelöst: jetzt prüfen statt still ohne Rabatt bestellen.
+  submitButton.disabled = true;
+  const codeOk = await einloesen();
+  submitButton.disabled = false;
+  if (!codeOk) {
+    status.textContent = codeStatus.textContent;
+    status.setAttribute("data-state", "error");
+    return;
+  }
+  data.bonuscode = bonus ? bonus.code : "";
 
   submitButton.disabled = true;
   submitButton.textContent = sagt("order.sending");
@@ -79,10 +170,18 @@ form.addEventListener("submit", async (event) => {
     const result = await response.json().catch(() => ({}));
 
     if (!response.ok) {
+      if (result.feld === "bonuscode") {
+        bonus = null;
+        codeMeldung("order.codeInvalid", "error");
+        zeigeTotal();
+        return fehler("order.codeInvalid");
+      }
       throw new Error(result.error || "Senden fehlgeschlagen.");
     }
 
     form.reset();
+    bonus = null;
+    codeMeldung("", "");
     zeigeTotal();
     status.textContent = sagt("order.success");
     if (result.nummer) {

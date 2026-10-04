@@ -1,4 +1,5 @@
 import { randomInt } from "node:crypto";
+import { bonusProzent, mitRabatt, normalerCode } from "./_rabatt.js";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PLZ_RE = /^\d{4}$/;
@@ -51,7 +52,18 @@ export default async function handler(request, response) {
     return response.status(400).json({ error: "Kein Artikel gewählt." });
   }
 
-  const total = positionen.reduce((summe, p) => summe + p.summe, 0);
+  const zwischensumme = positionen.reduce((summe, p) => summe + p.summe, 0);
+
+  // Bonuscode: ein falscher Code bricht ab, statt still den vollen Preis zu
+  // verlangen, den die Kundschaft so nicht erwartet.
+  const code = normalerCode(body.bonuscode);
+  const prozent = code ? bonusProzent(code) : 0;
+  if (code && !prozent) {
+    return response.status(400).json({ error: "Ungültiger Bonuscode.", feld: "bonuscode" });
+  }
+  const total = prozent ? mitRabatt(zwischensumme, prozent) : zwischensumme;
+  const rabatt = prozent ? { code, prozent, betrag: zwischensumme - total } : null;
+
   const nummer = bestellnummer();
 
   const apiKey = process.env.RESEND_API_KEY;
@@ -65,7 +77,7 @@ export default async function handler(request, response) {
     return response.status(500).json({ error: "Server ist nicht korrekt konfiguriert." });
   }
 
-  const bestellung = { nummer, name, email, strasse, plz, ort, positionen, total };
+  const bestellung = { nummer, name, email, strasse, plz, ort, positionen, zwischensumme, rabatt, total };
   const submittedAt = new Date().toISOString();
   const kurz = positionen.map((p) => `${p.menge}× ${p.name}`).join(", ");
 
@@ -162,7 +174,7 @@ function chf(rappen) {
   return `CHF ${(rappen / 100).toFixed(2)}`;
 }
 
-function internerText({ nummer, name, email, strasse, plz, ort, positionen, total }, submittedAt) {
+function internerText({ nummer, name, email, strasse, plz, ort, positionen, zwischensumme, rabatt, total }, submittedAt) {
   const artikel = positionen
     .map((p) => `${p.menge}× ${escapeHtml(p.name)} – ${chf(p.summe)}`)
     .join("<br>");
@@ -172,6 +184,12 @@ function internerText({ nummer, name, email, strasse, plz, ort, positionen, tota
     <table cellpadding="6" cellspacing="0">
       <tr><td><strong>Bestellnummer</strong></td><td>${escapeHtml(nummer)}</td></tr>
       <tr><td valign="top"><strong>Artikel</strong></td><td>${artikel}</td></tr>
+      ${
+        rabatt
+          ? `<tr><td><strong>Zwischensumme</strong></td><td>${chf(zwischensumme)}</td></tr>
+      <tr><td><strong>Bonuscode</strong></td><td>${escapeHtml(rabatt.code)} (−${rabatt.prozent} %): −${chf(rabatt.betrag)}</td></tr>`
+          : ""
+      }
       <tr><td><strong>Total</strong></td><td>${chf(total)} (inkl. Versand in der Schweiz)</td></tr>
       <tr><td><strong>Name</strong></td><td>${escapeHtml(name)}</td></tr>
       <tr><td><strong>E-Mail</strong></td><td>${escapeHtml(email)}</td></tr>
@@ -182,7 +200,7 @@ function internerText({ nummer, name, email, strasse, plz, ort, positionen, tota
   `.trim();
 }
 
-function bestaetigungsText({ nummer, name, strasse, plz, ort, positionen, total }) {
+function bestaetigungsText({ nummer, name, strasse, plz, ort, positionen, rabatt, total }) {
   const zeilen = positionen
     .map(
       (p) => `
@@ -192,6 +210,14 @@ function bestaetigungsText({ nummer, name, strasse, plz, ort, positionen, total 
         </tr>`,
     )
     .join("");
+
+  const rabattZeile = rabatt
+    ? `
+          <tr>
+            <td style="padding:6px 0;font-size:15px;color:#c8945f;">Bonuscode ${escapeHtml(rabatt.code)} (−${rabatt.prozent} %)</td>
+            <td style="padding:6px 0;font-size:15px;color:#c8945f;text-align:right;white-space:nowrap;">−${chf(rabatt.betrag)}</td>
+          </tr>`
+    : "";
 
   return `
 <div style="margin:0;padding:24px;background:#f4f1ea;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
@@ -210,7 +236,7 @@ function bestaetigungsText({ nummer, name, strasse, plz, ort, positionen, total 
       </p>
       <div style="margin:20px 0;padding:14px 16px;background:#221c14;border-radius:8px;">
         <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
-          ${zeilen}
+          ${zeilen}${rabattZeile}
           <tr>
             <td style="padding:10px 0 0;border-top:1px solid #362c1e;font-size:15px;font-weight:600;color:#f3ede1;">Total</td>
             <td style="padding:10px 0 0;border-top:1px solid #362c1e;font-size:15px;font-weight:600;color:#f3ede1;text-align:right;white-space:nowrap;">${chf(total)}</td>

@@ -188,9 +188,18 @@
             </div>
           </fieldset>
 
+          <div class="field bonus">
+            <label for="bonuscode" data-i18n="order.codeLabel">Bonuscode</label>
+            <div class="bonus-row">
+              <input id="bonuscode" name="bonuscode" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="40">
+              <button class="btn btn-secondary bonus-btn" type="button" data-i18n="order.codeApply">Einlösen</button>
+            </div>
+            <p id="bonus-status" class="bonus-status" aria-live="polite"></p>
+          </div>
+
           <p class="order-total" aria-live="polite">
             <span class="order-total-label" data-i18n="order.total">Total</span>
-            <strong id="order-total">CHF 79.90</strong>
+            <span class="order-total-wert"><s id="order-total-alt" hidden></s> <strong id="order-total">CHF 79.90</strong></span>
             <small data-i18n="order.totalNote">inkl. Versand, Lieferung nur innerhalb der Schweiz</small>
           </p>
 
