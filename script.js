@@ -578,6 +578,14 @@ function baueKasse(form) {
   zeigeSchritt(location.hash.slice(1) || "warenkorb");
 }
 
+// Warenkorb in einem anderen Tab geändert: hier neu einlesen
+window.addEventListener("storage", (e) => {
+  if (e.key === "mafo-warenkorb") {
+    Warenkorb._inhalt = null;
+    document.dispatchEvent(new CustomEvent("mafo:warenkorb"));
+  }
+});
+
 document.addEventListener("DOMContentLoaded", () => {
   zeichneZaehler();
   document.addEventListener("mafo:warenkorb", zeichneZaehler);

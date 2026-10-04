@@ -600,12 +600,6 @@ a {
   margin-bottom: 1rem;
 }
 
-.preorder-form {
-  margin-top: 2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.1rem;
-}
 
 .field label {
   display: block;
