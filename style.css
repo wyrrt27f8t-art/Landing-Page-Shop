@@ -466,12 +466,83 @@ a {
   outline-offset: 3px;
 }
 
+.rundum-viewer.gezoomt {
+  touch-action: none; /* gezoomt: ein Finger schiebt das Bild, Seite scrollt nicht */
+  cursor: move;
+}
+
+.rundum-viewer.gezoomt.greift {
+  cursor: grabbing;
+}
+
 .rundum-viewer img {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
   pointer-events: none;
+  transform-origin: center;
+  will-change: transform;
+}
+
+.rundum-viewer img.sanft {
+  transition: transform 0.25s ease-out;
+}
+
+.rundum-knopf {
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(23, 20, 15, 0.72);
+  color: var(--text);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.rundum-knopf:hover {
+  background: rgba(23, 20, 15, 0.9);
+}
+
+.rundum-knopf:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.rundum-knopf:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.rundum-dreh {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.rundum-dreh.links {
+  left: 0.7rem;
+}
+
+.rundum-dreh.rechts {
+  right: 0.7rem;
+}
+
+.rundum-zoom {
+  left: 0.7rem; /* links, damit die Chat-Blase unten rechts nie darüberliegt */
+}
+
+.rundum-zoom.plus {
+  bottom: 3.6rem;
+}
+
+.rundum-zoom.minus {
+  bottom: 0.9rem;
 }
 
 .rundum-hinweis {

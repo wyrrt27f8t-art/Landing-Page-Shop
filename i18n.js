@@ -51,7 +51,11 @@ const TEXTE = {
     "size.spec4": "abnehmbar, plus zwei Tragegriffe",
     "size.note": "Masse gerundet – geringe Abweichungen möglich.",
     "gallery.title": "Von allen Seiten",
-    "gallery.lead": "Das echte Produkt. Zieh es, um es zu drehen.",
+    "gallery.lead": "Das echte Produkt. Ziehen dreht, zweimal Tippen zoomt.",
+    "gallery.left": "Nach links drehen",
+    "gallery.right": "Nach rechts drehen",
+    "gallery.zoomIn": "Vergrössern",
+    "gallery.zoomOut": "Verkleinern",
     "gallery.hint": "Ziehen zum Drehen",
 
     "walk.kicker": "MAFO WALK — 3-in-1 Trinkflasche",
@@ -167,7 +171,11 @@ const TEXTE = {
     "size.spec4": "amovible, plus deux poignées",
     "size.note": "Dimensions arrondies – de légers écarts sont possibles.",
     "gallery.title": "Sous tous les angles",
-    "gallery.lead": "Le vrai produit. Fais-le glisser pour le tourner.",
+    "gallery.lead": "Le vrai produit. Glisser pour tourner, taper deux fois pour zoomer.",
+    "gallery.left": "Tourner vers la gauche",
+    "gallery.right": "Tourner vers la droite",
+    "gallery.zoomIn": "Agrandir",
+    "gallery.zoomOut": "Réduire",
     "gallery.hint": "Glisser pour tourner",
 
     "walk.kicker": "MAFO WALK — Gourde 3 en 1",
@@ -283,7 +291,11 @@ const TEXTE = {
     "size.spec4": "staccabile, più due maniglie",
     "size.note": "Misure arrotondate – lievi scostamenti possibili.",
     "gallery.title": "Da ogni lato",
-    "gallery.lead": "Il prodotto vero. Trascinalo per girarlo.",
+    "gallery.lead": "Il prodotto vero. Trascina per girare, tocca due volte per ingrandire.",
+    "gallery.left": "Ruota a sinistra",
+    "gallery.right": "Ruota a destra",
+    "gallery.zoomIn": "Ingrandisci",
+    "gallery.zoomOut": "Riduci",
     "gallery.hint": "Trascina per girare",
 
     "walk.kicker": "MAFO WALK — Borraccia 3 in 1",
@@ -399,7 +411,11 @@ const TEXTE = {
     "size.spec4": "detachable, plus two carry handles",
     "size.note": "Measurements rounded – slight deviations possible.",
     "gallery.title": "From every side",
-    "gallery.lead": "The real product. Drag to turn it.",
+    "gallery.lead": "The real product. Drag to turn, double-tap to zoom.",
+    "gallery.left": "Rotate left",
+    "gallery.right": "Rotate right",
+    "gallery.zoomIn": "Zoom in",
+    "gallery.zoomOut": "Zoom out",
     "gallery.hint": "Drag to rotate",
 
     "walk.kicker": "MAFO WALK — 3-in-1 water bottle",
@@ -503,6 +519,12 @@ function setzeSprache(sprache) {
   document.querySelectorAll("[data-i18n]").forEach((el) => {
     const text = woerter[el.dataset.i18n];
     if (text !== undefined) el.textContent = text;
+  });
+
+  // Beschriftungen für Bildschirmleser, zum Beispiel an Knöpfen mit Symbol
+  document.querySelectorAll("[data-i18n-label]").forEach((el) => {
+    const text = woerter[el.dataset.i18nLabel];
+    if (text !== undefined) el.setAttribute("aria-label", text);
   });
 
   // Titel und Beschreibung, sofern die Seite eigene hinterlegt hat

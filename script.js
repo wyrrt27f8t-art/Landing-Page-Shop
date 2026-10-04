@@ -234,30 +234,42 @@ document.querySelectorAll(".hero-bg").forEach((video) => {
 /*
  * 360-Grad-Ansicht: 27 Einzelbilder, die man mit Finger, Maus oder Pfeiltasten
  * dreht. Von selbst dreht sie langsam, bis jemand anfasst, und nach einer
- * Pause wieder. Die Bilder werden erst geladen, wenn der Abschnitt in die Nähe
- * des Bildschirms kommt.
+ * Pause wieder. Zoom mit zwei Fingern, Doppeltippen, Ctrl + Mausrad oder den
+ * Knöpfen; gezoomt verschiebt ein Finger das Bild, die Pfeile drehen weiter.
+ * Die kleinen Bilder laden, wenn der Abschnitt in die Nähe kommt, die grossen
+ * erst beim Zoomen und nur für das gezeigte Bild.
  */
 document.querySelectorAll(".rundum-viewer").forEach((viewer) => {
   const bild = viewer.querySelector("img");
   const anzahl = Number(viewer.dataset.frames);
-  const bilder = [];
+  const ZOOM_MAX = 2.5;
+  const quelle = (i, gross) =>
+    (gross ? viewer.dataset.srcGross : viewer.dataset.src).replace("{i}", String(i).padStart(2, "0"));
+  const klein = [];
+  const gross = [];
   let geladen = 0;
   let index = 0; // gezeigtes Bild
   let position = 0; // Drehlage in Bildern, mit Bruchteilen
-  let aktiv = false; // Finger oder Maus unten
-  let letzteX = 0;
-  let letzteZeit = 0;
   let schwung = 0; // Bilder pro 16 ms, Nachlauf nach dem Loslassen
   let pauseBis = 0; // bis dahin kein automatisches Drehen
+  let zoom = 1;
+  let tx = 0; // Verschiebung des gezoomten Bilds in Pixeln
+  let ty = 0;
+  const finger = new Map(); // aktive Finger oder Maus: id -> {x, y}
+  let geste = null; // laufende Geste: drehen, schieben oder kneifen
+  let letztesTippen = 0;
   const ruhig = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const knopf = (name) => viewer.querySelector(".rundum-" + name);
+
+  const fertig = (im) => im && im.complete && im.naturalWidth > 0;
 
   function laden() {
     for (let i = 0; i < anzahl; i++) {
       const im = new Image();
       im.decoding = "async";
       im.addEventListener("load", () => { geladen++; });
-      im.src = viewer.dataset.src.replace("{i}", String(i).padStart(2, "0"));
-      bilder.push(im);
+      im.src = quelle(i, false);
+      klein.push(im);
     }
   }
   if ("IntersectionObserver" in window) {
@@ -269,15 +281,67 @@ document.querySelectorAll(".rundum-viewer").forEach((viewer) => {
     laden();
   }
 
+  // Grosse Fassung eines Bilds holen; sie erscheint, sobald sie da ist
+  function grossLaden(i) {
+    if (!gross[i]) {
+      const im = new Image();
+      im.decoding = "async";
+      im.addEventListener("load", () => { if (zoom > 1 && index === i) bild.src = im.src; });
+      im.src = quelle(i, true);
+      gross[i] = im;
+    }
+    return gross[i];
+  }
+
+  function zeigeBild(i) {
+    index = i;
+    const g = zoom > 1 ? grossLaden(i) : null;
+    const im = fertig(g) ? g : klein[i];
+    if (fertig(im)) bild.src = im.src;
+  }
+
   function zeige(p) {
     position = ((p % anzahl) + anzahl) % anzahl;
     const i = Math.round(position) % anzahl;
-    const im = bilder[i];
-    if (i !== index && im && im.complete && im.naturalWidth) {
-      index = i;
-      bild.src = im.src;
+    if (i !== index) zeigeBild(i);
+  }
+
+  // Zoom und Verschiebung anwenden; das Bild bleibt immer rahmenfüllend
+  function wende() {
+    const mx = (viewer.clientWidth * (zoom - 1)) / 2;
+    const my = (viewer.clientHeight * (zoom - 1)) / 2;
+    tx = Math.max(-mx, Math.min(mx, tx));
+    ty = Math.max(-my, Math.min(my, ty));
+    bild.style.transform = zoom === 1 ? "" : `translate(${tx}px, ${ty}px) scale(${zoom})`;
+    viewer.classList.toggle("gezoomt", zoom > 1);
+    knopf("zoom.plus").disabled = zoom >= ZOOM_MAX - 0.01;
+    knopf("zoom.minus").disabled = zoom <= 1;
+  }
+
+  // Auf 'neu' zoomen, so dass der Punkt (px, py) relativ zur Mitte stehen bleibt
+  function zoomeAuf(neu, px, py, sanft) {
+    neu = Math.max(1, Math.min(ZOOM_MAX, neu));
+    if (neu < 1.15) neu = 1; // knapp über 1 rastet auf 1 ein
+    const f = neu / zoom;
+    tx = px - (px - tx) * f;
+    ty = py - (py - ty) * f;
+    zoom = neu;
+    if (zoom === 1) { tx = 0; ty = 0; }
+    bild.classList.toggle("sanft", !!sanft);
+    wende();
+    if (zoom > 1) {
+      const g = grossLaden(index);
+      if (fertig(g)) bild.src = g.src;
     }
   }
+
+  // Punkt relativ zur Mitte des Betrachters
+  function relativ(x, y) {
+    const r = viewer.getBoundingClientRect();
+    return { x: x - r.left - r.width / 2, y: y - r.top - r.height / 2 };
+  }
+  const abstand = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+  const mitte = (a, b) => ({ x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 });
 
   // Eine ganze Umdrehung entspricht etwa 1,3 Breiten des Betrachters
   const proBild = () => (viewer.clientWidth * 1.3) / anzahl;
@@ -287,52 +351,133 @@ document.querySelectorAll(".rundum-viewer").forEach((viewer) => {
     pauseBis = performance.now() + 4000;
   }
 
-  viewer.addEventListener("pointerdown", (e) => {
-    if (e.button !== 0) return;
-    aktiv = true;
-    letzteX = e.clientX;
-    letzteZeit = performance.now();
-    schwung = 0;
-    viewer.classList.add("greift");
-    anfassen();
-    viewer.setPointerCapture(e.pointerId);
-  });
-  viewer.addEventListener("pointermove", (e) => {
-    if (!aktiv) return;
-    const jetzt = performance.now();
-    const dBild = (e.clientX - letzteX) / proBild();
-    zeige(position + dBild);
-    const dt = Math.max(1, jetzt - letzteZeit);
-    schwung = 0.6 * schwung + 0.4 * ((dBild / dt) * 16);
-    letzteX = e.clientX;
-    letzteZeit = jetzt;
-  });
-  const loslassen = () => {
-    if (!aktiv) return;
-    aktiv = false;
-    viewer.classList.remove("greift");
-    pauseBis = performance.now() + 4000;
-  };
-  viewer.addEventListener("pointerup", loslassen);
-  viewer.addEventListener("pointercancel", loslassen);
-  viewer.addEventListener("lostpointercapture", loslassen);
+  function einFingerGeste(x, y) {
+    return { art: zoom > 1 ? "schieben" : "drehen", x, y, x0: x, y0: y, tx0: tx, ty0: ty, zeit: performance.now() };
+  }
 
-  viewer.addEventListener("keydown", (e) => {
-    if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+  viewer.addEventListener("pointerdown", (e) => {
+    if (e.target.closest("button")) return;
+    if (e.pointerType === "mouse" && e.button !== 0) return;
+    viewer.setPointerCapture(e.pointerId);
+    finger.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    anfassen();
+    viewer.classList.add("greift");
+    bild.classList.remove("sanft");
+    schwung = 0;
+    if (finger.size >= 2) {
+      const [a, b] = [...finger.values()];
+      geste = { art: "kneifen", abstand: abstand(a, b), mitte: relativ(mitte(a, b).x, mitte(a, b).y), zoom0: zoom, tx0: tx, ty0: ty };
+    } else {
+      geste = einFingerGeste(e.clientX, e.clientY);
+    }
+  });
+
+  viewer.addEventListener("pointermove", (e) => {
+    if (!finger.has(e.pointerId) || !geste) return;
+    finger.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (geste.art === "kneifen") {
+      if (finger.size < 2) return;
+      const [a, b] = [...finger.values()];
+      const neu = Math.max(1, Math.min(ZOOM_MAX, (geste.zoom0 * abstand(a, b)) / geste.abstand));
+      const m = mitte(a, b);
+      const p1 = relativ(m.x, m.y);
+      const f = neu / geste.zoom0;
+      // Der Punkt, der zu Beginn unter der Fingermitte lag, folgt der Fingermitte
+      tx = p1.x - (geste.mitte.x - geste.tx0) * f;
+      ty = p1.y - (geste.mitte.y - geste.ty0) * f;
+      zoom = neu;
+      wende();
+      if (zoom > 1) grossLaden(index);
+    } else if (geste.art === "drehen") {
+      const jetzt = performance.now();
+      const dBild = (e.clientX - geste.x) / proBild();
+      zeige(position + dBild);
+      const dt = Math.max(1, jetzt - geste.zeit);
+      schwung = 0.6 * schwung + 0.4 * ((dBild / dt) * 16);
+      geste.x = e.clientX;
+      geste.zeit = jetzt;
+    } else {
+      tx = geste.tx0 + (e.clientX - geste.x0);
+      ty = geste.ty0 + (e.clientY - geste.y0);
+      wende();
+    }
+  });
+
+  function loslassen(e, abgebrochen) {
+    if (!finger.has(e.pointerId)) return;
+    finger.delete(e.pointerId);
+    if (geste && geste.art === "kneifen") {
+      // Bleibt ein Finger, geht es mit ihm weiter; die Zoomstufe bleibt
+      const rest = [...finger.values()][0];
+      geste = rest ? einFingerGeste(rest.x, rest.y) : null;
+      if (zoom > 1) zeigeBild(index);
+    } else if (geste) {
+      // Doppeltippen: zwei kurze Tipps ohne Bewegung kurz nacheinander
+      const kurz = performance.now() - geste.zeit < 300;
+      const still = Math.hypot(e.clientX - geste.x0, e.clientY - geste.y0) < 8;
+      if (!abgebrochen && kurz && still) {
+        const jetzt = performance.now();
+        if (jetzt - letztesTippen < 350) {
+          const p = relativ(e.clientX, e.clientY);
+          zoomeAuf(zoom > 1 ? 1 : 2, p.x, p.y, true);
+          letztesTippen = 0;
+        } else {
+          letztesTippen = jetzt;
+        }
+      }
+      geste = null;
+    }
+    if (finger.size === 0) {
+      viewer.classList.remove("greift");
+      pauseBis = performance.now() + 4000;
+    }
+  }
+  viewer.addEventListener("pointerup", (e) => loslassen(e, false));
+  viewer.addEventListener("pointercancel", (e) => loslassen(e, true));
+  viewer.addEventListener("lostpointercapture", (e) => loslassen(e, true));
+
+  // Ctrl + Mausrad (oder Trackpad-Kneifen) zoomt; gezoomt reicht das Rad allein
+  viewer.addEventListener("wheel", (e) => {
+    if (zoom === 1 && !e.ctrlKey && !e.metaKey) return;
     e.preventDefault();
     anfassen();
-    zeige(position + (e.key === "ArrowRight" ? 1 : -1));
+    const p = relativ(e.clientX, e.clientY);
+    zoomeAuf(zoom * Math.exp(-e.deltaY * 0.0025), p.x, p.y, false);
+  }, { passive: false });
+
+  viewer.addEventListener("keydown", (e) => {
+    const taste = e.key;
+    if (taste === "ArrowLeft" || taste === "ArrowRight") {
+      anfassen();
+      zeige(position + (taste === "ArrowRight" ? 1 : -1));
+    } else if (taste === "+" || taste === "=") {
+      anfassen();
+      zoomeAuf(zoom * 1.5, 0, 0, true);
+    } else if (taste === "-") {
+      anfassen();
+      zoomeAuf(zoom / 1.5, 0, 0, true);
+    } else if (taste === "0" || taste === "Escape") {
+      zoomeAuf(1, 0, 0, true);
+    } else {
+      return;
+    }
+    e.preventDefault();
   });
+
+  knopf("dreh.links").addEventListener("click", () => { anfassen(); zeige(position - 1); });
+  knopf("dreh.rechts").addEventListener("click", () => { anfassen(); zeige(position + 1); });
+  knopf("zoom.plus").addEventListener("click", () => { anfassen(); zoomeAuf(zoom * 1.5, 0, 0, true); });
+  knopf("zoom.minus").addEventListener("click", () => { anfassen(); zoomeAuf(zoom / 1.5, 0, 0, true); });
 
   let letzter = 0;
   function schritt(t) {
     const dt = letzter ? Math.min(50, t - letzter) : 16;
     letzter = t;
-    if (!aktiv) {
+    if (!geste) {
       if (Math.abs(schwung) > 0.003) {
         zeige(position + (schwung * dt) / 16);
         schwung *= Math.pow(0.94, dt / 16);
-      } else if (!ruhig && t > pauseBis && geladen === anzahl) {
+      } else if (!ruhig && zoom === 1 && t > pauseBis && geladen === anzahl) {
         zeige(position + dt / 160); // von selbst: ein Bild alle 160 ms
       }
     }
