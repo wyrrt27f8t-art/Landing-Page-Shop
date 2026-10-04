@@ -287,7 +287,7 @@ function zahlungsText(zahlung, nummer, total) {
     wert
       ? `<tr>
           <td style="padding:5px 12px 5px 0;font-size:14px;color:#ab9f8c;white-space:nowrap;vertical-align:top;">${label}</td>
-          <td style="padding:5px 0;font-size:15px;color:#f3ede1;font-variant-numeric:tabular-nums;">${escapeHtml(wert)}</td>
+          <td style="padding:5px 0;font-size:15px;color:#f3ede1;font-variant-numeric:tabular-nums;white-space:nowrap;">${escapeHtml(wert)}</td>
         </tr>`
       : "";
   let zeilen = zeile("Zahlungsart", ZAHLUNGSARTEN[zahlung.art]) + zeile("Betrag", chf(total));

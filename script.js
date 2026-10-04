@@ -443,6 +443,7 @@ function baueKasse(form) {
       else li.removeAttribute("aria-current");
     });
     if (name === "pruefen") zeichnePruefung();
+    document.querySelector(".schritte").hidden = name === "danke";
     meldung("", "");
     if (location.hash.slice(1) !== name) history.replaceState(null, "", "#" + name);
     const kopf = form.querySelector(`.schritt[data-schritt="${name}"] h2`);
@@ -485,19 +486,19 @@ function baueKasse(form) {
     const z = ergebnis.zahlung || {};
     box.append(uebersetzt("h3", "", "kasse.payNow"));
     const dl = element("dl");
-    const reihe = (schluessel, wert) => {
+    const reihe = (schluessel, wert, eng) => {
       if (!wert) return;
-      dl.append(uebersetzt("dt", "", schluessel), element("dd", "", wert));
+      dl.append(uebersetzt("dt", "", schluessel), element("dd", eng ? "nowrap" : "", wert));
     };
     reihe("kasse.payment", sagt(z.art === "twint" ? "pay.twint" : "pay.vorauskasse"));
     reihe("kasse.payAmount", chf(ergebnis.total));
     if (z.art === "twint") {
-      reihe("kasse.payTwintNumber", z.twint);
-      reihe("kasse.payMessage", ergebnis.nummer);
+      reihe("kasse.payTwintNumber", z.twint, true);
+      reihe("kasse.payMessage", ergebnis.nummer, true);
     } else {
       reihe("kasse.payIban", z.iban);
       reihe("kasse.payHolder", z.inhaber);
-      reihe("kasse.payRef", ergebnis.nummer);
+      reihe("kasse.payRef", ergebnis.nummer, true);
     }
     box.append(dl);
     if (z.art === "twint" && z.qr) {

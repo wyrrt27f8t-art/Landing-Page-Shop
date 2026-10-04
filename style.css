@@ -1625,6 +1625,10 @@ a {
   overflow-wrap: anywhere;
 }
 
+.zahlhinweis dd.nowrap {
+  white-space: nowrap;
+}
+
 .zahlhinweis img {
   display: block;
   margin: 0.5rem 0 0;

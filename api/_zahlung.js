@@ -22,9 +22,17 @@ export function ibanFormat(iban) {
   return iban.replace(/\s+/g, "").toUpperCase().replace(/(.{4})/g, "$1 ").trim();
 }
 
+// Schweizer Handynummer lesbar: +41 79 123 45 67; andere Nummern bleiben, wie sie sind
+export function telefonFormat(nummer) {
+  const ziffern = nummer.replace(/[^\d+]/g, "");
+  const m = ziffern.match(/^(?:\+41|0041|0)(\d{2})(\d{3})(\d{2})(\d{2})$/);
+  return m ? `+41 ${m[1]} ${m[2]} ${m[3]} ${m[4]}` : nummer;
+}
+
 export function zahlungsangaben(art) {
   if (art === "twint") {
-    return { art, twint: wert("MAFO_TWINT_NUMMER"), qr: wert("MAFO_TWINT_QR") };
+    const nummer = wert("MAFO_TWINT_NUMMER");
+    return { art, twint: nummer ? telefonFormat(nummer) : "", qr: wert("MAFO_TWINT_QR") };
   }
   const iban = wert("MAFO_IBAN");
   return { art, iban: iban ? ibanFormat(iban) : "", inhaber: wert("MAFO_KONTOINHABER") };
