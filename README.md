@@ -5,9 +5,12 @@ und **MAFO WALK**, die 3-in-1 Trinkflasche.
 
 ## Struktur
 
-- `index.html` – Hero, Feature-Sektion, Bestell-Formular
+- `index.html`, `mafo-walk.html` – Produktseiten mit Kaufbox („In den Warenkorb“)
+- `kasse.html` – Kasse in vier Schritten: Warenkorb, Lieferadresse, Zahlungsart
+  (Vorauskasse oder TWINT), Prüfung; danach Bestätigung mit Zahlungsangaben
 - `style.css` – Design (dunkle/erdige Töne)
-- `script.js` – sendet das Formular per `fetch` an `/api/reserve`
+- `script.js` – Warenkorb (im Browser gespeichert), Warenkorb-Fenster, Kasse;
+  schickt die Bestellung per `fetch` an `/api/reserve`
 - `api/reserve.js` – Vercel Serverless Function für Bestellungen: validiert Artikel,
   Mengen und Lieferadresse, rechnet den Betrag selbst nach und verschickt eine
   strukturierte E-Mail an `info@mafo-pet.ch` sowie eine Bestätigung an die Kundschaft
@@ -42,6 +45,10 @@ Environment Variables in Vercel (Settings → Environments → Production):
 | `RESEND_API_KEY` | API-Key aus dem Resend-Dashboard |
 | `MAFO_FROM_EMAIL` | `noreply@mafo-pet.ch` (Anzeigename ist im Code fest: „MAFO“) |
 | `MAFO_TO_EMAIL` | `info@mafo-pet.ch` |
+| `MAFO_IBAN` | IBAN für die Vorauskasse. Fehlt sie, steht in der Bestätigung, dass die Angaben separat folgen. |
+| `MAFO_KONTOINHABER` | Name auf dem Konto, wie er auf der Überweisung stehen soll |
+| `MAFO_TWINT_NUMMER` | Handynummer, an die per TWINT bezahlt wird |
+| `MAFO_TWINT_QR` | Optional: Adresse (https://…) eines Bilds mit dem TWINT-QR-Code |
 | `MAFO_BONUSCODES` | Bonuscodes, durch Komma getrennt. `CODE` gibt 30 % Rabatt, `CODE:20` einen eigenen Satz. Leer oder nicht gesetzt: kein Code gilt. |
 
 Die Bonuscodes stehen absichtlich nur in Vercel und nicht im Code, weil dieses

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kasse — MAFO</title>
+  <meta name="description" content="Kasse: Warenkorb prüfen, Lieferadresse und Zahlungsart angeben, Bestellung abschliessen.">
+  <meta name="robots" content="noindex">
+
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <meta name="theme-color" content="#17140f">
+
+  <link rel="stylesheet" href="fonts.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <a class="brand" href="index.html"><img src="logo.png" alt="MAFO" width="440" height="314"></a>
+      <nav class="topbar-nav">
+        <a href="index.html" data-i18n="nav.car">MAFO</a>
+        <a href="mafo-walk.html" data-i18n="nav.walk">MAFO WALK</a>
+        <button class="topbar-cta topbar-warenkorb" type="button" data-i18n-label="nav.cart" aria-label="Warenkorb">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          <span class="warenkorb-zahl" data-warenkorb-zahl hidden>0</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main data-i18n-title="kasse.pageTitle">
+    <section class="kasse">
+      <div class="wrap kasse-inner">
+        <h1 data-i18n="kasse.title">Kasse</h1>
+
+        <ol class="schritte" aria-label="Schritte">
+          <li data-schritt="warenkorb"><span class="schritt-nr">1</span><span data-i18n="kasse.step1">Warenkorb</span></li>
+          <li data-schritt="adresse"><span class="schritt-nr">2</span><span data-i18n="kasse.step2">Adresse</span></li>
+          <li data-schritt="zahlung"><span class="schritt-nr">3</span><span data-i18n="kasse.step3">Zahlung</span></li>
+          <li data-schritt="pruefen"><span class="schritt-nr">4</span><span data-i18n="kasse.step4">Prüfen</span></li>
+        </ol>
+
+        <form id="kasse-form" class="kasse-form" novalidate>
+
+          <!-- 1. Warenkorb -->
+          <section class="schritt" data-schritt="warenkorb">
+            <h2 data-i18n="kasse.step1">Warenkorb</h2>
+            <div class="wk-liste" id="kasse-zeilen"></div>
+            <p class="kasse-leer" hidden><span data-i18n="cart.empty">Dein Warenkorb ist leer.</span> <a href="index.html#reservieren" data-i18n="kasse.backShop">Zu den Produkten</a></p>
+
+            <div class="kasse-nur-mit-artikeln">
+              <div class="field bonus">
+                <label for="bonuscode" data-i18n="order.codeLabel">Bonuscode</label>
+                <div class="bonus-row">
+                  <input id="bonuscode" name="bonuscode" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="40">
+                  <button class="btn btn-secondary bonus-btn" type="button" data-i18n="order.codeApply">Einlösen</button>
+                </div>
+                <p id="bonus-status" class="bonus-status" aria-live="polite"></p>
+              </div>
+
+              <div class="summen" id="kasse-summen" aria-live="polite"></div>
+
+              <div class="schritt-knoepfe">
+                <button class="btn btn-primary" type="button" data-weiter="adresse" data-i18n="kasse.next1">Weiter zur Adresse</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- 2. Adresse -->
+          <section class="schritt" data-schritt="adresse" hidden>
+            <h2 data-i18n="kasse.addressTitle">Lieferadresse</h2>
+            <p class="form-note" data-i18n="kasse.addressNote">Lieferung nur innerhalb der Schweiz. Die Bestätigung schicken wir an deine E-Mail-Adresse.</p>
+            <div class="field">
+              <label for="name" data-i18n="order.name">Name</label>
+              <input id="name" name="name" type="text" autocomplete="name" required>
+            </div>
+            <div class="field">
+              <label for="email" data-i18n="order.email">E-Mail-Adresse</label>
+              <input id="email" name="email" type="email" autocomplete="email" required>
+            </div>
+            <div class="field">
+              <label for="street" data-i18n="order.street">Strasse und Nummer</label>
+              <input id="street" name="street" type="text" autocomplete="address-line1" required>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="zip" data-i18n="order.zip">PLZ</label>
+                <input id="zip" name="zip" type="text" inputmode="numeric" maxlength="4" autocomplete="postal-code" required>
+              </div>
+              <div class="field">
+                <label for="city" data-i18n="order.city">Ort</label>
+                <input id="city" name="city" type="text" autocomplete="address-level2" required>
+              </div>
+            </div>
+            <!-- Honeypot gegen Spam-Bots, für Menschen unsichtbar -->
+            <div class="field field-hidden" aria-hidden="true">
+              <label for="company">Firma</label>
+              <input id="company" name="company" type="text" tabindex="-1" autocomplete="off">
+            </div>
+            <div class="schritt-knoepfe">
+              <button class="btn btn-secondary" type="button" data-weiter="warenkorb" data-i18n="kasse.back">Zurück</button>
+              <button class="btn btn-primary" type="button" data-weiter="zahlung" data-i18n="kasse.next2">Weiter zur Zahlung</button>
+            </div>
+          </section>
+
+          <!-- 3. Zahlungsart -->
+          <section class="schritt" data-schritt="zahlung" hidden>
+            <h2 data-i18n="kasse.payTitle">Zahlungsart</h2>
+            <label class="zahlart">
+              <input type="radio" name="zahlung" value="vorauskasse">
+              <span class="zahlart-text">
+                <strong data-i18n="pay.vorauskasse">Vorauskasse (Banküberweisung)</strong>
+                <span data-i18n="pay.vorauskasseText">Du erhältst die Bankangaben mit der Bestellbestätigung. Überweise den Betrag mit der Bestellnummer als Zahlungszweck.</span>
+              </span>
+            </label>
+            <label class="zahlart">
+              <input type="radio" name="zahlung" value="twint">
+              <span class="zahlart-text">
+                <strong data-i18n="pay.twint">TWINT</strong>
+                <span data-i18n="pay.twintText">Du erhältst die TWINT-Angaben mit der Bestellbestätigung. Bezahle in der TWINT-App und gib die Bestellnummer als Mitteilung an.</span>
+              </span>
+            </label>
+            <p class="form-note" data-i18n="pay.after">Wir versenden, sobald die Zahlung eingegangen ist.</p>
+            <div class="schritt-knoepfe">
+              <button class="btn btn-secondary" type="button" data-weiter="adresse" data-i18n="kasse.back">Zurück</button>
+              <button class="btn btn-primary" type="button" data-weiter="pruefen" data-i18n="kasse.next3">Weiter zur Prüfung</button>
+            </div>
+          </section>
+
+          <!-- 4. Prüfen und bestellen -->
+          <section class="schritt" data-schritt="pruefen" hidden>
+            <h2 data-i18n="kasse.reviewTitle">Bestellung prüfen</h2>
+            <div class="pruef-block">
+              <h3 data-i18n="kasse.items">Artikel</h3>
+              <div id="pruef-artikel" class="pruef-artikel"></div>
+              <div class="summen" id="pruef-summen"></div>
+              <button class="link-knopf" type="button" data-weiter="warenkorb" data-i18n="kasse.edit">Ändern</button>
+            </div>
+            <div class="pruef-block">
+              <h3 data-i18n="kasse.addressTitle">Lieferadresse</h3>
+              <p id="pruef-adresse" class="pruef-text"></p>
+              <button class="link-knopf" type="button" data-weiter="adresse" data-i18n="kasse.edit">Ändern</button>
+            </div>
+            <div class="pruef-block">
+              <h3 data-i18n="kasse.payTitle">Zahlungsart</h3>
+              <p id="pruef-zahlung" class="pruef-text"></p>
+              <button class="link-knopf" type="button" data-weiter="zahlung" data-i18n="kasse.edit">Ändern</button>
+            </div>
+            <p class="form-note"><span data-i18n="kasse.legal">Mit Klick auf «Zahlungspflichtig bestellen» gibst du eine verbindliche Bestellung auf. Den Eingang bestätigen wir dir per E-Mail. Wie wir mit deinen Daten umgehen, steht in der </span><a href="datenschutz.html" data-i18n="order.privacyLink">Datenschutzerklärung</a>.</p>
+            <p class="form-note" data-i18n="order.seller">Verkäufer: Mafo Pet, Ausserdorfstrasse 22, 8918 Unterlunkhofen, info@mafo-pet.ch</p>
+            <div class="schritt-knoepfe">
+              <button class="btn btn-secondary" type="button" data-weiter="zahlung" data-i18n="kasse.back">Zurück</button>
+              <button class="btn btn-primary" type="submit" data-i18n="kasse.submit">Zahlungspflichtig bestellen</button>
+            </div>
+          </section>
+
+          <!-- 5. Danke -->
+          <section class="schritt" data-schritt="danke" hidden>
+            <h2 data-i18n="kasse.thanksTitle">Danke für deine Bestellung!</h2>
+            <p data-i18n="kasse.thanksText">Sie ist bei uns eingegangen. Die Bestätigung mit allen Angaben schicken wir dir per E-Mail – schau auch im Spam-Ordner nach.</p>
+            <p class="bestellnummer"><span data-i18n="order.number">Bestellnummer</span>: <strong id="danke-nummer"></strong></p>
+            <div class="zahlhinweis" id="danke-zahlung"></div>
+            <div class="schritt-knoepfe">
+              <a class="btn btn-secondary" href="index.html" data-i18n="kasse.backShop">Zu den Produkten</a>
+            </div>
+          </section>
+
+          <p id="form-status" class="form-status" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <span data-i18n="footer.rights">© 2026 MAFO, Schweiz</span>
+      <nav class="footer-links">
+        <a href="mailto:info@mafo-pet.ch">info@mafo-pet.ch</a>
+        <a href="datenschutz.html" data-i18n="footer.privacy">Datenschutz</a>
+      </nav>
+      <div class="lang-switch" role="group" aria-label="Sprache / Langue / Lingua / Language">
+        <button type="button" data-lang="de">DE</button>
+        <button type="button" data-lang="fr">FR</button>
+        <button type="button" data-lang="it">IT</button>
+        <button type="button" data-lang="en">EN</button>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <!-- Cookiefreie Zugriffsstatistik (Vercel Web Analytics) -->
+  <script defer src="/_vercel/insights/script.js"></script>
+  <script src="i18n.js"></script>
+  <script src="chat.js"></script>
+</body>
+</html>

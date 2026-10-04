@@ -1,5 +1,6 @@
 import { randomInt } from "node:crypto";
 import { bonusProzent, mitRabatt, normalerCode } from "./_rabatt.js";
+import { ZAHLUNGSARTEN, zahlungsangaben, vollstaendig } from "./_zahlung.js";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PLZ_RE = /^\d{4}$/;
@@ -40,6 +41,11 @@ export default async function handler(request, response) {
   if (!PLZ_RE.test(plz)) return response.status(400).json({ error: "Ungültige Postleitzahl." });
   if (!ort) return response.status(400).json({ error: "Ort fehlt." });
 
+  const zahlungsart = text(body.zahlung, 20);
+  if (!ZAHLUNGSARTEN[zahlungsart]) {
+    return response.status(400).json({ error: "Ungültige Zahlungsart.", feld: "zahlung" });
+  }
+
   const positionen = [];
   for (const artikel of ARTIKEL) {
     const menge = leseMenge(body[artikel.feld]);
@@ -77,7 +83,8 @@ export default async function handler(request, response) {
     return response.status(500).json({ error: "Server ist nicht korrekt konfiguriert." });
   }
 
-  const bestellung = { nummer, name, email, strasse, plz, ort, positionen, zwischensumme, rabatt, total };
+  const zahlung = zahlungsangaben(zahlungsart);
+  const bestellung = { nummer, name, email, strasse, plz, ort, positionen, zwischensumme, rabatt, total, zahlung };
   const submittedAt = new Date().toISOString();
   const kurz = positionen.map((p) => `${p.menge}× ${p.name}`).join(", ");
 
@@ -88,7 +95,7 @@ export default async function handler(request, response) {
       from: fromEmail,
       to: [toEmail],
       reply_to: email,
-      subject: `Neue Bestellung ${nummer}: ${kurz} – ${einzeilig(name)}`,
+      subject: `Neue Bestellung ${nummer}: ${kurz} – ${einzeilig(name)} (${ZAHLUNGSARTEN[zahlungsart]})`,
       html: internerText(bestellung, submittedAt),
     });
 
@@ -111,7 +118,7 @@ export default async function handler(request, response) {
       console.error("Resend error (Bestätigung):", bestaetigung.status, bestaetigung.text);
     }
 
-    return response.status(200).json({ ok: true, nummer });
+    return response.status(200).json({ ok: true, nummer, total, zahlung });
   } catch (error) {
     console.error("Unerwarteter Fehler beim Senden:", error);
     return response.status(500).json({ error: "Unerwarteter Fehler." });
@@ -174,7 +181,7 @@ function chf(rappen) {
   return `CHF ${(rappen / 100).toFixed(2)}`;
 }
 
-function internerText({ nummer, name, email, strasse, plz, ort, positionen, zwischensumme, rabatt, total }, submittedAt) {
+function internerText({ nummer, name, email, strasse, plz, ort, positionen, zwischensumme, rabatt, total, zahlung }, submittedAt) {
   const artikel = positionen
     .map((p) => `${p.menge}× ${escapeHtml(p.name)} – ${chf(p.summe)}`)
     .join("<br>");
@@ -194,13 +201,18 @@ function internerText({ nummer, name, email, strasse, plz, ort, positionen, zwis
       <tr><td><strong>Name</strong></td><td>${escapeHtml(name)}</td></tr>
       <tr><td><strong>E-Mail</strong></td><td>${escapeHtml(email)}</td></tr>
       <tr><td valign="top"><strong>Lieferadresse</strong></td><td>${escapeHtml(strasse)}<br>${escapeHtml(plz)} ${escapeHtml(ort)}</td></tr>
+      <tr><td><strong>Zahlungsart</strong></td><td>${escapeHtml(ZAHLUNGSARTEN[zahlung.art])} – Zahlung ausstehend</td></tr>
       <tr><td><strong>Zeitpunkt</strong></td><td>${submittedAt}</td></tr>
     </table>
-    <p>Noch offen: Liefertermin und Zahlungsangaben an die Kundschaft senden (siehe Bestätigungsmail).</p>
+    ${
+      vollstaendig(zahlung)
+        ? "<p>Die Kundschaft hat die Zahlungsangaben mit der Bestätigung erhalten. Noch offen: Zahlungseingang prüfen, dann versenden und den Liefertermin nennen.</p>"
+        : "<p><strong>Achtung:</strong> Für diese Zahlungsart sind in Vercel keine Zahlungsangaben hinterlegt (MAFO_IBAN bzw. MAFO_TWINT_NUMMER). Die Kundschaft wartet auf eine separate E-Mail mit den Angaben.</p>"
+    }
   `.trim();
 }
 
-function bestaetigungsText({ nummer, name, strasse, plz, ort, positionen, rabatt, total }) {
+function bestaetigungsText({ nummer, name, strasse, plz, ort, positionen, rabatt, total, zahlung }) {
   const zeilen = positionen
     .map(
       (p) => `
@@ -250,10 +262,11 @@ function bestaetigungsText({ nummer, name, strasse, plz, ort, positionen, rabatt
         ${escapeHtml(strasse)}<br>
         ${escapeHtml(plz)} ${escapeHtml(ort)}
       </p>
+      ${zahlungsText(zahlung, nummer, total)}
       <p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:#d5cbba;">
-        Als Nächstes melden wir uns mit dem <strong style="color:#f3ede1;">Liefertermin</strong>
-        und den <strong style="color:#f3ede1;">Zahlungsangaben</strong>. Stimmt etwas
-        nicht, zum Beispiel die Adresse, antworte einfach auf diese E-Mail.
+        Wir versenden, sobald die Zahlung eingegangen ist, und nennen dir dann den
+        <strong style="color:#f3ede1;">Liefertermin</strong>. Stimmt etwas nicht, zum
+        Beispiel die Adresse, antworte einfach auf diese E-Mail.
       </p>
       <p style="margin:0;font-size:15px;line-height:1.6;color:#d5cbba;">
         Herzlich<br>Dein MAFO Team
@@ -266,6 +279,37 @@ function bestaetigungsText({ nummer, name, strasse, plz, ort, positionen, rabatt
   </p>
 </div>
   `.trim();
+}
+
+// Block "So bezahlst du" in der Bestätigung
+function zahlungsText(zahlung, nummer, total) {
+  const zeile = (label, wert) =>
+    wert
+      ? `<tr>
+          <td style="padding:5px 12px 5px 0;font-size:14px;color:#ab9f8c;white-space:nowrap;vertical-align:top;">${label}</td>
+          <td style="padding:5px 0;font-size:15px;color:#f3ede1;font-variant-numeric:tabular-nums;">${escapeHtml(wert)}</td>
+        </tr>`
+      : "";
+  let zeilen = zeile("Zahlungsart", ZAHLUNGSARTEN[zahlung.art]) + zeile("Betrag", chf(total));
+  if (zahlung.art === "twint") {
+    zeilen += zeile("TWINT-Nummer", zahlung.twint) + zeile("Mitteilung", nummer);
+  } else {
+    zeilen += zeile("IBAN", zahlung.iban) + zeile("Kontoinhaber", zahlung.inhaber) + zeile("Zahlungszweck", nummer);
+  }
+  const qr =
+    zahlung.art === "twint" && zahlung.qr
+      ? `<p style="margin:12px 0 0;font-size:14px;color:#d5cbba;">Oder scanne diesen QR-Code in der TWINT-App:</p>
+         <img src="${escapeHtml(zahlung.qr)}" alt="TWINT QR-Code" width="180" style="display:block;margin:8px 0 0;background:#fff;padding:8px;border-radius:8px;">`
+      : "";
+  const hinweis = vollstaendig(zahlung)
+    ? ""
+    : `<p style="margin:12px 0 0;font-size:14px;line-height:1.5;color:#d5cbba;">Die Zahlungsangaben senden wir dir in einer separaten E-Mail.</p>`;
+  return `
+      <div style="margin:0 0 20px;padding:14px 16px;background:#221c14;border:1px solid #c8945f;border-radius:8px;">
+        <p style="margin:0 0 8px;font-size:15px;font-weight:600;color:#f3ede1;">So bezahlst du</p>
+        <table cellpadding="0" cellspacing="0" style="border-collapse:collapse;">${zeilen}</table>
+        ${qr}${hinweis}
+      </div>`;
 }
 
 function vorname(name) {
