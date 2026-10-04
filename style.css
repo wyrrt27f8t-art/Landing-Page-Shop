@@ -426,6 +426,47 @@ a {
   margin-bottom: 1.75rem !important;
 }
 
+/* Rundum-Video und Produktbild */
+.rundum {
+  padding: 4.5rem 0 0;
+}
+
+.rundum-inner {
+  max-width: 34rem;
+  text-align: center;
+}
+
+.rundum h2 {
+  font-size: clamp(1.7rem, 3vw, 2.2rem);
+  margin-bottom: 0.6rem;
+}
+
+.rundum-video {
+  display: block;
+  width: 100%;
+  max-width: 26rem;
+  height: auto;
+  aspect-ratio: 9 / 10;
+  margin: 1.75rem auto 0;
+  border-radius: 1rem;
+  background: #e5dccb;
+  object-fit: cover;
+}
+
+.produktbild {
+  margin: 1.75rem 0 0;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: #e5dccb;
+}
+
+.produktbild img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
 /* Preorder */
 .preorder {
   padding: 4.5rem 0;

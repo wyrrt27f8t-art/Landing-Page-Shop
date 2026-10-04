@@ -13,17 +13,17 @@ const STANDARD = "de";
 
 const TEXTE = {
   de: {
-    "nav.car": "MAFO CAR",
+    "nav.car": "MAFO",
     "nav.walk": "MAFO WALK",
     "nav.cta": "Bestellen",
 
-    "hero.kicker": "MAFO CAR — Dog Travel Organizer",
+    "hero.kicker": "MAFO — Dog Travel Organizer",
     "hero.title": "Ordnung fürs Auto.",
     "hero.lead": "Der praktische Travel Organizer, der mit deinem Hund reist – griffbereit, durchdacht und gemacht für jede Fahrt und jeden Spaziergang.",
     "hero.priceNote": "inkl. Versand in der Schweiz · jetzt bestellbar",
     "hero.cta": "Jetzt bestellen",
 
-    "features.title": "Warum MAFO CAR",
+    "features.title": "Warum MAFO",
     "features.1.title": "Durchdacht organisiert",
     "features.1.text": "Eigene Taschen für Leine, Decke und alles, was sonst noch mitmuss – griffbereit statt lose im Kofferraum.",
     "features.2.title": "Napfstation an Bord",
@@ -38,7 +38,7 @@ const TEXTE = {
     "features.6.text": "Entwickelt in der Schweiz, mit Liebe zum Detail – für Hundebesitzer, die Qualität schätzen.",
 
     "size.title": "Passt er in dein Auto?",
-    "size.p1": "Mit 33 cm Breite und 17 cm Tiefe steht MAFO CAR aufrecht im Kofferraum, ohne die Ladefläche zu blockieren – und lässt sich am Schultergurt in einem Zug herausnehmen.",
+    "size.p1": "Mit 33 cm Breite und 17 cm Tiefe steht MAFO aufrecht im Kofferraum, ohne die Ladefläche zu blockieren – und lässt sich am Schultergurt in einem Zug herausnehmen.",
     "size.p2": "Die wasserfeste Matte misst ausgerollt 60 × 40 cm. Genug Platz für beide Näpfe nebeneinander, ohne dass Wasser ins Gras oder auf den Kofferraumboden läuft.",
     "size.specTitle": "Masse und Lieferumfang",
     "size.spec1Label": "Tasche",
@@ -50,6 +50,8 @@ const TEXTE = {
     "size.spec4Label": "Schultergurt",
     "size.spec4": "abnehmbar, plus zwei Tragegriffe",
     "size.note": "Masse gerundet – geringe Abweichungen möglich.",
+    "gallery.title": "Von allen Seiten",
+    "gallery.lead": "Das echte Produkt, einmal ringsum gedreht.",
 
     "walk.kicker": "MAFO WALK — 3-in-1 Trinkflasche",
     "walk.title1": "Eine Flasche.",
@@ -79,7 +81,7 @@ const TEXTE = {
     "order.qty": "Anzahl",
     "order.total": "Total",
     "order.totalNote": "inkl. Versand, Lieferung nur innerhalb der Schweiz",
-    "order.optCar": "MAFO CAR — Travel Organizer",
+    "order.optCar": "MAFO — Travel Organizer",
     "order.optWalk": "MAFO WALK — 3-in-1 Trinkflasche",
     "order.name": "Name",
     "order.email": "E-Mail-Adresse",
@@ -120,17 +122,17 @@ const TEXTE = {
   },
 
   fr: {
-    "nav.car": "MAFO CAR",
+    "nav.car": "MAFO",
     "nav.walk": "MAFO WALK",
     "nav.cta": "Commander",
 
-    "hero.kicker": "MAFO CAR — Organiseur de voyage pour chien",
+    "hero.kicker": "MAFO — Organiseur de voyage pour chien",
     "hero.title": "De l'ordre dans la voiture.",
     "hero.lead": "L'organiseur pratique qui voyage avec ton chien – à portée de main, bien pensé, conçu pour chaque trajet et chaque promenade.",
     "hero.priceNote": "livraison en Suisse incluse · commande possible dès maintenant",
     "hero.cta": "Commander maintenant",
 
-    "features.title": "Pourquoi MAFO CAR",
+    "features.title": "Pourquoi MAFO",
     "features.1.title": "Tout à sa place",
     "features.1.text": "Des poches dédiées pour la laisse, la couverture et tout le reste – à portée de main plutôt qu'en vrac dans le coffre.",
     "features.2.title": "Station gamelles intégrée",
@@ -145,7 +147,7 @@ const TEXTE = {
     "features.6.text": "Conçu en Suisse, avec le souci du détail – pour les propriétaires de chiens qui apprécient la qualité.",
 
     "size.title": "Entre-t-il dans ta voiture ?",
-    "size.p1": "Avec 33 cm de largeur et 17 cm de profondeur, MAFO CAR tient debout dans le coffre sans bloquer la surface de chargement – et se retire d'un seul geste grâce à la sangle.",
+    "size.p1": "Avec 33 cm de largeur et 17 cm de profondeur, MAFO tient debout dans le coffre sans bloquer la surface de chargement – et se retire d'un seul geste grâce à la sangle.",
     "size.p2": "Le tapis imperméable mesure 60 × 40 cm une fois déroulé. De quoi poser les deux gamelles côte à côte, sans que l'eau ne finisse dans l'herbe ou au fond du coffre.",
     "size.specTitle": "Dimensions et contenu",
     "size.spec1Label": "Sac",
@@ -157,6 +159,8 @@ const TEXTE = {
     "size.spec4Label": "Sangle d'épaule",
     "size.spec4": "amovible, plus deux poignées",
     "size.note": "Dimensions arrondies – de légers écarts sont possibles.",
+    "gallery.title": "Sous tous les angles",
+    "gallery.lead": "Le vrai produit, vu tout autour.",
 
     "walk.kicker": "MAFO WALK — Gourde 3 en 1",
     "walk.title1": "Une gourde.",
@@ -186,7 +190,7 @@ const TEXTE = {
     "order.qty": "Quantité",
     "order.total": "Total",
     "order.totalNote": "livraison incluse, uniquement en Suisse",
-    "order.optCar": "MAFO CAR — Organiseur de voyage",
+    "order.optCar": "MAFO — Organiseur de voyage",
     "order.optWalk": "MAFO WALK — Gourde 3 en 1",
     "order.name": "Nom",
     "order.email": "Adresse e-mail",
@@ -227,17 +231,17 @@ const TEXTE = {
   },
 
   it: {
-    "nav.car": "MAFO CAR",
+    "nav.car": "MAFO",
     "nav.walk": "MAFO WALK",
     "nav.cta": "Ordina",
 
-    "hero.kicker": "MAFO CAR — Organizer da viaggio per cani",
+    "hero.kicker": "MAFO — Organizer da viaggio per cani",
     "hero.title": "Ordine in auto.",
     "hero.lead": "L'organizer pratico che viaggia con il tuo cane – a portata di mano, ben pensato, fatto per ogni viaggio e ogni passeggiata.",
     "hero.priceNote": "spedizione in Svizzera inclusa · ordinabile subito",
     "hero.cta": "Ordina ora",
 
-    "features.title": "Perché MAFO CAR",
+    "features.title": "Perché MAFO",
     "features.1.title": "Tutto al suo posto",
     "features.1.text": "Scomparti dedicati per guinzaglio, coperta e tutto il resto – a portata di mano invece che sparsi nel bagagliaio.",
     "features.2.title": "Ciotole già incluse",
@@ -252,7 +256,7 @@ const TEXTE = {
     "features.6.text": "Progettato in Svizzera, con cura per il dettaglio – per chi ha un cane e apprezza la qualità.",
 
     "size.title": "Entra nella tua auto?",
-    "size.p1": "Con 33 cm di larghezza e 17 cm di profondità, MAFO CAR sta in piedi nel bagagliaio senza occupare il piano di carico – e si estrae in un solo gesto grazie alla tracolla.",
+    "size.p1": "Con 33 cm di larghezza e 17 cm di profondità, MAFO sta in piedi nel bagagliaio senza occupare il piano di carico – e si estrae in un solo gesto grazie alla tracolla.",
     "size.p2": "Il tappetino impermeabile misura 60 × 40 cm una volta srotolato. Spazio sufficiente per entrambe le ciotole affiancate, senza che l'acqua finisca sull'erba o sul fondo del bagagliaio.",
     "size.specTitle": "Dimensioni e contenuto",
     "size.spec1Label": "Borsa",
@@ -264,6 +268,8 @@ const TEXTE = {
     "size.spec4Label": "Tracolla",
     "size.spec4": "staccabile, più due maniglie",
     "size.note": "Misure arrotondate – lievi scostamenti possibili.",
+    "gallery.title": "Da ogni lato",
+    "gallery.lead": "Il prodotto vero, visto tutto intorno.",
 
     "walk.kicker": "MAFO WALK — Borraccia 3 in 1",
     "walk.title1": "Una borraccia.",
@@ -293,7 +299,7 @@ const TEXTE = {
     "order.qty": "Quantità",
     "order.total": "Totale",
     "order.totalNote": "spedizione inclusa, solo in Svizzera",
-    "order.optCar": "MAFO CAR — Organizer da viaggio",
+    "order.optCar": "MAFO — Organizer da viaggio",
     "order.optWalk": "MAFO WALK — Borraccia 3 in 1",
     "order.name": "Nome",
     "order.email": "Indirizzo e-mail",
@@ -334,17 +340,17 @@ const TEXTE = {
   },
 
   en: {
-    "nav.car": "MAFO CAR",
+    "nav.car": "MAFO",
     "nav.walk": "MAFO WALK",
     "nav.cta": "Order",
 
-    "hero.kicker": "MAFO CAR — Dog Travel Organizer",
+    "hero.kicker": "MAFO — Dog Travel Organizer",
     "hero.title": "Order in your car.",
     "hero.lead": "The practical travel organizer that rides along with your dog – within reach, well thought out, made for every drive and every walk.",
     "hero.priceNote": "shipping within Switzerland included · available to order now",
     "hero.cta": "Order now",
 
-    "features.title": "Why MAFO CAR",
+    "features.title": "Why MAFO",
     "features.1.title": "Everything in its place",
     "features.1.text": "Dedicated pockets for the lead, the blanket and whatever else comes along – within reach instead of loose in the boot.",
     "features.2.title": "Bowls already included",
@@ -359,7 +365,7 @@ const TEXTE = {
     "features.6.text": "Designed in Switzerland with an eye for detail – for dog owners who value quality.",
 
     "size.title": "Will it fit your car?",
-    "size.p1": "At 33 cm wide and 17 cm deep, MAFO CAR stands upright in the boot without taking up the loading area – and lifts out in one go by the shoulder strap.",
+    "size.p1": "At 33 cm wide and 17 cm deep, MAFO stands upright in the boot without taking up the loading area – and lifts out in one go by the shoulder strap.",
     "size.p2": "Rolled out, the waterproof mat measures 60 × 40 cm. Room enough for both bowls side by side, without water ending up in the grass or on the boot floor.",
     "size.specTitle": "Dimensions and contents",
     "size.spec1Label": "Bag",
@@ -371,6 +377,8 @@ const TEXTE = {
     "size.spec4Label": "Shoulder strap",
     "size.spec4": "detachable, plus two carry handles",
     "size.note": "Measurements rounded – slight deviations possible.",
+    "gallery.title": "From every side",
+    "gallery.lead": "The real product, turned all the way round.",
 
     "walk.kicker": "MAFO WALK — 3-in-1 water bottle",
     "walk.title1": "One bottle.",
@@ -400,7 +408,7 @@ const TEXTE = {
     "order.qty": "Quantity",
     "order.total": "Total",
     "order.totalNote": "shipping included, Switzerland only",
-    "order.optCar": "MAFO CAR — Travel Organizer",
+    "order.optCar": "MAFO — Travel Organizer",
     "order.optWalk": "MAFO WALK — 3-in-1 water bottle",
     "order.name": "Name",
     "order.email": "Email address",

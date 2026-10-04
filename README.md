@@ -1,6 +1,7 @@
-# MAFO CAR — Landingpage
+# MAFO — Landingpage
 
-Landingpage für **MAFO CAR**, den praktischen Dog Travel Organizer fürs Auto (Marke MAFO, Schweiz).
+Landingpage der Schweizer Marke MAFO: **MAFO**, der praktische Dog Travel Organizer fürs Auto,
+und **MAFO WALK**, die 3-in-1 Trinkflasche.
 
 ## Struktur
 
@@ -39,7 +40,7 @@ Environment Variables in Vercel (Settings → Environments → Production):
 | Variable | Wert |
 | --- | --- |
 | `RESEND_API_KEY` | API-Key aus dem Resend-Dashboard |
-| `MAFO_FROM_EMAIL` | `MAFO CAR <noreply@mafo-pet.ch>` |
+| `MAFO_FROM_EMAIL` | `noreply@mafo-pet.ch` (Anzeigename ist im Code fest: „MAFO“) |
 | `MAFO_TO_EMAIL` | `info@mafo-pet.ch` |
 
 Änderungen an diesen Variablen greifen erst nach einem Redeploy.

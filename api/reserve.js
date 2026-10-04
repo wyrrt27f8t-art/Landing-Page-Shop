@@ -7,7 +7,7 @@ const PLZ_RE = /^\d{4}$/;
 // übereinstimmen; der Betrag in den Mails wird hier berechnet, nie aus dem
 // Browser übernommen.
 const ARTIKEL = [
-  { feld: "anzahlCar", name: "MAFO CAR", preis: 7990 },
+  { feld: "anzahlCar", name: "MAFO", preis: 7990 },
   { feld: "anzahlWalk", name: "MAFO WALK", preis: 3990 },
 ];
 const MAX_PRO_ARTIKEL = 10;
