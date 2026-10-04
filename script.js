@@ -84,8 +84,14 @@ form.addEventListener("submit", async (event) => {
 
     form.reset();
     zeigeTotal();
-    const nummer = result.nummer ? ` ${sagt("order.number")}: ${result.nummer}` : "";
-    status.textContent = sagt("order.success") + nummer;
+    status.textContent = sagt("order.success");
+    if (result.nummer) {
+      // Die Bestellnummer soll nie mitten im Wort umbrechen.
+      const nummer = document.createElement("span");
+      nummer.style.whiteSpace = "nowrap";
+      nummer.textContent = result.nummer;
+      status.append(` ${sagt("order.number")}: `, nummer);
+    }
     status.setAttribute("data-state", "success");
   } catch (error) {
     status.textContent = sagt("order.error");
