@@ -631,7 +631,7 @@ document.querySelectorAll(".hero-bg").forEach((video) => {
 });
 
 /*
- * 360-Grad-Ansicht: 27 Einzelbilder, die man mit Finger, Maus oder Pfeiltasten
+ * 360-Grad-Ansicht: 72 Einzelbilder, die man mit Finger, Maus oder Pfeiltasten
  * dreht. Von selbst dreht sie langsam, bis jemand anfasst, und nach einer
  * Pause wieder. Zoom mit zwei Fingern, Doppeltippen, Ctrl + Mausrad oder den
  * Knöpfen; gezoomt verschiebt ein Finger das Bild, die Pfeile drehen weiter.
@@ -744,6 +744,8 @@ document.querySelectorAll(".rundum-viewer").forEach((viewer) => {
 
   // Eine ganze Umdrehung entspricht etwa 1,3 Breiten des Betrachters
   const proBild = () => (viewer.clientWidth * 1.3) / anzahl;
+  // Pfeile drehen um rund 15 Grad, unabhängig von der Zahl der Bilder
+  const SCHRITT = Math.max(1, Math.round(anzahl / 24));
 
   function anfassen() {
     viewer.classList.add("beruehrt");
@@ -848,7 +850,7 @@ document.querySelectorAll(".rundum-viewer").forEach((viewer) => {
     const taste = e.key;
     if (taste === "ArrowLeft" || taste === "ArrowRight") {
       anfassen();
-      zeige(position + (taste === "ArrowRight" ? 1 : -1));
+      zeige(position + (taste === "ArrowRight" ? SCHRITT : -SCHRITT));
     } else if (taste === "+" || taste === "=") {
       anfassen();
       zoomeAuf(zoom * 1.5, 0, 0, true);
@@ -863,8 +865,8 @@ document.querySelectorAll(".rundum-viewer").forEach((viewer) => {
     e.preventDefault();
   });
 
-  knopf("dreh.links").addEventListener("click", () => { anfassen(); zeige(position - 1); });
-  knopf("dreh.rechts").addEventListener("click", () => { anfassen(); zeige(position + 1); });
+  knopf("dreh.links").addEventListener("click", () => { anfassen(); zeige(position - SCHRITT); });
+  knopf("dreh.rechts").addEventListener("click", () => { anfassen(); zeige(position + SCHRITT); });
   knopf("zoom.plus").addEventListener("click", () => { anfassen(); zoomeAuf(zoom * 1.5, 0, 0, true); });
   knopf("zoom.minus").addEventListener("click", () => { anfassen(); zoomeAuf(zoom / 1.5, 0, 0, true); });
 
@@ -877,7 +879,7 @@ document.querySelectorAll(".rundum-viewer").forEach((viewer) => {
         zeige(position + (schwung * dt) / 16);
         schwung *= Math.pow(0.94, dt / 16);
       } else if (!ruhig && zoom === 1 && t > pauseBis && geladen === anzahl) {
-        zeige(position + dt / 160); // von selbst: ein Bild alle 160 ms
+        zeige(position + (dt * anzahl) / 7000); // von selbst: eine Umdrehung in 7 Sekunden
       }
     }
     requestAnimationFrame(schritt);
