@@ -284,6 +284,11 @@ function bestaetigungsText({ nummer, name, strasse, plz, ort, land, positionen, 
         ${escapeHtml(LAENDER[land])}
       </p>
       ${zahlungsText(zahlung, nummer, total)}
+      ${
+        versand
+          ? `<p style="margin:0 0 16px;font-size:13px;line-height:1.6;color:#ab9f8c;">Hinweis für Lieferungen nach ${escapeHtml(LAENDER[land])}: Einfuhrumsatzsteuer und allfällige Zollgebühren werden vom Paketdienst bei der Zustellung erhoben und sind nicht im Betrag enthalten.</p>`
+          : ""
+      }
       <p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:#d5cbba;">
         Wir versenden, sobald die Zahlung eingegangen ist, und nennen dir dann den
         <strong style="color:#f3ede1;">Liefertermin</strong>. Stimmt etwas nicht, zum
