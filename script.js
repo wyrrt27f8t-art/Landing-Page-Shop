@@ -380,19 +380,35 @@ function baueKasse(form) {
       street: form.elements.street.value.trim(),
       zip: form.elements.zip.value.trim(),
       city: form.elements.city.value.trim(),
+      country: form.elements.country.value,
     };
   }
+  // Postleitzahlen: Schweiz und Österreich vierstellig, Deutschland fünfstellig
+  const PLZ_RE = { CH: /^\d{4}$/, AT: /^\d{4}$/, DE: /^\d{5}$/ };
   function adresseFehler() {
     const a = adresse();
     if (!a.name || !a.email || !a.street || !a.zip || !a.city) return "order.missing";
     if (!EMAIL_RE.test(a.email)) return "order.badEmail";
-    if (!/^\d{4}$/.test(a.zip)) return "order.badZip";
+    if (!(PLZ_RE[a.country] || PLZ_RE.CH).test(a.zip)) return "order.badZip";
     return "";
   }
   function zahlungsart() {
     const gewaehlt = form.querySelector('input[name="zahlung"]:checked');
-    return gewaehlt ? gewaehlt.value : "";
+    if (!gewaehlt) return "";
+    if (gewaehlt.value === "twint" && adresse().country !== "CH") return ""; // TWINT gibt es nur in der Schweiz
+    return gewaehlt.value;
   }
+  // TWINT nur anbieten, wenn in die Schweiz geliefert wird
+  const twintRadio = form.querySelector('input[name="zahlung"][value="twint"]');
+  const twintHinweis = form.querySelector(".zahlart-hinweis");
+  function landAnwenden() {
+    const schweiz = form.elements.country.value === "CH";
+    twintRadio.disabled = !schweiz;
+    twintHinweis.hidden = schweiz;
+    if (!schweiz && twintRadio.checked) twintRadio.checked = false;
+  }
+  form.elements.country.addEventListener("change", landAnwenden);
+  landAnwenden();
 
   function zeichnePruefung() {
     pruefArtikel.replaceChildren();
@@ -407,7 +423,7 @@ function baueKasse(form) {
     }
     summenZeilen(pruefSummen);
     const a = adresse();
-    document.getElementById("pruef-adresse").textContent = `${a.name}\n${a.street}\n${a.zip} ${a.city}\n${a.email}`;
+    document.getElementById("pruef-adresse").textContent = `${a.name}\n${a.street}\n${a.zip} ${a.city}\n${sagt("country." + a.country.toLowerCase())}\n${a.email}`;
     const z = zahlungsart();
     const zahlungEl = document.getElementById("pruef-zahlung");
     zahlungEl.replaceChildren(z ? uebersetzt("span", "", z === "twint" ? "pay.twint" : "pay.vorauskasse") : "");

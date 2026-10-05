@@ -88,12 +88,20 @@
             <div class="field-row">
               <div class="field">
                 <label for="zip" data-i18n="order.zip">PLZ</label>
-                <input id="zip" name="zip" type="text" inputmode="numeric" maxlength="4" autocomplete="postal-code" required>
+                <input id="zip" name="zip" type="text" inputmode="numeric" maxlength="5" autocomplete="postal-code" required>
               </div>
               <div class="field">
                 <label for="city" data-i18n="order.city">Ort</label>
                 <input id="city" name="city" type="text" autocomplete="address-level2" required>
               </div>
+            </div>
+            <div class="field">
+              <label for="country" data-i18n="order.country">Land</label>
+              <select id="country" name="country" autocomplete="country" required>
+                <option value="CH" data-i18n="country.ch">Schweiz</option>
+                <option value="DE" data-i18n="country.de">Deutschland</option>
+                <option value="AT" data-i18n="country.at">Österreich</option>
+              </select>
             </div>
             <!-- Honeypot gegen Spam-Bots, für Menschen unsichtbar -->
             <div class="field field-hidden" aria-hidden="true">
@@ -121,6 +129,7 @@
               <span class="zahlart-text">
                 <strong data-i18n="pay.twint">TWINT</strong>
                 <span data-i18n="pay.twintText">Du erhältst die TWINT-Angaben mit der Bestellbestätigung. Bezahle in der TWINT-App und gib die Bestellnummer als Mitteilung an.</span>
+                <span class="zahlart-hinweis" data-i18n="pay.twintOnlyCh" hidden>TWINT ist nur bei Lieferung in die Schweiz möglich.</span>
               </span>
             </label>
             <p class="form-note" data-i18n="pay.after">Wir versenden, sobald die Zahlung eingegangen ist.</p>

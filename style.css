@@ -1604,6 +1604,15 @@ a {
   line-height: 1.5;
 }
 
+.zahlart-hinweis {
+  color: var(--accent);
+}
+
+.zahlart:has(input:disabled) {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
 .pruef-block {
   padding: 1rem 1.1rem;
   background: var(--surface);

@@ -3,9 +3,11 @@ import { bonusProzent, mitRabatt, normalerCode } from "./_rabatt.js";
 import { ZAHLUNGSARTEN, zahlungsangaben, vollstaendig } from "./_zahlung.js";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const PLZ_RE = /^\d{4}$/;
+// Lieferländer und ihre Postleitzahlen
+const LAENDER = { CH: "Schweiz", DE: "Deutschland", AT: "Österreich" };
+const PLZ_RE = { CH: /^\d{4}$/, AT: /^\d{4}$/, DE: /^\d{5}$/ };
 
-// Preise in Rappen, inkl. Versand in der Schweiz. Müssen mit der Website
+// Preise in Rappen, inkl. Versand (Schweiz, Deutschland, Österreich). Müssen mit der Website
 // übereinstimmen; der Betrag in den Mails wird hier berechnet, nie aus dem
 // Browser übernommen.
 const ARTIKEL = [
@@ -32,18 +34,23 @@ export default async function handler(request, response) {
   const strasse = text(body.street, 200);
   const plz = text(body.zip, 10);
   const ort = text(body.city, 100);
+  const land = (text(body.country, 2) || "CH").toUpperCase();
 
   if (!name) return response.status(400).json({ error: "Name fehlt." });
   if (!email || !EMAIL_RE.test(email)) {
     return response.status(400).json({ error: "Ungültige E-Mail-Adresse." });
   }
   if (!strasse) return response.status(400).json({ error: "Strasse fehlt." });
-  if (!PLZ_RE.test(plz)) return response.status(400).json({ error: "Ungültige Postleitzahl." });
+  if (!LAENDER[land]) return response.status(400).json({ error: "Ungültiges Land.", feld: "country" });
+  if (!PLZ_RE[land].test(plz)) return response.status(400).json({ error: "Ungültige Postleitzahl." });
   if (!ort) return response.status(400).json({ error: "Ort fehlt." });
 
   const zahlungsart = text(body.zahlung, 20);
   if (!ZAHLUNGSARTEN[zahlungsart]) {
     return response.status(400).json({ error: "Ungültige Zahlungsart.", feld: "zahlung" });
+  }
+  if (zahlungsart === "twint" && land !== "CH") {
+    return response.status(400).json({ error: "TWINT ist nur bei Lieferung in die Schweiz möglich.", feld: "zahlung" });
   }
 
   const positionen = [];
@@ -84,7 +91,7 @@ export default async function handler(request, response) {
   }
 
   const zahlung = zahlungsangaben(zahlungsart);
-  const bestellung = { nummer, name, email, strasse, plz, ort, positionen, zwischensumme, rabatt, total, zahlung };
+  const bestellung = { nummer, name, email, strasse, plz, ort, land, positionen, zwischensumme, rabatt, total, zahlung };
   const submittedAt = new Date().toISOString();
   const kurz = positionen.map((p) => `${p.menge}× ${p.name}`).join(", ");
 
@@ -181,7 +188,7 @@ function chf(rappen) {
   return `CHF ${(rappen / 100).toFixed(2)}`;
 }
 
-function internerText({ nummer, name, email, strasse, plz, ort, positionen, zwischensumme, rabatt, total, zahlung }, submittedAt) {
+function internerText({ nummer, name, email, strasse, plz, ort, land, positionen, zwischensumme, rabatt, total, zahlung }, submittedAt) {
   const artikel = positionen
     .map((p) => `${p.menge}× ${escapeHtml(p.name)} – ${chf(p.summe)}`)
     .join("<br>");
@@ -197,10 +204,10 @@ function internerText({ nummer, name, email, strasse, plz, ort, positionen, zwis
       <tr><td><strong>Bonuscode</strong></td><td>${escapeHtml(rabatt.code)} (−${rabatt.prozent} %): −${chf(rabatt.betrag)}</td></tr>`
           : ""
       }
-      <tr><td><strong>Total</strong></td><td>${chf(total)} (inkl. Versand in der Schweiz)</td></tr>
+      <tr><td><strong>Total</strong></td><td>${chf(total)} (inkl. Versand)</td></tr>
       <tr><td><strong>Name</strong></td><td>${escapeHtml(name)}</td></tr>
       <tr><td><strong>E-Mail</strong></td><td>${escapeHtml(email)}</td></tr>
-      <tr><td valign="top"><strong>Lieferadresse</strong></td><td>${escapeHtml(strasse)}<br>${escapeHtml(plz)} ${escapeHtml(ort)}</td></tr>
+      <tr><td valign="top"><strong>Lieferadresse</strong></td><td>${escapeHtml(strasse)}<br>${escapeHtml(plz)} ${escapeHtml(ort)}<br>${escapeHtml(LAENDER[land])}</td></tr>
       <tr><td><strong>Zahlungsart</strong></td><td>${escapeHtml(ZAHLUNGSARTEN[zahlung.art])} – Zahlung ausstehend</td></tr>
       <tr><td><strong>Zeitpunkt</strong></td><td>${submittedAt}</td></tr>
     </table>
@@ -212,7 +219,7 @@ function internerText({ nummer, name, email, strasse, plz, ort, positionen, zwis
   `.trim();
 }
 
-function bestaetigungsText({ nummer, name, strasse, plz, ort, positionen, rabatt, total, zahlung }) {
+function bestaetigungsText({ nummer, name, strasse, plz, ort, land, positionen, rabatt, total, zahlung }) {
   const zeilen = positionen
     .map(
       (p) => `
@@ -254,13 +261,14 @@ function bestaetigungsText({ nummer, name, strasse, plz, ort, positionen, rabatt
             <td style="padding:10px 0 0;border-top:1px solid #362c1e;font-size:15px;font-weight:600;color:#f3ede1;text-align:right;white-space:nowrap;">${chf(total)}</td>
           </tr>
         </table>
-        <p style="margin:8px 0 0;font-size:12px;line-height:1.5;color:#ab9f8c;">inkl. Versand in der Schweiz</p>
+        <p style="margin:8px 0 0;font-size:12px;line-height:1.5;color:#ab9f8c;">inkl. Versand</p>
       </div>
       <p style="margin:0 0 6px;font-size:13px;color:#ab9f8c;">Lieferadresse</p>
       <p style="margin:0 0 20px;font-size:15px;line-height:1.5;color:#f3ede1;">
         ${escapeHtml(name)}<br>
         ${escapeHtml(strasse)}<br>
-        ${escapeHtml(plz)} ${escapeHtml(ort)}
+        ${escapeHtml(plz)} ${escapeHtml(ort)}<br>
+        ${escapeHtml(LAENDER[land])}
       </p>
       ${zahlungsText(zahlung, nummer, total)}
       <p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:#d5cbba;">
