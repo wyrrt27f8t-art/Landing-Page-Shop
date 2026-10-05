@@ -11,6 +11,8 @@ const ARTIKEL = {
   car: { preis: 5900, name: "order.optCar", feld: "anzahlCar" },
   walk: { preis: 3990, name: "order.optWalk", feld: "anzahlWalk" },
 };
+// Versand in Rappen, pauschal pro Bestellung; muss mit api/reserve.js übereinstimmen
+const VERSAND = { CH: 0, DE: 1200, AT: 1200 };
 const MAX_PRO_ARTIKEL = 10;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -339,10 +341,14 @@ function baueKasse(form) {
   }
 
   // Zwischensumme, Rabatt und Total in einen Container zeichnen
-  function summenZeilen(container) {
+  // mitVersand: erst ab der Adresse ist das Land bekannt; vorher gilt der allgemeine Hinweis
+  function summenZeilen(container, mitVersand) {
     container.replaceChildren();
     const zwischen = Warenkorb.zwischensumme();
-    const total = bonus ? mitRabatt(zwischen, bonus.prozent) : zwischen;
+    const ware = bonus ? mitRabatt(zwischen, bonus.prozent) : zwischen;
+    const land = form.elements.country.value;
+    const versand = mitVersand ? VERSAND[land] || 0 : 0;
+    const total = ware + versand;
     const zeile = (schluessel, wert, klasse) => {
       const z = element("div", "summen-zeile" + (klasse ? " " + klasse : ""));
       z.append(uebersetzt("span", "", schluessel), element("strong", "", wert));
@@ -350,10 +356,11 @@ function baueKasse(form) {
     };
     if (bonus) {
       zeile("cart.subtotal", chf(zwischen));
-      zeile("kasse.discount", `${bonus.code} (−${bonus.prozent} %): −${chf(zwischen - total)}`);
+      zeile("kasse.discount", `${bonus.code} (−${bonus.prozent} %): −${chf(zwischen - ware)}`);
     }
+    if (versand) zeile("kasse.shipping" + land, chf(versand));
     zeile("order.total", chf(total), "summen-total");
-    container.append(uebersetzt("small", "", "order.totalNote"));
+    container.append(uebersetzt("small", "", !mitVersand ? "order.totalNote" : versand ? "kasse.shippingNote" : "kasse.shippingCh"));
     return total;
   }
   function zeichneSummen() {
@@ -407,7 +414,7 @@ function baueKasse(form) {
     twintHinweis.hidden = schweiz;
     if (!schweiz && twintRadio.checked) twintRadio.checked = false;
   }
-  form.elements.country.addEventListener("change", landAnwenden);
+  form.elements.country.addEventListener("change", () => { landAnwenden(); zeichneSummen(); });
   landAnwenden();
 
   function zeichnePruefung() {
@@ -421,7 +428,7 @@ function baueKasse(form) {
       z.append(name, element("strong", "", chf(inhalt[art] * ARTIKEL[art].preis)));
       pruefArtikel.append(z);
     }
-    summenZeilen(pruefSummen);
+    summenZeilen(pruefSummen, true);
     const a = adresse();
     document.getElementById("pruef-adresse").textContent = `${a.name}\n${a.street}\n${a.zip} ${a.city}\n${sagt("country." + a.country.toLowerCase())}\n${a.email}`;
     const z = zahlungsart();

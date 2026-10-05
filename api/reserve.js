@@ -3,13 +3,14 @@ import { bonusProzent, mitRabatt, normalerCode } from "./_rabatt.js";
 import { ZAHLUNGSARTEN, zahlungsangaben, vollstaendig } from "./_zahlung.js";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-// Lieferländer und ihre Postleitzahlen
+// Lieferländer, ihre Postleitzahlen und Versandkosten in Rappen (pauschal pro Bestellung)
 const LAENDER = { CH: "Schweiz", DE: "Deutschland", AT: "Österreich" };
+const VERSAND = { CH: 0, DE: 1200, AT: 1200 };
 const PLZ_RE = { CH: /^\d{4}$/, AT: /^\d{4}$/, DE: /^\d{5}$/ };
 
-// Preise in Rappen, inkl. Versand (Schweiz, Deutschland, Österreich). Müssen mit der Website
-// übereinstimmen; der Betrag in den Mails wird hier berechnet, nie aus dem
-// Browser übernommen.
+// Preise in Rappen, inkl. Versand in die Schweiz; nach DE und AT kommt VERSAND
+// dazu. Müssen mit der Website übereinstimmen; der Betrag in den Mails wird
+// hier berechnet, nie aus dem Browser übernommen.
 const ARTIKEL = [
   { feld: "anzahlCar", name: "MAFO", preis: 5900 },
   { feld: "anzahlWalk", name: "MAFO WALK", preis: 3990 },
@@ -74,8 +75,11 @@ export default async function handler(request, response) {
   if (code && !prozent) {
     return response.status(400).json({ error: "Ungültiger Bonuscode.", feld: "bonuscode" });
   }
-  const total = prozent ? mitRabatt(zwischensumme, prozent) : zwischensumme;
-  const rabatt = prozent ? { code, prozent, betrag: zwischensumme - total } : null;
+  // Der Rabatt gilt für die Ware, nicht für den Versand
+  const ware = prozent ? mitRabatt(zwischensumme, prozent) : zwischensumme;
+  const rabatt = prozent ? { code, prozent, betrag: zwischensumme - ware } : null;
+  const versand = VERSAND[land];
+  const total = ware + versand;
 
   const nummer = bestellnummer();
 
@@ -91,7 +95,7 @@ export default async function handler(request, response) {
   }
 
   const zahlung = zahlungsangaben(zahlungsart);
-  const bestellung = { nummer, name, email, strasse, plz, ort, land, positionen, zwischensumme, rabatt, total, zahlung };
+  const bestellung = { nummer, name, email, strasse, plz, ort, land, positionen, zwischensumme, rabatt, versand, total, zahlung };
   const submittedAt = new Date().toISOString();
   const kurz = positionen.map((p) => `${p.menge}× ${p.name}`).join(", ");
 
@@ -188,7 +192,7 @@ function chf(rappen) {
   return `CHF ${(rappen / 100).toFixed(2)}`;
 }
 
-function internerText({ nummer, name, email, strasse, plz, ort, land, positionen, zwischensumme, rabatt, total, zahlung }, submittedAt) {
+function internerText({ nummer, name, email, strasse, plz, ort, land, positionen, zwischensumme, rabatt, versand, total, zahlung }, submittedAt) {
   const artikel = positionen
     .map((p) => `${p.menge}× ${escapeHtml(p.name)} – ${chf(p.summe)}`)
     .join("<br>");
@@ -204,7 +208,8 @@ function internerText({ nummer, name, email, strasse, plz, ort, land, positionen
       <tr><td><strong>Bonuscode</strong></td><td>${escapeHtml(rabatt.code)} (−${rabatt.prozent} %): −${chf(rabatt.betrag)}</td></tr>`
           : ""
       }
-      <tr><td><strong>Total</strong></td><td>${chf(total)} (inkl. Versand)</td></tr>
+      <tr><td><strong>Versand</strong></td><td>${versand ? chf(versand) + " (" + escapeHtml(LAENDER[land]) + ", pauschal)" : "inklusive (Schweiz)"}</td></tr>
+      <tr><td><strong>Total</strong></td><td>${chf(total)}</td></tr>
       <tr><td><strong>Name</strong></td><td>${escapeHtml(name)}</td></tr>
       <tr><td><strong>E-Mail</strong></td><td>${escapeHtml(email)}</td></tr>
       <tr><td valign="top"><strong>Lieferadresse</strong></td><td>${escapeHtml(strasse)}<br>${escapeHtml(plz)} ${escapeHtml(ort)}<br>${escapeHtml(LAENDER[land])}</td></tr>
@@ -219,7 +224,7 @@ function internerText({ nummer, name, email, strasse, plz, ort, land, positionen
   `.trim();
 }
 
-function bestaetigungsText({ nummer, name, strasse, plz, ort, land, positionen, rabatt, total, zahlung }) {
+function bestaetigungsText({ nummer, name, strasse, plz, ort, land, positionen, rabatt, versand, total, zahlung }) {
   const zeilen = positionen
     .map(
       (p) => `
@@ -235,6 +240,14 @@ function bestaetigungsText({ nummer, name, strasse, plz, ort, land, positionen, 
           <tr>
             <td style="padding:6px 0;font-size:15px;color:#c8945f;">Bonuscode ${escapeHtml(rabatt.code)} (−${rabatt.prozent} %)</td>
             <td style="padding:6px 0;font-size:15px;color:#c8945f;text-align:right;white-space:nowrap;">−${chf(rabatt.betrag)}</td>
+          </tr>`
+    : "";
+
+  const versandZeile = versand
+    ? `
+          <tr>
+            <td style="padding:6px 0;font-size:15px;color:#f3ede1;">Versand nach ${escapeHtml(LAENDER[land])}</td>
+            <td style="padding:6px 0;font-size:15px;color:#f3ede1;text-align:right;white-space:nowrap;">${chf(versand)}</td>
           </tr>`
     : "";
 
@@ -255,13 +268,13 @@ function bestaetigungsText({ nummer, name, strasse, plz, ort, land, positionen, 
       </p>
       <div style="margin:20px 0;padding:14px 16px;background:#221c14;border-radius:8px;">
         <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
-          ${zeilen}${rabattZeile}
+          ${zeilen}${rabattZeile}${versandZeile}
           <tr>
             <td style="padding:10px 0 0;border-top:1px solid #362c1e;font-size:15px;font-weight:600;color:#f3ede1;">Total</td>
             <td style="padding:10px 0 0;border-top:1px solid #362c1e;font-size:15px;font-weight:600;color:#f3ede1;text-align:right;white-space:nowrap;">${chf(total)}</td>
           </tr>
         </table>
-        <p style="margin:8px 0 0;font-size:12px;line-height:1.5;color:#ab9f8c;">inkl. Versand</p>
+        <p style="margin:8px 0 0;font-size:12px;line-height:1.5;color:#ab9f8c;">${versand ? "inkl. Versand (pauschal)" : "inkl. Versand in die Schweiz"}</p>
       </div>
       <p style="margin:0 0 6px;font-size:13px;color:#ab9f8c;">Lieferadresse</p>
       <p style="margin:0 0 20px;font-size:15px;line-height:1.5;color:#f3ede1;">
