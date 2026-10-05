@@ -160,6 +160,7 @@ const TEXTE = {
 
     "footer.rights": "© 2026 MAFO, Schweiz",
     "footer.privacy": "Datenschutz",
+    "footer.follow": "Folge MAFO",
     "footer.language": "Sprache",
     "chat.button": "Chat öffnen",
     "chat.title": "Schreib uns",
@@ -325,6 +326,7 @@ const TEXTE = {
 
     "footer.rights": "© 2026 MAFO, Suisse",
     "footer.privacy": "Confidentialité",
+    "footer.follow": "Suis MAFO",
     "footer.language": "Langue",
     "chat.button": "Ouvrir le chat",
     "chat.title": "Écris-nous",
@@ -490,6 +492,7 @@ const TEXTE = {
 
     "footer.rights": "© 2026 MAFO, Svizzera",
     "footer.privacy": "Privacy",
+    "footer.follow": "Segui MAFO",
     "footer.language": "Lingua",
     "chat.button": "Apri la chat",
     "chat.title": "Scrivici",
@@ -655,6 +658,7 @@ const TEXTE = {
 
     "footer.rights": "© 2026 MAFO, Switzerland",
     "footer.privacy": "Privacy",
+    "footer.follow": "Follow MAFO",
     "footer.language": "Language",
     "chat.button": "Open chat",
     "chat.title": "Write to us",
