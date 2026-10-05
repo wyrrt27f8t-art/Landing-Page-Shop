@@ -8,7 +8,7 @@
  * Anzeige, der Server rechnet bei jeder Bestellung selbst nach.
  */
 const ARTIKEL = {
-  car: { preis: 4900, name: "order.optCar", feld: "anzahlCar" },
+  car: { preis: 5900, name: "order.optCar", feld: "anzahlCar" },
   walk: { preis: 3990, name: "order.optWalk", feld: "anzahlWalk" },
 };
 const MAX_PRO_ARTIKEL = 10;

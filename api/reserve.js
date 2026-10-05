@@ -11,7 +11,7 @@ const PLZ_RE = { CH: /^\d{4}$/, AT: /^\d{4}$/, DE: /^\d{5}$/ };
 // übereinstimmen; der Betrag in den Mails wird hier berechnet, nie aus dem
 // Browser übernommen.
 const ARTIKEL = [
-  { feld: "anzahlCar", name: "MAFO", preis: 4900 },
+  { feld: "anzahlCar", name: "MAFO", preis: 5900 },
   { feld: "anzahlWalk", name: "MAFO WALK", preis: 3990 },
 ];
 const MAX_PRO_ARTIKEL = 10;
