@@ -884,3 +884,17 @@ document.querySelectorAll(".rundum-viewer").forEach((viewer) => {
   }
   requestAnimationFrame(schritt);
 });
+
+// Produktbilder: ein Klick auf ein kleines Bild zeigt es gross
+document.querySelectorAll(".produktgalerie").forEach((galerie) => {
+  const gross = galerie.querySelector(".galerie-gross");
+  const knoepfe = galerie.querySelectorAll(".galerie-knopf");
+  knoepfe.forEach((knopf) => {
+    knopf.addEventListener("click", () => {
+      gross.src = knopf.dataset.bild;
+      gross.dataset.i18nAlt = knopf.dataset.alt;
+      gross.alt = knopf.getAttribute("aria-label") || "";
+      knoepfe.forEach((k) => k.setAttribute("aria-pressed", k === knopf ? "true" : "false"));
+    });
+  });
+});

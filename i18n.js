@@ -58,6 +58,10 @@ const TEXTE = {
     "gallery.zoomIn": "Vergrössern",
     "gallery.zoomOut": "Verkleinern",
     "gallery.hint": "Ziehen zum Drehen",
+    "shot.set": "MAFO Set: Tasche, wasserfeste Matte, zwei faltbare Näpfe und zwei Futter-/Leckerli-Taschen",
+    "shot.front": "MAFO Tasche von vorne",
+    "shot.left": "MAFO Tasche schräg von links, mit Schultergurt",
+    "shot.right": "MAFO Tasche schräg von rechts, mit Seitenfach",
 
     "walk.kicker": "MAFO WALK — 3-in-1 Trinkflasche",
     "walk.title1": "Eine Flasche.",
@@ -226,6 +230,10 @@ const TEXTE = {
     "gallery.zoomIn": "Agrandir",
     "gallery.zoomOut": "Réduire",
     "gallery.hint": "Glisser pour tourner",
+    "shot.set": "Set MAFO : sac, tapis imperméable, deux gamelles pliables et deux sacs à nourriture/friandises",
+    "shot.front": "Sac MAFO vu de face",
+    "shot.left": "Sac MAFO vu de trois quarts gauche, avec bandoulière",
+    "shot.right": "Sac MAFO vu de trois quarts droit, avec poche latérale",
 
     "walk.kicker": "MAFO WALK — Gourde 3 en 1",
     "walk.title1": "Une gourde.",
@@ -394,6 +402,10 @@ const TEXTE = {
     "gallery.zoomIn": "Ingrandisci",
     "gallery.zoomOut": "Riduci",
     "gallery.hint": "Trascina per girare",
+    "shot.set": "Set MAFO: borsa, tappetino impermeabile, due ciotole pieghevoli e due sacche per cibo/snack",
+    "shot.front": "Borsa MAFO vista di fronte",
+    "shot.left": "Borsa MAFO vista di tre quarti da sinistra, con tracolla",
+    "shot.right": "Borsa MAFO vista di tre quarti da destra, con tasca laterale",
 
     "walk.kicker": "MAFO WALK — Borraccia 3 in 1",
     "walk.title1": "Una borraccia.",
@@ -562,6 +574,10 @@ const TEXTE = {
     "gallery.zoomIn": "Zoom in",
     "gallery.zoomOut": "Zoom out",
     "gallery.hint": "Drag to rotate",
+    "shot.set": "MAFO set: bag, waterproof mat, two collapsible bowls and two food/treat bags",
+    "shot.front": "MAFO bag from the front",
+    "shot.left": "MAFO bag from the front left, with shoulder strap",
+    "shot.right": "MAFO bag from the front right, with side pocket",
 
     "walk.kicker": "MAFO WALK — 3-in-1 water bottle",
     "walk.title1": "One bottle.",
@@ -717,6 +733,12 @@ function setzeSprache(sprache) {
   document.querySelectorAll("[data-i18n-label]").forEach((el) => {
     const text = woerter[el.dataset.i18nLabel];
     if (text !== undefined) el.setAttribute("aria-label", text);
+  });
+
+  // Bildbeschreibungen
+  document.querySelectorAll("[data-i18n-alt]").forEach((el) => {
+    const text = woerter[el.dataset.i18nAlt];
+    if (text !== undefined) el.alt = text;
   });
 
   // Titel und Beschreibung, sofern die Seite eigene hinterlegt hat
