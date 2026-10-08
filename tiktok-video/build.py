@@ -5,7 +5,7 @@ import os, subprocess, sys, tempfile
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 MEDIA = os.path.join(ROOT, "media")
-OUT = os.path.join(os.path.dirname(__file__), "mafo-organizer-v1.mp4")
+OUT = os.path.join(os.path.dirname(__file__), "mafo-organizer-v2.mp4")
 FONT = "/usr/share/fonts/opentype/inter/Inter-ExtraBold.otf"
 W, H, FPS = 1080, 1920, 30
 tmp = tempfile.mkdtemp(prefix="mafo_")
@@ -87,7 +87,7 @@ photo_crop(c("c5.mp4"), (675, 1200, 60, 0), 1.5, [("2 Futter- und", 96), ("Lecke
 # 6 Matte
 photo_whole(c("c6.mp4"), 2.0, [("Wasserfeste Matte", 92), ("60 × 40 cm", 100)], 1.3, 1.0)
 # 7 Marke, ab hier erlaubt
-rundum(c("c7.mp4"), [("MAFO", 160), ("Dog Travel Organizer", 80), ("Ordnung fürs Auto.", 64)])
+rundum(c("c7.mp4"), [("MAFO", 160), ("Dog Travel Organizer", 80), ("Ordnung für überall.", 64)])
 # 8 Loop mit Speichern-CTA
 hero(c("c8.mp4"), 0.0, 2.5, [("Speichern für deine", 88), ("nächste Packliste", 88)], 1.0, 1.0)
 

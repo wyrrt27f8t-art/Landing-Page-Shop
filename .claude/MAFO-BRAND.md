@@ -20,6 +20,7 @@ Pläne oder Briefings erstellt. Nichts erfinden, was hier nicht steht – bei L�
   - Zwei Futter-/Leckerli-Taschen
   - Abnehmbarer Schultergurt plus zwei Tragegriffe
 - Kernnutzen: Alles fürs Auto und den Spaziergang an einem Ort, griffbereit, kein Gesuche im Kofferraum.
+- **Positionierung für Social, Ads und Videos: Ordnung für überall, nicht nur fürs Auto.** Auto, Spaziergang, Park, Reise, Alltag. Viele aus der jungen TikTok-Zielgruppe haben kein Auto. Den Claim «Ordnung fürs Auto.» auf der Website nicht in neue Social- und Ads-Texte übernehmen. Belegte Fakten dafür: abnehmbarer Schultergurt plus zwei Tragegriffe, Matte 60 × 40 cm, faltbare Näpfe.
 - Landingpage: `index.html`
 
 ## Produkt 2: MAFO WALK – 3-in-1 Trinkflasche
