@@ -6,6 +6,8 @@ export default function handler(request, response) {
     return response.status(405).json({ error: "Method not allowed" });
   }
   response.setHeader("Cache-Control", "no-store");
-  const bereit = !!(process.env.STRIPE_SECRET_KEY || "").trim() && !!(process.env.STRIPE_WEBHOOK_SECRET || "").trim();
-  return response.status(200).json({ karte: bereit });
+  // Nur ob die Variablen da sind, nie ihr Inhalt
+  const schluessel = !!(process.env.STRIPE_SECRET_KEY || "").trim();
+  const webhook = !!(process.env.STRIPE_WEBHOOK_SECRET || "").trim();
+  return response.status(200).json({ karte: schluessel && webhook, schluessel, webhook, umgebung: process.env.VERCEL_ENV || "" });
 }
