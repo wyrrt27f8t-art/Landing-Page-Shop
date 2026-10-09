@@ -405,6 +405,7 @@ function baueKasse(form) {
     if (gewaehlt.value === "twint" && adresse().country !== "CH") return ""; // TWINT gibt es nur in der Schweiz
     return gewaehlt.value;
   }
+  const zahlungsName = (z) => (z === "twint" ? "pay.twint" : z === "karte" ? "pay.karte" : "pay.vorauskasse");
   // TWINT nur anbieten, wenn in die Schweiz geliefert wird
   const twintRadio = form.querySelector('input[name="zahlung"][value="twint"]');
   const twintHinweis = form.querySelector(".zahlart-hinweis");
@@ -433,7 +434,7 @@ function baueKasse(form) {
     document.getElementById("pruef-adresse").textContent = `${a.name}\n${a.street}\n${a.zip} ${a.city}\n${sagt("country." + a.country.toLowerCase())}\n${a.email}`;
     const z = zahlungsart();
     const zahlungEl = document.getElementById("pruef-zahlung");
-    zahlungEl.replaceChildren(z ? uebersetzt("span", "", z === "twint" ? "pay.twint" : "pay.vorauskasse") : "");
+    zahlungEl.replaceChildren(z ? uebersetzt("span", "", zahlungsName(z)) : "");
   }
 
   function meldung(schluessel, zustand) {
@@ -507,6 +508,10 @@ function baueKasse(form) {
     const box = document.getElementById("danke-zahlung");
     box.replaceChildren();
     const z = ergebnis.zahlung || {};
+    if (z.art === "karte") {
+      box.append(uebersetzt("h3", "", "kasse.cardPaidTitle"), uebersetzt("p", "", "kasse.cardPaidText"));
+      return;
+    }
     box.append(uebersetzt("h3", "", "kasse.payNow"));
     const dl = element("dl");
     const reihe = (schluessel, wert, eng) => {
@@ -561,9 +566,11 @@ function baueKasse(form) {
       zahlung: zahlungsart(),
       company: form.elements.company.value, // Honeypot
     };
+    const istKarte = daten.zahlung === "karte";
+    let weiterleitung = false;
     knopf.textContent = sagt("order.sending");
     try {
-      const antwort = await fetch("/api/reserve", {
+      const antwort = await fetch(istKarte ? "/api/checkout" : "/api/reserve", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(daten),
@@ -579,6 +586,14 @@ function baueKasse(form) {
         }
         throw new Error(ergebnis.error || "Senden fehlgeschlagen.");
       }
+      if (istKarte) {
+        // Weiter zur Bezahlseite von Stripe. Warenkorb und Code bleiben, bis die Zahlung durch ist.
+        if (!/^https:\/\/checkout\.stripe\.com\//.test(ergebnis.url || "")) throw new Error("Ungültige Bezahladresse.");
+        try { sessionStorage.setItem("mafo-adresse", JSON.stringify(adresse())); } catch (e) { /* ohne Speicher geht es trotzdem */ }
+        weiterleitung = true;
+        location.href = ergebnis.url;
+        return;
+      }
       bestellt = ergebnis;
       document.getElementById("danke-nummer").textContent = ergebnis.nummer || "";
       zahlhinweis(ergebnis);
@@ -593,10 +608,48 @@ function baueKasse(form) {
     } catch (error) {
       meldung("order.error", "error");
     } finally {
-      knopf.disabled = false;
-      knopf.textContent = beschriftung;
+      if (!weiterleitung) {
+        knopf.disabled = false;
+        knopf.textContent = beschriftung;
+      }
     }
   });
+
+  // Kartenzahlung nur anbieten, wenn der Server sie eingerichtet hat
+  const karteOption = document.getElementById("zahlart-karte");
+  const karteBereit = fetch("/api/zahlarten", { cache: "no-store" })
+    .then((a) => (a.ok ? a.json() : { karte: false }))
+    .then((j) => { karteOption.hidden = !j.karte; return !!j.karte; })
+    .catch(() => false);
+
+  // Rückkehr von der Bezahlseite von Stripe
+  const rueck = new URLSearchParams(location.search);
+  if (rueck.get("karte") === "ok" && /^MAFO-[A-HJ-NP-Z2-9]{6}$/.test(rueck.get("nr") || "")) {
+    bestellt = { nummer: rueck.get("nr"), zahlung: { art: "karte" } };
+    document.getElementById("danke-nummer").textContent = bestellt.nummer;
+    zahlhinweis(bestellt);
+    bonus = null;
+    speicher("mafo-bonus", null);
+    codeFeld.value = "";
+    Warenkorb.leeren();
+    try { sessionStorage.removeItem("mafo-adresse"); } catch (e) { /* egal */ }
+    history.replaceState(null, "", location.pathname + "#danke");
+  } else if (rueck.get("karte") === "abbruch") {
+    // Bezahlung abgebrochen: Angaben zurückholen, damit nichts neu getippt werden muss
+    try {
+      const alt = JSON.parse(sessionStorage.getItem("mafo-adresse") || "{}");
+      for (const feld of ["name", "email", "street", "zip", "city", "country"]) {
+        if (typeof alt[feld] === "string" && form.elements[feld]) form.elements[feld].value = alt[feld];
+      }
+    } catch (e) { /* egal */ }
+    landAnwenden();
+    history.replaceState(null, "", location.pathname + "#pruefen");
+    karteBereit.then((bereit) => {
+      if (bereit) form.querySelector('input[name="zahlung"][value="karte"]').checked = true;
+      zeigeSchritt(bereit ? "pruefen" : "zahlung");
+      meldung("kasse.cardCancelled", "error");
+    });
+  }
 
   zeichneWarenkorb();
   zeigeSchritt(location.hash.slice(1) || "warenkorb");

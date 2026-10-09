@@ -1592,6 +1592,10 @@ a {
   flex: none;
 }
 
+.zahlart[hidden] {
+  display: none;
+}
+
 .zahlart-text {
   display: flex;
   flex-direction: column;

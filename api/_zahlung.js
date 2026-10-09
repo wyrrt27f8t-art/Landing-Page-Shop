@@ -11,6 +11,7 @@
 export const ZAHLUNGSARTEN = {
   vorauskasse: "Vorauskasse (Banküberweisung)",
   twint: "TWINT",
+  karte: "Karte (Stripe)",
 };
 
 function wert(name) {
@@ -30,6 +31,7 @@ export function telefonFormat(nummer) {
 }
 
 export function zahlungsangaben(art) {
+  if (art === "karte") return { art };
   if (art === "twint") {
     const nummer = wert("MAFO_TWINT_NUMMER");
     return { art, twint: nummer ? telefonFormat(nummer) : "", qr: wert("MAFO_TWINT_QR") };
@@ -40,5 +42,6 @@ export function zahlungsangaben(art) {
 
 // true, wenn die Kundschaft mit diesen Angaben bezahlen kann
 export function vollstaendig(z) {
+  if (z.art === "karte") return true;
   return z.art === "twint" ? !!(z.twint || z.qr) : !!z.iban;
 }

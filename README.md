@@ -57,6 +57,26 @@ auf 5 Rappen gerundet; der Server rechnet ihn bei jeder Bestellung selbst nach.
 
 Änderungen an diesen Variablen greifen erst nach einem Redeploy.
 
+### Kartenzahlung (Stripe)
+
+Die Option «Karte» in der Kasse erscheint nur, wenn **beide** Stripe-Variablen
+in Vercel gesetzt sind. Ohne sie läuft der Shop wie bisher mit Vorkasse und TWINT.
+Die Schlüssel stehen nur in Vercel, nie im Code oder in einer Datei im Repository.
+
+| Variable | Wert |
+| --- | --- |
+| `STRIPE_SECRET_KEY` | Eingeschränkter Schlüssel (`rk_test_…` zum Testen, später `rk_live_…`). Als «Sensitive» eintragen. Recht: Checkout Sessions, schreiben. |
+| `STRIPE_WEBHOOK_SECRET` | Signiergeheimnis (`whsec_…`) des Webhooks. Als «Sensitive» eintragen. |
+| `MAFO_SITE_URL` | Optional, Standard `https://mafo-pet.ch`. Dorthin kehrt die Kundschaft nach der Zahlung zurück. |
+
+Ablauf: Die Kasse ruft `/api/checkout` auf, der Server rechnet den Betrag selbst
+und legt bei Stripe eine Checkout-Sitzung an. Die Kundschaft bezahlt auf der Seite
+von Stripe. Danach meldet Stripe die Zahlung an `/api/stripe-webhook`; erst dann
+gehen die Bestellmails raus. Der Webhook wird in Stripe unter Entwickler → Webhooks
+auf `https://mafo-pet.ch/api/stripe-webhook` eingerichtet, mit den Ereignissen
+`checkout.session.completed`, `checkout.session.async_payment_succeeded` und
+`checkout.session.async_payment_failed`.
+
 ### DNS-Setup
 
 Die DNS-Zone von `mafo-pet.ch` liegt bei **Infomaniak** (`ns11/ns12.infomaniak.ch`),

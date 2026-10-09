@@ -132,6 +132,13 @@
                 <span class="zahlart-hinweis" data-i18n="pay.twintOnlyCh" hidden>TWINT ist nur bei Lieferung in die Schweiz möglich.</span>
               </span>
             </label>
+            <label class="zahlart" id="zahlart-karte" hidden>
+              <input type="radio" name="zahlung" value="karte">
+              <span class="zahlart-text">
+                <strong data-i18n="pay.karte">Karte</strong>
+                <span data-i18n="pay.karteText">Du bezahlst direkt online auf der sicheren Bezahlseite von Stripe. Danach ist deine Bestellung bezahlt.</span>
+              </span>
+            </label>
             <p class="form-note" data-i18n="pay.after">Wir versenden, sobald die Zahlung eingegangen ist.</p>
             <div class="schritt-knoepfe">
               <button class="btn btn-secondary" type="button" data-weiter="adresse" data-i18n="kasse.back">Zurück</button>
