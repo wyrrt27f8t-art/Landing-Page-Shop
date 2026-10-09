@@ -976,3 +976,18 @@ document.querySelectorAll(".produktgalerie").forEach((galerie) => {
     });
   });
 });
+
+/* ---------- Hinweis zur Zahlung auf den Produktseiten ---------- */
+// Nennt die Karte nur, wenn der Server sie eingerichtet hat (siehe api/zahlarten.js)
+(function () {
+  const hinweise = document.querySelectorAll('[data-i18n="buy.note"]');
+  if (!hinweise.length) return;
+  fetch("/api/zahlarten", { cache: "no-store" })
+    .then((a) => (a.ok ? a.json() : { karte: false }))
+    .then((j) => {
+      if (!j.karte) return;
+      hinweise.forEach((h) => h.setAttribute("data-i18n", "buy.noteKarte"));
+      if (window.mafoUebersetze) window.mafoUebersetze();
+    })
+    .catch(() => {});
+})();
