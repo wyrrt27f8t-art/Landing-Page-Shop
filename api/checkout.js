@@ -119,7 +119,13 @@ export default async function handler(request, response) {
     const meldung = String((fehler && fehler.message) || "").replace(/[sr]k_(test|live)_\w+/g, "[Schlüssel]");
     console.error("Stripe-Fehler beim Anlegen der Bezahlseite:", fehler && fehler.type, meldung);
     // Grund ohne geheime Daten an die Kasse zurückgeben, damit man den Fehler sieht
-    const grund = [fehler && fehler.type, fehler && fehler.code, fehler && fehler.param && `Feld ${fehler.param}`].filter(Boolean).join(" / ");
+    const grund = [
+      fehler && fehler.type,
+      fehler && fehler.code,
+      fehler && fehler.param && `Feld ${fehler.param}`,
+      // Bei fehlender Berechtigung nennt Stripe, welche; die Meldung ist ohne Schlüssel
+      fehler && fehler.type === "StripePermissionError" && meldung.slice(0, 300),
+    ].filter(Boolean).join(" / ");
     return response.status(502).json({ error: "Die Bezahlseite konnte nicht geöffnet werden.", grund: grund || "unbekannt" });
   }
 }
