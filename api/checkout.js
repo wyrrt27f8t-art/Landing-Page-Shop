@@ -68,7 +68,7 @@ export default async function handler(request, response) {
 
   try {
     const stripe = new Stripe(schluessel);
-    const sitzung = await stripe.checkout.sessions.create({
+    const angaben = {
       mode: "payment",
       line_items: zeilen,
       customer_email: d.email,
@@ -97,12 +97,23 @@ export default async function handler(request, response) {
       },
       success_url: `${basis}/kasse.html?karte=ok&nr=${nummer}`,
       cancel_url: `${basis}/kasse.html?karte=abbruch#pruefen`,
-    });
+    };
+    let sitzung;
+    try {
+      sitzung = await stripe.checkout.sessions.create(angaben);
+    } catch (ersterFehler) {
+      // Kennt das Konto das Etikett nicht, ohne es nochmals versuchen
+      if (!(ersterFehler && ersterFehler.param === "integration_identifier")) throw ersterFehler;
+      delete angaben.integration_identifier;
+      sitzung = await stripe.checkout.sessions.create(angaben);
+    }
     return response.status(200).json({ ok: true, url: sitzung.url });
   } catch (fehler) {
     // Nur Art und Meldung loggen, nie den Schlüssel oder die ganze Anfrage
     const meldung = String((fehler && fehler.message) || "").replace(/[sr]k_(test|live)_\w+/g, "[Schlüssel]");
     console.error("Stripe-Fehler beim Anlegen der Bezahlseite:", fehler && fehler.type, meldung);
-    return response.status(502).json({ error: "Die Bezahlseite konnte nicht geöffnet werden." });
+    // Grund ohne geheime Daten an die Kasse zurückgeben, damit man den Fehler sieht
+    const grund = [fehler && fehler.type, fehler && fehler.code, fehler && fehler.param && `Feld ${fehler.param}`].filter(Boolean).join(" / ");
+    return response.status(502).json({ error: "Die Bezahlseite konnte nicht geöffnet werden.", grund: grund || "unbekannt" });
   }
 }

@@ -584,11 +584,11 @@ function baueKasse(form) {
           zeigeSchritt("warenkorb");
           return meldung("order.codeInvalid", "error");
         }
-        throw new Error(ergebnis.error || "Senden fehlgeschlagen.");
+        throw new Error((ergebnis.error || "Senden fehlgeschlagen.") + (ergebnis.grund ? ` (Stripe: ${ergebnis.grund})` : "") + ` [HTTP ${antwort.status}]`);
       }
       if (istKarte) {
         // Weiter zur Bezahlseite von Stripe. Warenkorb und Code bleiben, bis die Zahlung durch ist.
-        if (!/^https:\/\/checkout\.stripe\.com\//.test(ergebnis.url || "")) throw new Error("Ungültige Bezahladresse.");
+        if (!/^https:\/\/[a-z0-9.-]+\.stripe\.com\//.test(ergebnis.url || "")) throw new Error("Ungültige Bezahladresse: " + String(ergebnis.url || "leer").slice(0, 60));
         try { sessionStorage.setItem("mafo-adresse", JSON.stringify(adresse())); } catch (e) { /* ohne Speicher geht es trotzdem */ }
         weiterleitung = true;
         location.href = ergebnis.url;
@@ -607,6 +607,8 @@ function baueKasse(form) {
       zeigeSchritt("danke");
     } catch (error) {
       meldung("order.error", "error");
+      // Bei Kartenzahlung den genauen Grund anhängen, damit sich der Fehler finden lässt
+      if (istKarte && error && error.message) status.textContent += " " + error.message;
     } finally {
       if (!weiterleitung) {
         knopf.disabled = false;
