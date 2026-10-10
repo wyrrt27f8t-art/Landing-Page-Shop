@@ -111,14 +111,27 @@ export default async function handler(request, response) {
       success_url: `${basis}/kasse.html?karte=ok&nr=${nummer}`,
       cancel_url: `${basis}/kasse.html?karte=abbruch#pruefen`,
     };
+    // TWINT gewählt: Bezahlseite nur mit TWINT, damit es direkt dorthin geht.
+    // allowed_payment_method_types filtert die im Dashboard aktivierten Zahlungsarten.
+    if (wahl === "twint") angaben.allowed_payment_method_types = ["twint"];
     let sitzung;
-    try {
-      sitzung = await stripe.checkout.sessions.create(angaben);
-    } catch (ersterFehler) {
-      // Kennt das Konto das Etikett nicht, ohne es nochmals versuchen
-      if (!(ersterFehler && ersterFehler.param === "integration_identifier")) throw ersterFehler;
-      delete angaben.integration_identifier;
-      sitzung = await stripe.checkout.sessions.create(angaben);
+    for (let versuch = 0; ; versuch++) {
+      try {
+        sitzung = await stripe.checkout.sessions.create(angaben);
+        break;
+      } catch (versuchFehler) {
+        if (versuch >= 2 || !versuchFehler || versuchFehler.type !== "StripeInvalidRequestError") throw versuchFehler;
+        if (angaben.allowed_payment_method_types) {
+          // TWINT ist im Konto (noch) nicht verfügbar: lieber alle Zahlungsarten zeigen als abbrechen
+          console.error("TWINT auf der Bezahlseite nicht möglich, zeige alle Zahlungsarten:", String(versuchFehler.message || "").replace(/[sr]k_(test|live)_\w+/g, "[Schlüssel]"));
+          delete angaben.allowed_payment_method_types;
+        } else if (versuchFehler.param === "integration_identifier" && angaben.integration_identifier) {
+          // Kennt das Konto das Etikett nicht, ohne es nochmals versuchen
+          delete angaben.integration_identifier;
+        } else {
+          throw versuchFehler;
+        }
+      }
     }
     return response.status(200).json({ ok: true, url: sitzung.url });
   } catch (fehler) {
