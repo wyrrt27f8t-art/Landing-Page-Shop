@@ -564,7 +564,8 @@ function baueKasse(form) {
       anzahlWalk: inhalt.walk,
       bonuscode: bonus ? bonus.code : "",
       zahlung: zahlungsart(),
-      company: form.elements.company.value, // Honeypot
+      // Falle für Bots; bewusst kein Name wie "company", den der Browser automatisch ausfüllt
+      mafo_falle: form.elements.mafo_falle.value,
     };
     const istKarte = daten.zahlung === "karte";
     let weiterleitung = false;
@@ -594,6 +595,8 @@ function baueKasse(form) {
         location.href = ergebnis.url;
         return;
       }
+      // Ohne Bestellnummer ist nichts angekommen: keine Bestätigung vortäuschen
+      if (!ergebnis.nummer) throw new Error("Keine Bestellnummer erhalten.");
       bestellt = ergebnis;
       document.getElementById("danke-nummer").textContent = ergebnis.nummer || "";
       zahlhinweis(ergebnis);

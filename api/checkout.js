@@ -30,7 +30,7 @@ export default async function handler(request, response) {
   const body = request.body || {};
 
   // Honeypot: real users never fill this in.
-  if (body.company) return response.status(200).json({ ok: true });
+  if (body.mafo_falle) return response.status(200).json({ ok: true });
 
   const schluessel = stripeSchluessel();
   if (!schluessel || !webhookGeheimnis()) {
