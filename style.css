@@ -1608,6 +1608,57 @@ a {
   line-height: 1.5;
 }
 
+.zahlart-text .marken {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.35rem;
+}
+
+.zahlart-text .marke {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.6rem;
+  height: 1.6rem;
+  padding: 0 0.45rem;
+  border-radius: 0.3rem;
+  background: #fff;
+  color: #1a1f71;
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+
+.zahlart-text .marke-visa {
+  font-style: italic;
+  font-size: 0.82rem;
+}
+
+.zahlart-text .marke-amex {
+  background: #016fd0;
+  color: #fff;
+}
+
+.zahlart-text .marke-apple {
+  background: #000;
+  color: #fff;
+  border: 1px solid #555;
+  font-weight: 600;
+}
+
+.zahlart-text .marke-google {
+  color: #3c4043;
+  font-weight: 600;
+}
+
+.zahlart-text .marke-klarna {
+  background: #ffa8cd;
+  color: #0b051d;
+}
+
 .zahlart-hinweis {
   color: var(--accent);
 }
