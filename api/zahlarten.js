@@ -1,4 +1,4 @@
-import { schluesselArt, stripeSchluessel, stripeVariablen, webhookGeheimnis } from "./_stripe.js";
+import { schluesselArt, stripeSchluessel, webhookGeheimnis } from "./_stripe.js";
 
 // Sagt der Kasse, ob die Kartenzahlung eingerichtet ist. Ohne Stripe-Schlüssel
 // in Vercel bleibt die Option unsichtbar und der Shop läuft wie bisher.
@@ -20,6 +20,5 @@ export default function handler(request, response) {
     schluesselArt: schluesselArt(wert),
     schluesselLaenge: wert.length,
     webhookArt: webhook ? (/^whsec_/.test(webhookGeheimnis()) ? "whsec_" : "unbekannt (muss mit whsec_ beginnen)") : "fehlt",
-    variablen: stripeVariablen(),
   });
 }
