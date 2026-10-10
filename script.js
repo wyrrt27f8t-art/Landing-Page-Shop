@@ -567,7 +567,8 @@ function baueKasse(form) {
       // Falle für Bots; bewusst kein Name wie "company", den der Browser automatisch ausfüllt
       mafo_falle: form.elements.mafo_falle.value,
     };
-    const istKarte = daten.zahlung === "karte";
+    // Karte und (sobald Stripe eingerichtet ist) TWINT laufen über die Bezahlseite von Stripe
+    const istKarte = daten.zahlung === "karte" || (daten.zahlung === "twint" && stripeBereit);
     let weiterleitung = false;
     knopf.textContent = sagt("order.sending");
     try {
@@ -590,7 +591,7 @@ function baueKasse(form) {
       if (istKarte) {
         // Weiter zur Bezahlseite von Stripe. Warenkorb und Code bleiben, bis die Zahlung durch ist.
         if (!/^https:\/\/[a-z0-9.-]+\.stripe\.com\//.test(ergebnis.url || "")) throw new Error("Ungültige Bezahladresse: " + String(ergebnis.url || "leer").slice(0, 60));
-        try { sessionStorage.setItem("mafo-adresse", JSON.stringify(adresse())); } catch (e) { /* ohne Speicher geht es trotzdem */ }
+        try { sessionStorage.setItem("mafo-adresse", JSON.stringify({ ...adresse(), zahlung: daten.zahlung })); } catch (e) { /* ohne Speicher geht es trotzdem */ }
         weiterleitung = true;
         location.href = ergebnis.url;
         return;
@@ -624,11 +625,18 @@ function baueKasse(form) {
   const karteOption = document.getElementById("zahlart-karte");
   // Mit kasse.html?kartentest lässt sich die Kartenzahlung im Testmodus von Stripe ausprobieren
   const kartentest = new URLSearchParams(location.search).has("kartentest") ? "?test=1" : "";
+  let stripeBereit = false;
   const karteBereit = fetch("/api/zahlarten" + kartentest, { cache: "no-store" })
     .then((a) => (a.ok ? a.json() : { karte: false }))
     .then((j) => {
       karteOption.hidden = !j.karte;
-      return !!j.karte;
+      stripeBereit = !!j.karte;
+      // TWINT dann ebenfalls über Stripe: sofort bezahlt statt Angaben per E-Mail
+      if (stripeBereit) {
+        form.querySelector("[data-twint-text]").setAttribute("data-i18n", "pay.twintStripe");
+        if (window.mafoUebersetze) window.mafoUebersetze();
+      }
+      return stripeBereit;
     })
     .catch(() => false);
 
@@ -655,7 +663,10 @@ function baueKasse(form) {
     landAnwenden();
     history.replaceState(null, "", location.pathname + "#pruefen");
     karteBereit.then((bereit) => {
-      if (bereit) form.querySelector('input[name="zahlung"][value="karte"]').checked = true;
+      let gewaehlt = "karte";
+      try { if (JSON.parse(sessionStorage.getItem("mafo-adresse") || "{}").zahlung === "twint") gewaehlt = "twint"; } catch (e) { /* egal */ }
+      const radio = form.querySelector(`input[name="zahlung"][value="${gewaehlt}"]`);
+      if (bereit && radio && !radio.disabled) radio.checked = true;
       zeigeSchritt(bereit ? "pruefen" : "zahlung");
       meldung("kasse.cardCancelled", "error");
     });

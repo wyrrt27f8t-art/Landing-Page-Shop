@@ -42,9 +42,15 @@ export default async function handler(request, response) {
     return response.status(503).json({ error: "Kartenzahlung ist falsch eingerichtet.", grund: `Schlüssel ${schluesselArt(schluessel)}` });
   }
 
+  // Gewählt auf der Website: "twint" oder "karte". Bezahlt wird beides auf der
+  // Bezahlseite von Stripe, die alle im Dashboard aktivierten Zahlungsarten zeigt.
+  const wahl = body.zahlung === "twint" ? "twint" : "karte";
   const ergebnis = pruefeBestellung({ ...body, zahlung: "karte" }, ["karte"]);
   if (ergebnis.fehler) return response.status(ergebnis.fehler.status).json(ergebnis.fehler.body);
   const d = ergebnis.daten;
+  if (wahl === "twint" && d.land !== "CH") {
+    return response.status(400).json({ error: "TWINT ist nur bei Lieferung in die Schweiz möglich.", feld: "zahlung" });
+  }
   const nummer = bestellnummer();
 
   // Mit Rabatt eine Sammelzeile, damit der Betrag in Stripe auf den Rappen
@@ -92,6 +98,7 @@ export default async function handler(request, response) {
         car: String(mengen.anzahlCar || 0),
         walk: String(mengen.anzahlWalk || 0),
         code: d.rabatt ? d.rabatt.code : "",
+        wahl,
       },
       payment_intent_data: {
         description: `MAFO Bestellung ${nummer}`,
