@@ -11,7 +11,7 @@
 export const ZAHLUNGSARTEN = {
   vorauskasse: "Vorauskasse (Banküberweisung)",
   twint: "TWINT",
-  karte: "Karte/Klarna (Stripe)",
+  karte: "Online-Zahlung (Stripe)",
 };
 
 function wert(name) {
