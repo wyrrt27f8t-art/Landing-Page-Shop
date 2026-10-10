@@ -13,8 +13,9 @@ export default async function handler(request, response) {
 
   const body = request.body || {};
 
-  // Honeypot: real users never fill this in.
-  if (body.company) {
+  // Honeypot: echte Menschen füllen dieses Feld nie aus. (Früher hiess es
+  // "company"; das füllt der Browser per Autofill aus, darum ein neutraler Name.)
+  if (body.mafo_falle) {
     return response.status(200).json({ ok: true });
   }
 

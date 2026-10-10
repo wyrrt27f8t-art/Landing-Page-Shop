@@ -67,7 +67,7 @@
   falle.setAttribute("aria-hidden", "true");
   const falleEingabe = document.createElement("input");
   falleEingabe.type = "text";
-  falleEingabe.name = "company";
+  falleEingabe.name = "mafo_falle";
   falleEingabe.tabIndex = -1;
   falleEingabe.autocomplete = "off";
   falle.append(falleEingabe);
@@ -129,7 +129,7 @@
       name: felder.name.eingabe.value.trim(),
       email: felder.email.eingabe.value.trim(),
       nachricht: nachrichtEingabe.value.trim(),
-      company: falleEingabe.value,
+      mafo_falle: falleEingabe.value,
       seite: location.pathname,
       sprache: document.documentElement.lang || "de",
     };

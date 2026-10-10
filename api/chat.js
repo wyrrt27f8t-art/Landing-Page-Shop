@@ -6,10 +6,11 @@ export default async function handler(request, response) {
     return response.status(405).json({ error: "Method not allowed" });
   }
 
-  const { name, email, nachricht, seite, sprache, company } = request.body || {};
+  const { name, email, nachricht, seite, sprache, mafo_falle: falle } = request.body || {};
 
-  // Honeypot: echte Menschen füllen dieses Feld nie aus.
-  if (company) {
+  // Honeypot: echte Menschen füllen dieses Feld nie aus. (Früher hiess es
+  // "company"; das füllt der Browser per Autofill aus, darum ein neutraler Name.)
+  if (falle) {
     return response.status(200).json({ ok: true });
   }
 
