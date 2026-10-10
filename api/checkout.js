@@ -1,6 +1,6 @@
 import Stripe from "stripe";
 import { LAENDER, bestellnummer, pruefeBestellung } from "./_bestellung.js";
-import { stripeSchluessel, webhookGeheimnis } from "./_stripe.js";
+import { schluesselArt, stripeSchluessel, webhookGeheimnis } from "./_stripe.js";
 
 // Kartenzahlung über Stripe Checkout (gehostete Bezahlseite). Die Beträge
 // rechnet der Server aus den Mengen, nie der Browser. Die Bestellmails gehen
@@ -35,6 +35,11 @@ export default async function handler(request, response) {
   const schluessel = stripeSchluessel();
   if (!schluessel || !webhookGeheimnis()) {
     return response.status(503).json({ error: "Kartenzahlung ist noch nicht eingerichtet.", feld: "zahlung" });
+  }
+
+  // Öffentlicher Schlüssel oder Webhook-Geheimnis statt Geheimschlüssel: gar nicht erst zu Stripe
+  if (!/^(sk|rk)_(test|live)_/.test(schluessel)) {
+    return response.status(503).json({ error: "Kartenzahlung ist falsch eingerichtet.", grund: `Schlüssel ${schluesselArt(schluessel)}` });
   }
 
   const ergebnis = pruefeBestellung({ ...body, zahlung: "karte" }, ["karte"]);

@@ -13,7 +13,8 @@ export default function handler(request, response) {
   const schluessel = !!wert;
   const webhook = !!webhookGeheimnis();
   return response.status(200).json({
-    karte: schluessel && webhook,
+    // Nur mit echtem Geheimschlüssel anbieten, sonst sähen Kunden bloss eine Fehlermeldung
+    karte: /^(sk|rk)_(test|live)_/.test(wert) && webhook,
     schluessel,
     webhook,
     umgebung: process.env.VERCEL_ENV || "",
