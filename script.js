@@ -619,23 +619,13 @@ function baueKasse(form) {
 
   // Kartenzahlung nur anbieten, wenn der Server sie eingerichtet hat
   const karteOption = document.getElementById("zahlart-karte");
-  // Zustand für die Diagnoseseite (diagnose.html): was ist bei der Abfrage passiert?
-  window.mafoKarte = { stand: "angefragt" };
   const karteBereit = fetch("/api/zahlarten", { cache: "no-store" })
-    .then((a) => {
-      window.mafoKarte.http = a.status;
-      return a.ok ? a.json() : { karte: false };
-    })
+    .then((a) => (a.ok ? a.json() : { karte: false }))
     .then((j) => {
       karteOption.hidden = !j.karte;
-      window.mafoKarte.stand = j.karte ? "angezeigt" : "serverSagtNein";
       return !!j.karte;
     })
-    .catch((e) => {
-      window.mafoKarte.stand = "fehler";
-      window.mafoKarte.meldung = String((e && e.message) || e);
-      return false;
-    });
+    .catch(() => false);
 
   // Rückkehr von der Bezahlseite von Stripe
   const rueck = new URLSearchParams(location.search);

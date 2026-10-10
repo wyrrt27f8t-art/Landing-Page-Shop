@@ -23,9 +23,6 @@ export function webhookGeheimnis() {
   return treffer ? treffer[1] : "";
 }
 
-// Namen (nie Werte) der Variablen, die nach Stripe aussehen, für die Prüfseite
-export const stripeVariablen = () =>
-  Object.keys(process.env).filter((name) => /stripe|webhook|whsec/i.test(name)).sort();
 
 // Nur die Art des Schlüssels, nie der Inhalt
 export function schluesselArt(wert) {
