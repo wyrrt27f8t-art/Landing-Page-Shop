@@ -9,7 +9,23 @@ function bereinigt(wert) {
 }
 
 export const stripeSchluessel = () => bereinigt(process.env.STRIPE_SECRET_KEY);
-export const webhookGeheimnis = () => bereinigt(process.env.STRIPE_WEBHOOK_SECRET);
+
+// Das Webhook-Geheimnis auch finden, wenn der Variablenname leicht abweicht
+// (Gross-/Kleinschreibung, Tippfehler): zuerst der richtige Name, dann jede
+// Variable mit "webhook" im Namen, dann jede, deren Wert mit whsec_ beginnt.
+export function webhookGeheimnis() {
+  const richtig = bereinigt(process.env.STRIPE_WEBHOOK_SECRET);
+  if (richtig) return richtig;
+  const werte = Object.entries(process.env).map(([name, wert]) => [name, bereinigt(wert)]);
+  const treffer =
+    werte.find(([name, wert]) => /webhook/i.test(name) && /^whsec_/.test(wert)) ||
+    werte.find(([, wert]) => /^whsec_/.test(wert));
+  return treffer ? treffer[1] : "";
+}
+
+// Namen (nie Werte) der Variablen, die nach Stripe aussehen, für die Prüfseite
+export const stripeVariablen = () =>
+  Object.keys(process.env).filter((name) => /stripe|webhook|whsec/i.test(name)).sort();
 
 // Nur die Art des Schlüssels, nie der Inhalt
 export function schluesselArt(wert) {
