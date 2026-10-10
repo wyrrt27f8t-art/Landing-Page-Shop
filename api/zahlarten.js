@@ -12,12 +12,18 @@ export default function handler(request, response) {
   const wert = stripeSchluessel();
   const schluessel = !!wert;
   const webhook = !!webhookGeheimnis();
+  const umgebung = process.env.VERCEL_ENV || "";
+  const modus = /^(sk|rk)_live_/.test(wert) ? "live" : /^(sk|rk)_test_/.test(wert) ? "test" : "";
+  // Mit Testschlüssel auf der echten Seite sähen Kunden nur die Stripe-Testseite,
+  // auf der echte Karten abgelehnt werden. Dann nur mit ?test=1 (kasse.html?kartentest) anbieten.
+  const testErlaubt = umgebung !== "production" || (request.query && request.query.test === "1");
   return response.status(200).json({
     // Nur mit echtem Geheimschlüssel anbieten, sonst sähen Kunden bloss eine Fehlermeldung
-    karte: /^(sk|rk)_(test|live)_/.test(wert) && webhook,
+    karte: webhook && (modus === "live" || (modus === "test" && testErlaubt)),
+    modus,
     schluessel,
     webhook,
-    umgebung: process.env.VERCEL_ENV || "",
+    umgebung,
     schluesselArt: schluesselArt(wert),
     schluesselLaenge: wert.length,
     webhookArt: webhook ? (/^whsec_/.test(webhookGeheimnis()) ? "whsec_" : "unbekannt (muss mit whsec_ beginnen)") : "fehlt",

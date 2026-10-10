@@ -619,7 +619,9 @@ function baueKasse(form) {
 
   // Kartenzahlung nur anbieten, wenn der Server sie eingerichtet hat
   const karteOption = document.getElementById("zahlart-karte");
-  const karteBereit = fetch("/api/zahlarten", { cache: "no-store" })
+  // Mit kasse.html?kartentest lässt sich die Kartenzahlung im Testmodus von Stripe ausprobieren
+  const kartentest = new URLSearchParams(location.search).has("kartentest") ? "?test=1" : "";
+  const karteBereit = fetch("/api/zahlarten" + kartentest, { cache: "no-store" })
     .then((a) => (a.ok ? a.json() : { karte: false }))
     .then((j) => {
       karteOption.hidden = !j.karte;
