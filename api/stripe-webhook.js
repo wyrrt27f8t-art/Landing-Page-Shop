@@ -1,4 +1,5 @@
 import Stripe from "stripe";
+import { stripeSchluessel, webhookGeheimnis } from "./_stripe.js";
 import { berechne, chf, escapeHtml, sendeBestellmails, sendeInternHinweis } from "./_bestellung.js";
 
 // Stripe meldet hierher, wenn eine Kartenzahlung durch ist. Erst jetzt gehen
@@ -19,8 +20,8 @@ export default async function handler(request, response) {
     return response.status(405).json({ error: "Method not allowed" });
   }
 
-  const schluessel = (process.env.STRIPE_SECRET_KEY || "").trim();
-  const geheimnis = (process.env.STRIPE_WEBHOOK_SECRET || "").trim();
+  const schluessel = stripeSchluessel();
+  const geheimnis = webhookGeheimnis();
   if (!schluessel || !geheimnis) {
     console.error("STRIPE_SECRET_KEY oder STRIPE_WEBHOOK_SECRET ist nicht gesetzt.");
     return response.status(500).json({ error: "Server ist nicht korrekt konfiguriert." });

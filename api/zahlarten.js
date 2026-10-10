@@ -1,3 +1,5 @@
+import { schluesselArt, stripeSchluessel, webhookGeheimnis } from "./_stripe.js";
+
 // Sagt der Kasse, ob die Kartenzahlung eingerichtet ist. Ohne Stripe-Schlüssel
 // in Vercel bleibt die Option unsichtbar und der Shop läuft wie bisher.
 export default function handler(request, response) {
@@ -6,8 +8,17 @@ export default function handler(request, response) {
     return response.status(405).json({ error: "Method not allowed" });
   }
   response.setHeader("Cache-Control", "no-store");
-  // Nur ob die Variablen da sind, nie ihr Inhalt
-  const schluessel = !!(process.env.STRIPE_SECRET_KEY || "").trim();
-  const webhook = !!(process.env.STRIPE_WEBHOOK_SECRET || "").trim();
-  return response.status(200).json({ karte: schluessel && webhook, schluessel, webhook, umgebung: process.env.VERCEL_ENV || "" });
+  // Nur ob die Variablen da sind und welche Art Schlüssel, nie ihr Inhalt
+  const wert = stripeSchluessel();
+  const schluessel = !!wert;
+  const webhook = !!webhookGeheimnis();
+  return response.status(200).json({
+    karte: schluessel && webhook,
+    schluessel,
+    webhook,
+    umgebung: process.env.VERCEL_ENV || "",
+    schluesselArt: schluesselArt(wert),
+    schluesselLaenge: wert.length,
+    webhookArt: webhook ? (/^whsec_/.test(webhookGeheimnis()) ? "whsec_" : "unbekannt (muss mit whsec_ beginnen)") : "fehlt",
+  });
 }
