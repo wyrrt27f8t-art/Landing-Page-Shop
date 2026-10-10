@@ -43,7 +43,7 @@
 
       // 2. Welches Skript liefert die Website aus?
       try {
-        const r = await fetch("/script.js?v=20261009", { cache: "no-store" });
+        const r = await fetch("/script.js?v=20261010", { cache: "no-store" });
         const t = await r.text();
         zeile(t.includes("api/zahlarten") && t.includes("mafoKarte"), "Skript enthält den neuesten Karten-Code", "Länge " + t.length + " Zeichen; " + kopf(r));
       } catch (e) { zeile(false, "Skript nicht ladbar", String(e)); }
@@ -53,7 +53,7 @@
         const r = await fetch("/kasse.html", { cache: "no-store" });
         const t = await r.text();
         zeile(t.includes('id="zahlart-karte"'), "Kasse-Seite enthält die Option Karte", kopf(r));
-        zeile(t.includes("script.js?v=20261009"), "Kasse-Seite lädt das Skript mit Versionsnummer");
+        zeile(t.includes("script.js?v=20261010"), "Kasse-Seite lädt das Skript mit Versionsnummer");
       } catch (e) { zeile(false, "Kasse-Seite nicht ladbar", String(e)); }
 
       // 4. Die echte Kasse laden und schauen, was das Skript dort getan hat
