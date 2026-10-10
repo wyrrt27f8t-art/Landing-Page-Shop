@@ -1,5 +1,6 @@
 import Stripe from "stripe";
 import { LAENDER, bestellnummer, pruefeBestellung } from "./_bestellung.js";
+import { stripeSchluessel, webhookGeheimnis } from "./_stripe.js";
 
 // Kartenzahlung über Stripe Checkout (gehostete Bezahlseite). Die Beträge
 // rechnet der Server aus den Mengen, nie der Browser. Die Bestellmails gehen
@@ -31,8 +32,8 @@ export default async function handler(request, response) {
   // Honeypot: real users never fill this in.
   if (body.company) return response.status(200).json({ ok: true });
 
-  const schluessel = (process.env.STRIPE_SECRET_KEY || "").trim();
-  if (!schluessel || !(process.env.STRIPE_WEBHOOK_SECRET || "").trim()) {
+  const schluessel = stripeSchluessel();
+  if (!schluessel || !webhookGeheimnis()) {
     return response.status(503).json({ error: "Kartenzahlung ist noch nicht eingerichtet.", feld: "zahlung" });
   }
 
