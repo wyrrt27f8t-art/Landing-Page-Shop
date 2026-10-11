@@ -15,8 +15,14 @@ const ARTIKEL = {
   // Aus der Zeit vor der Farbauswahl: bleibt im Warenkorb, die Farbe klären wir per E-Mail
   walk: { preis: 3990, name: "order.optWalkOffen", feld: "anzahlWalk" },
 };
-// Versand in Rappen, pauschal pro Bestellung; muss mit api/reserve.js übereinstimmen
+// Versand in Rappen pro Bestellung; muss mit api/_bestellung.js übereinstimmen
 const VERSAND = { CH: 0, DE: 2500, AT: 2500, FR: 2500, IT: 2500 };
+// Ab diesem Warenwert (nach Rabatt) kostet der Versand ins Ausland weniger
+const VERSAND_GUENSTIG = { ab: 7500, betrag: 1800 };
+function versandFuer(land, ware) {
+  const versand = VERSAND[land] || 0;
+  return versand && ware >= VERSAND_GUENSTIG.ab ? VERSAND_GUENSTIG.betrag : versand;
+}
 const MAX_PRO_ARTIKEL = 10;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -476,7 +482,7 @@ function baueKasse(form) {
     const zwischen = Warenkorb.zwischensumme();
     const ware = bonus ? mitRabatt(zwischen, bonus.prozent) : zwischen;
     const land = form.elements.country.value;
-    const versand = mitVersand ? VERSAND[land] || 0 : 0;
+    const versand = mitVersand ? versandFuer(land, ware) : 0;
     const total = ware + versand;
     const zeile = (schluessel, wert, klasse) => {
       const z = element("div", "summen-zeile" + (klasse ? " " + klasse : ""));
@@ -489,6 +495,12 @@ function baueKasse(form) {
     }
     if (versand) zeile("kasse.shipping" + land, chf(versand));
     zeile("order.total", chf(total), "summen-total");
+    if (versand && ware < VERSAND_GUENSTIG.ab) {
+      // Betrag in der Mitte, damit der Sprachwechsel nur die Textteile tauscht
+      const fehlt = element("small", "summen-hinweis");
+      fehlt.append(uebersetzt("span", "", "kasse.shippingHintA"), " ", element("strong", "", chf(VERSAND_GUENSTIG.ab - ware)), " ", uebersetzt("span", "", "kasse.shippingHintB"));
+      container.append(fehlt);
+    }
     container.append(uebersetzt("small", "", !mitVersand ? "order.totalNote" : versand ? "kasse.shippingNote" : "kasse.shippingCh"));
     return total;
   }

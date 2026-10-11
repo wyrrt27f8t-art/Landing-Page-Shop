@@ -9,13 +9,20 @@ import { leseSprache, mailtexte } from "./_mailtexte.js";
 // Vercel nicht zu eigenen Endpunkten.
 
 export const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-// Lieferländer, ihre Postleitzahlen und Versandkosten in Rappen (pauschal pro Bestellung)
+// Lieferländer, ihre Postleitzahlen und Versandkosten in Rappen (pro Bestellung)
 export const LAENDER = { CH: "Schweiz", DE: "Deutschland", AT: "Österreich", FR: "Frankreich", IT: "Italien" };
 export const VERSAND = { CH: 0, DE: 2500, AT: 2500, FR: 2500, IT: 2500 };
+// Ab diesem Warenwert (nach Rabatt) kostet der Versand ins Ausland weniger
+export const VERSAND_GUENSTIG = { ab: 7500, betrag: 1800 };
+
+export function versandFuer(land, ware) {
+  const versand = VERSAND[land] || 0;
+  return versand && ware >= VERSAND_GUENSTIG.ab ? VERSAND_GUENSTIG.betrag : versand;
+}
 export const PLZ_RE = { CH: /^\d{4}$/, AT: /^\d{4}$/, DE: /^\d{5}$/, FR: /^\d{5}$/, IT: /^\d{5}$/ };
 
-// Preise in Rappen, inkl. Versand in die Schweiz; nach DE und AT kommt VERSAND
-// dazu. Müssen mit der Website übereinstimmen; der Betrag in den Mails wird
+// Preise in Rappen, inkl. Versand in die Schweiz; ins Ausland kommt der Versand
+// (versandFuer) dazu. Müssen mit der Website übereinstimmen; der Betrag in den Mails wird
 // hier berechnet, nie aus dem Browser übernommen.
 export const ARTIKEL = [
   { feld: "anzahlCar", name: "MAFO TRAVEL", preis: 5900 },
@@ -92,7 +99,7 @@ export function berechne(mengen, land, bonuscode) {
   // Der Rabatt gilt für die Ware, nicht für den Versand
   const ware = prozent ? mitRabatt(zwischensumme, prozent) : zwischensumme;
   const rabatt = prozent ? { code, prozent, betrag: zwischensumme - ware } : null;
-  const versand = VERSAND[land];
+  const versand = versandFuer(land, ware);
   return { positionen, zwischensumme, rabatt, ware, versand, total: ware + versand };
 }
 
@@ -220,7 +227,7 @@ export function internerText({ nummer, name, email, strasse, plz, ort, land, pos
       <tr><td><strong>Bonuscode</strong></td><td>${escapeHtml(rabatt.code)} (−${rabatt.prozent} %): −${chf(rabatt.betrag)}</td></tr>`
           : ""
       }
-      <tr><td><strong>Versand</strong></td><td>${versand ? chf(versand) + " (" + escapeHtml(LAENDER[land]) + ", pauschal)" : "inklusive (Schweiz)"}</td></tr>
+      <tr><td><strong>Versand</strong></td><td>${versand ? chf(versand) + " (" + escapeHtml(LAENDER[land]) + ")" : "inklusive (Schweiz)"}</td></tr>
       <tr><td><strong>Total</strong></td><td>${chf(total)}</td></tr>
       <tr><td><strong>Name</strong></td><td>${escapeHtml(name)}</td></tr>
       <tr><td><strong>E-Mail</strong></td><td>${escapeHtml(email)}</td></tr>${sprache && sprache !== "de" ? `
