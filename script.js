@@ -16,7 +16,7 @@ const ARTIKEL = {
   walk: { preis: 3990, name: "order.optWalkOffen", feld: "anzahlWalk" },
 };
 // Versand in Rappen, pauschal pro Bestellung; muss mit api/reserve.js übereinstimmen
-const VERSAND = { CH: 0, DE: 1200, AT: 1200 };
+const VERSAND = { CH: 0, DE: 2500, AT: 2500, FR: 2500, IT: 2500 };
 const MAX_PRO_ARTIKEL = 10;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -520,7 +520,7 @@ function baueKasse(form) {
     };
   }
   // Postleitzahlen: Schweiz und Österreich vierstellig, Deutschland fünfstellig
-  const PLZ_RE = { CH: /^\d{4}$/, AT: /^\d{4}$/, DE: /^\d{5}$/ };
+  const PLZ_RE = { CH: /^\d{4}$/, AT: /^\d{4}$/, DE: /^\d{5}$/, FR: /^\d{5}$/, IT: /^\d{5}$/ };
   function adresseFehler() {
     const a = adresse();
     if (!a.name || !a.email || !a.street || !a.zip || !a.city) return "order.missing";
