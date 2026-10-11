@@ -182,6 +182,8 @@ const TEXTE = {
 
     "footer.rights": "© 2026 MAFO, Schweiz",
     "footer.privacy": "Datenschutz",
+    "gallery.open360": "360° drehen",
+    "gallery.thumb360": "360-Grad-Ansicht: Tasche drehen",
     "usp.label": "Deine Vorteile",
     "usp.1": "Versand in die Schweiz inklusive",
     "usp.2": "TWINT, Karte & Klarna",
@@ -401,6 +403,8 @@ const TEXTE = {
 
     "footer.rights": "© 2026 MAFO, Suisse",
     "footer.privacy": "Confidentialité",
+    "gallery.open360": "Tourner à 360°",
+    "gallery.thumb360": "Vue à 360° : faire tourner le sac",
     "usp.label": "Tes avantages",
     "usp.1": "Livraison en Suisse incluse",
     "usp.2": "TWINT, carte & Klarna",
@@ -620,6 +624,8 @@ const TEXTE = {
 
     "footer.rights": "© 2026 MAFO, Svizzera",
     "footer.privacy": "Privacy",
+    "gallery.open360": "Ruota a 360°",
+    "gallery.thumb360": "Vista a 360°: ruota la borsa",
     "usp.label": "I tuoi vantaggi",
     "usp.1": "Spedizione in Svizzera inclusa",
     "usp.2": "TWINT, carta e Klarna",
@@ -839,6 +845,8 @@ const TEXTE = {
 
     "footer.rights": "© 2026 MAFO, Switzerland",
     "footer.privacy": "Privacy",
+    "gallery.open360": "Rotate 360°",
+    "gallery.thumb360": "360° view: rotate the bag",
     "usp.label": "Your benefits",
     "usp.1": "Shipping within Switzerland included",
     "usp.2": "TWINT, card & Klarna",
