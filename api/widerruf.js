@@ -2,7 +2,7 @@ import { EMAIL_RE, absenderAdresse, einzeilig, escapeHtml, sendeMail, text } fro
 import { leseSprache, mailtexte, zeitText } from "./_mailtexte.js";
 
 // "Vertrag widerrufen" bzw. Rückgabe anmelden (rueckgabe.html / widerruf.html).
-// Für Kundschaft in Deutschland und Österreich verlangt das EU-Recht eine solche
+// Für Kundschaft in der EU (DE, AT, FR, IT) verlangt das EU-Recht eine solche
 // Widerrufsfunktion samt Eingangsbestätigung auf einem dauerhaften Datenträger
 // (E-Mail). Für die Schweiz gilt dieselbe freiwillige Rückgabe innert 14 Tagen.
 

@@ -13,7 +13,7 @@ export function leseSprache(wert) {
 const T = {
   de: {
     produkte: { anzahlCar: "MAFO TRAVEL", anzahlWalkBordeaux: "MAFO WALK, Bordeaux", anzahlWalkCreme: "MAFO WALK, Crème", anzahlWalkSalbei: "MAFO WALK, Salbeigrün", anzahlWalk: "MAFO WALK" },
-    laender: { CH: "Schweiz", DE: "Deutschland", AT: "Österreich" },
+    laender: { CH: "Schweiz", DE: "Deutschland", AT: "Österreich", FR: "Frankreich", IT: "Italien" },
     zahlungsarten: { vorauskasse: "Vorauskasse (Banküberweisung)", twint: "TWINT", karte: "Online-Zahlung" },
     betreff: (nummer, vorname) => `Deine Bestellung ${nummer} ist eingegangen, ${vorname}`,
     danke: "Danke für deine Bestellung.",
@@ -61,7 +61,7 @@ const T = {
   },
   fr: {
     produkte: { anzahlCar: "MAFO TRAVEL", anzahlWalkBordeaux: "MAFO WALK, bordeaux", anzahlWalkCreme: "MAFO WALK, crème", anzahlWalkSalbei: "MAFO WALK, vert sauge", anzahlWalk: "MAFO WALK" },
-    laender: { CH: "Suisse", DE: "Allemagne", AT: "Autriche" },
+    laender: { CH: "Suisse", DE: "Allemagne", AT: "Autriche", FR: "France", IT: "Italie" },
     zahlungsarten: { vorauskasse: "Paiement anticipé (virement bancaire)", twint: "TWINT", karte: "Paiement en ligne" },
     betreff: (nummer, vorname) => `Ta commande ${nummer} est bien arrivée, ${vorname}`,
     danke: "Merci pour ta commande.",
@@ -107,7 +107,7 @@ const T = {
   },
   it: {
     produkte: { anzahlCar: "MAFO TRAVEL", anzahlWalkBordeaux: "MAFO WALK, bordeaux", anzahlWalkCreme: "MAFO WALK, crema", anzahlWalkSalbei: "MAFO WALK, verde salvia", anzahlWalk: "MAFO WALK" },
-    laender: { CH: "Svizzera", DE: "Germania", AT: "Austria" },
+    laender: { CH: "Svizzera", DE: "Germania", AT: "Austria", FR: "Francia", IT: "Italia" },
     zahlungsarten: { vorauskasse: "Pagamento anticipato (bonifico bancario)", twint: "TWINT", karte: "Pagamento online" },
     betreff: (nummer, vorname) => `Il tuo ordine ${nummer} è arrivato, ${vorname}`,
     danke: "Grazie per il tuo ordine.",
@@ -153,7 +153,7 @@ const T = {
   },
   en: {
     produkte: { anzahlCar: "MAFO TRAVEL", anzahlWalkBordeaux: "MAFO WALK, burgundy", anzahlWalkCreme: "MAFO WALK, cream", anzahlWalkSalbei: "MAFO WALK, sage green", anzahlWalk: "MAFO WALK" },
-    laender: { CH: "Switzerland", DE: "Germany", AT: "Austria" },
+    laender: { CH: "Switzerland", DE: "Germany", AT: "Austria", FR: "France", IT: "Italy" },
     zahlungsarten: { vorauskasse: "Payment in advance (bank transfer)", twint: "TWINT", karte: "Online payment" },
     betreff: (nummer, vorname) => `Your order ${nummer} has been received, ${vorname}`,
     danke: "Thank you for your order.",

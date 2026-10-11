@@ -10,9 +10,9 @@ import { leseSprache, mailtexte } from "./_mailtexte.js";
 
 export const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 // Lieferländer, ihre Postleitzahlen und Versandkosten in Rappen (pauschal pro Bestellung)
-export const LAENDER = { CH: "Schweiz", DE: "Deutschland", AT: "Österreich" };
-export const VERSAND = { CH: 0, DE: 1200, AT: 1200 };
-export const PLZ_RE = { CH: /^\d{4}$/, AT: /^\d{4}$/, DE: /^\d{5}$/ };
+export const LAENDER = { CH: "Schweiz", DE: "Deutschland", AT: "Österreich", FR: "Frankreich", IT: "Italien" };
+export const VERSAND = { CH: 0, DE: 2500, AT: 2500, FR: 2500, IT: 2500 };
+export const PLZ_RE = { CH: /^\d{4}$/, AT: /^\d{4}$/, DE: /^\d{5}$/, FR: /^\d{5}$/, IT: /^\d{5}$/ };
 
 // Preise in Rappen, inkl. Versand in die Schweiz; nach DE und AT kommt VERSAND
 // dazu. Müssen mit der Website übereinstimmen; der Betrag in den Mails wird
