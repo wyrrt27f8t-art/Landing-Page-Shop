@@ -24,7 +24,7 @@
   <meta name="twitter:card" content="summary_large_image">
 
   <link rel="stylesheet" href="fonts.css">
-  <link rel="stylesheet" href="style.css?v=20261019">
+  <link rel="stylesheet" href="style.css?v=20261020">
 </head>
 <body>
 
@@ -50,9 +50,10 @@
     </div>
   </header>
 
-  <main>
+  <main data-i18n-title="title.payment">
     <section class="legal">
       <div class="wrap legal-inner">
+        <div id="inhalt" data-sprachinhalt data-gezeigt="de">
         <h1>Zahlungsarten</h1>
 
         <p>
@@ -150,6 +151,394 @@
         <p>
           Schreib uns an <a href="mailto:info@mafo-pet.ch">info@mafo-pet.ch</a>.
         </p>
+        </div>
+        <template data-sprache="de" data-fuer="inhalt">
+        <h1>Zahlungsarten</h1>
+
+        <p>
+          Bei MAFO bezahlst du sicher und in Schweizer Franken (CHF). Wir versenden deine
+          Bestellung, sobald die Zahlung bei uns eingegangen ist.
+        </p>
+        <p class="legal-meta">Stand: Oktober 2026</p>
+
+        <h2 id="karte">Kredit- oder Debitkarte</h2>
+        <div class="marken marken-gross" role="img" aria-label="Visa, Mastercard, American Express">
+          <span class="marke marke-visa" aria-hidden="true">VISA</span>
+          <span class="marke marke-mc" aria-hidden="true"><svg viewBox="0 0 32 20" width="30" height="19"><circle cx="12" cy="10" r="7.5" fill="#eb001b"/><circle cx="20" cy="10" r="7.5" fill="#f79e1b"/><path d="M16 3.6a7.5 7.5 0 0 1 0 12.8a7.5 7.5 0 0 1 0-12.8z" fill="#ff5f00"/></svg></span>
+          <span class="marke marke-amex" aria-hidden="true">AMEX</span>
+        </div>
+        <p>Du bezahlst auf der sicheren Bezahlseite unseres Zahlungsdienstleisters Stripe mit einer der folgenden Karten:</p>
+        <ul class="legal-liste">
+          <li>Visa</li>
+          <li>Mastercard</li>
+          <li>American Express</li>
+        </ul>
+        <p>
+          Auch Debitkarten mit Visa- oder Mastercard-Funktion (zum Beispiel Visa Debit oder
+          Debit Mastercard) funktionieren. Je nach Bank bestätigst du die Zahlung zusätzlich
+          in deiner Banking-App. Der Betrag wird bei der Bestellung belastet.
+        </p>
+
+        <h2 id="twint">TWINT</h2>
+        <div class="marken marken-gross" role="img" aria-label="TWINT">
+          <span class="marke marke-twint" aria-hidden="true">TWINT</span>
+        </div>
+        <p>
+          Wähle in der Kasse TWINT. Auf der Bezahlseite von Stripe wählst du TWINT aus und
+          bestätigst die Zahlung direkt in deiner TWINT-App. Deine Bestellung ist damit
+          sofort bezahlt. TWINT ist nur bei Lieferung in die Schweiz möglich.
+        </p>
+
+        <h2 id="wallet">Apple Pay und Google Pay</h2>
+        <div class="marken marken-gross" role="img" aria-label="Apple Pay, Google Pay">
+          <span class="marke marke-apple" aria-hidden="true">Apple&nbsp;Pay</span>
+          <span class="marke marke-google" aria-hidden="true"><b style="color:#4285f4">G</b>&nbsp;Pay</span>
+        </div>
+        <p>
+          Auf passenden Geräten zeigt dir die Bezahlseite Apple Pay (zum Beispiel auf dem
+          iPhone mit Safari) oder Google Pay (zum Beispiel auf Android mit Chrome) an. Du
+          bestätigst die Zahlung dann mit Face ID, Touch ID oder der Sperre deines Geräts.
+        </p>
+
+        <h2 id="klarna">Klarna</h2>
+        <div class="marken marken-gross" role="img" aria-label="Klarna">
+          <span class="marke marke-klarna" aria-hidden="true">Klarna.</span>
+        </div>
+        <p>
+          Auch Klarna wählst du auf der Bezahlseite von Stripe. Welche Möglichkeiten dir
+          Klarna anbietet, zum Beispiel eine spätere Zahlung, entscheidet Klarna nach
+          eigener Prüfung und zu eigenen Bedingungen. Bei Fragen zu einer Klarna-Zahlung
+          helfen dir die Klarna-App und
+          <a href="https://www.klarna.com/ch/" rel="noopener" target="_blank">klarna.com</a>.
+        </p>
+
+        <h2 id="vorauskasse">Vorauskasse (Banküberweisung)</h2>
+        <p>
+          Mit der Bestellbestätigung erhältst du unsere Bankverbindung (IBAN) per E-Mail.
+          Überweise den Betrag bitte mit deiner Bestellnummer (MAFO-…) als Zahlungszweck.
+          Sobald das Geld bei uns ist, versenden wir.
+        </p>
+        <p>
+          Bei Überweisungen aus Deutschland oder Österreich gilt: Der Betrag lautet auf
+          Schweizer Franken. Deine Bank kann für Auslandsüberweisungen oder den
+          Währungswechsel Gebühren verlangen.
+        </p>
+
+        <h2 id="rechnung">Rechnung</h2>
+        <p>
+          Einen Kauf auf Rechnung bieten wir nicht direkt an. Möchtest du später bezahlen,
+          kannst du Klarna wählen, sofern Klarna dir diese Möglichkeit anbietet.
+        </p>
+
+        <h2 id="sicherheit">Sicherheit</h2>
+        <p>
+          Unsere Website ist durchgehend verschlüsselt (HTTPS). Karten-, TWINT- und
+          Klarna-Zahlungen laufen über Stripe; deine Kartendaten gibst du nur dort ein. Wir
+          sehen und speichern sie nicht. Stripe ist nach dem Sicherheitsstandard der
+          Kartenindustrie (PCI DSS) zertifiziert. Mehr dazu in unserer
+          <a href="datenschutz.html">Datenschutzerklärung</a>.
+        </p>
+
+        <h2 id="erstattung">Erstattungen</h2>
+        <p>
+          Gibst du etwas zurück, erstatten wir den Betrag über die gleiche Zahlungsart, mit
+          der du bezahlt hast. Bei Vorauskasse überweisen wir ihn auf dein Konto. Alles zur
+          Rückgabe findest du unter <a href="rueckgabe.html">Rückgaben und Probleme melden</a>.
+        </p>
+
+        <h2>Fragen?</h2>
+        <p>
+          Schreib uns an <a href="mailto:info@mafo-pet.ch">info@mafo-pet.ch</a>.
+        </p>
+        </template>
+        <template data-sprache="fr" data-fuer="inhalt">
+        <h1>Modes de paiement</h1>
+        <p>
+          Chez MAFO, tu paies en toute sécurité et en francs suisses (CHF). Nous expédions ta
+          commande dès que le paiement nous est parvenu.
+        </p>
+        <p class="legal-meta">État : octobre 2026</p>
+
+        <h2 id="karte">Carte de crédit ou de débit</h2>
+        <div class="marken marken-gross" role="img" aria-label="Visa, Mastercard, American Express">
+          <span class="marke marke-visa" aria-hidden="true">VISA</span>
+          <span class="marke marke-mc" aria-hidden="true"><svg viewBox="0 0 32 20" width="30" height="19"><circle cx="12" cy="10" r="7.5" fill="#eb001b"/><circle cx="20" cy="10" r="7.5" fill="#f79e1b"/><path d="M16 3.6a7.5 7.5 0 0 1 0 12.8a7.5 7.5 0 0 1 0-12.8z" fill="#ff5f00"/></svg></span>
+          <span class="marke marke-amex" aria-hidden="true">AMEX</span>
+        </div>
+        <p>Tu paies sur la page de paiement sécurisée de notre prestataire Stripe avec l'une des cartes suivantes :</p>
+        <ul class="legal-liste">
+          <li>Visa</li>
+          <li>Mastercard</li>
+          <li>American Express</li>
+        </ul>
+        <p>
+          Les cartes de débit avec fonction Visa ou Mastercard (par exemple Visa Debit ou Debit
+          Mastercard) fonctionnent aussi. Selon ta banque, tu confirmes en plus le paiement dans
+          ton application bancaire. Le montant est débité lors de la commande.
+        </p>
+
+        <h2 id="twint">TWINT</h2>
+        <div class="marken marken-gross" role="img" aria-label="TWINT">
+          <span class="marke marke-twint" aria-hidden="true">TWINT</span>
+        </div>
+        <p>
+          Choisis TWINT à la caisse. Sur la page de paiement de Stripe, tu sélectionnes TWINT et
+          confirmes le paiement directement dans ton app TWINT. Ta commande est ainsi payée
+          immédiatement. TWINT n'est possible que pour une livraison en Suisse.
+        </p>
+
+        <h2 id="wallet">Apple Pay et Google Pay</h2>
+        <div class="marken marken-gross" role="img" aria-label="Apple Pay, Google Pay">
+          <span class="marke marke-apple" aria-hidden="true">Apple&nbsp;Pay</span>
+          <span class="marke marke-google" aria-hidden="true"><b style="color:#4285f4">G</b>&nbsp;Pay</span>
+        </div>
+        <p>
+          Sur les appareils compatibles, la page de paiement te propose Apple Pay (par exemple
+          sur iPhone avec Safari) ou Google Pay (par exemple sur Android avec Chrome). Tu
+          confirmes alors le paiement avec Face ID, Touch ID ou le verrouillage de ton appareil.
+        </p>
+
+        <h2 id="klarna">Klarna</h2>
+        <div class="marken marken-gross" role="img" aria-label="Klarna">
+          <span class="marke marke-klarna" aria-hidden="true">Klarna.</span>
+        </div>
+        <p>
+          Tu choisis aussi Klarna sur la page de paiement de Stripe. Les possibilités que
+          Klarna te propose, par exemple un paiement ultérieur, sont décidées par Klarna après
+          son propre examen et à ses propres conditions. Pour toute question sur un paiement
+          Klarna, l'app Klarna et <a href="https://www.klarna.com/ch/" rel="noopener" target="_blank">klarna.com</a> t'aident.
+        </p>
+
+        <h2 id="vorauskasse">Paiement anticipé (virement bancaire)</h2>
+        <p>
+          Avec la confirmation de commande, tu reçois nos coordonnées bancaires (IBAN) par
+          e-mail. Vire le montant en indiquant ton numéro de commande (MAFO-…) comme
+          communication. Dès que l'argent nous est parvenu, nous expédions.
+        </p>
+        <p>
+          Pour les virements depuis l'Allemagne ou l'Autriche : le montant est libellé en francs
+          suisses. Ta banque peut facturer des frais pour les virements à l'étranger ou le
+          change.
+        </p>
+
+        <h2 id="rechnung">Facture</h2>
+        <p>
+          Nous ne proposons pas directement l'achat sur facture. Si tu souhaites payer plus
+          tard, tu peux choisir Klarna, pour autant que Klarna te propose cette possibilité.
+        </p>
+
+        <h2 id="sicherheit">Sécurité</h2>
+        <p>
+          Notre site est entièrement chiffré (HTTPS). Les paiements par carte, TWINT et Klarna
+          passent par Stripe ; tu saisis tes données de carte uniquement chez Stripe. Nous ne les
+          voyons pas et ne les enregistrons pas. Stripe est certifié selon la norme de sécurité
+          de l'industrie des cartes (PCI DSS). Plus d'informations dans notre
+          <a href="datenschutz.html">déclaration de protection des données</a>.
+        </p>
+
+        <h2 id="erstattung">Remboursements</h2>
+        <p>
+          Si tu retournes un article, nous remboursons le montant par le même moyen de paiement
+          que celui utilisé. En cas de paiement anticipé, nous le virons sur ton compte. Tout
+          sur les retours sous <a href="rueckgabe.html">Retours et problèmes</a>.
+        </p>
+
+        <h2>Des questions ?</h2>
+        <p>
+          Écris-nous à <a href="mailto:info@mafo-pet.ch">info@mafo-pet.ch</a>.
+        </p>
+        </template>
+        <template data-sprache="it" data-fuer="inhalt">
+        <h1>Metodi di pagamento</h1>
+        <p>
+          Da MAFO paghi in modo sicuro e in franchi svizzeri (CHF). Spediamo il tuo ordine non
+          appena il pagamento ci è pervenuto.
+        </p>
+        <p class="legal-meta">Stato: ottobre 2026</p>
+
+        <h2 id="karte">Carta di credito o di debito</h2>
+        <div class="marken marken-gross" role="img" aria-label="Visa, Mastercard, American Express">
+          <span class="marke marke-visa" aria-hidden="true">VISA</span>
+          <span class="marke marke-mc" aria-hidden="true"><svg viewBox="0 0 32 20" width="30" height="19"><circle cx="12" cy="10" r="7.5" fill="#eb001b"/><circle cx="20" cy="10" r="7.5" fill="#f79e1b"/><path d="M16 3.6a7.5 7.5 0 0 1 0 12.8a7.5 7.5 0 0 1 0-12.8z" fill="#ff5f00"/></svg></span>
+          <span class="marke marke-amex" aria-hidden="true">AMEX</span>
+        </div>
+        <p>Paghi sulla pagina di pagamento sicura del nostro fornitore Stripe con una delle seguenti carte:</p>
+        <ul class="legal-liste">
+          <li>Visa</li>
+          <li>Mastercard</li>
+          <li>American Express</li>
+        </ul>
+        <p>
+          Funzionano anche le carte di debito con funzione Visa o Mastercard (ad esempio Visa
+          Debit o Debit Mastercard). A seconda della banca confermi il pagamento anche nella tua
+          app bancaria. L'importo viene addebitato al momento dell'ordine.
+        </p>
+
+        <h2 id="twint">TWINT</h2>
+        <div class="marken marken-gross" role="img" aria-label="TWINT">
+          <span class="marke marke-twint" aria-hidden="true">TWINT</span>
+        </div>
+        <p>
+          Scegli TWINT alla cassa. Sulla pagina di pagamento di Stripe selezioni TWINT e confermi
+          il pagamento direttamente nella tua app TWINT. Il tuo ordine è così pagato subito.
+          TWINT è possibile solo per consegne in Svizzera.
+        </p>
+
+        <h2 id="wallet">Apple Pay e Google Pay</h2>
+        <div class="marken marken-gross" role="img" aria-label="Apple Pay, Google Pay">
+          <span class="marke marke-apple" aria-hidden="true">Apple&nbsp;Pay</span>
+          <span class="marke marke-google" aria-hidden="true"><b style="color:#4285f4">G</b>&nbsp;Pay</span>
+        </div>
+        <p>
+          Sui dispositivi compatibili la pagina di pagamento ti mostra Apple Pay (ad esempio su
+          iPhone con Safari) o Google Pay (ad esempio su Android con Chrome). Confermi quindi il
+          pagamento con Face ID, Touch ID o il blocco del tuo dispositivo.
+        </p>
+
+        <h2 id="klarna">Klarna</h2>
+        <div class="marken marken-gross" role="img" aria-label="Klarna">
+          <span class="marke marke-klarna" aria-hidden="true">Klarna.</span>
+        </div>
+        <p>
+          Anche Klarna si sceglie sulla pagina di pagamento di Stripe. Quali possibilità Klarna
+          ti offre, ad esempio un pagamento posticipato, lo decide Klarna dopo una propria
+          verifica e alle proprie condizioni. Per domande su un pagamento Klarna ti aiutano l'app
+          Klarna e <a href="https://www.klarna.com/ch/" rel="noopener" target="_blank">klarna.com</a>.
+        </p>
+
+        <h2 id="vorauskasse">Pagamento anticipato (bonifico bancario)</h2>
+        <p>
+          Con la conferma d'ordine ricevi per e-mail le nostre coordinate bancarie (IBAN).
+          Bonifica l'importo indicando il tuo numero d'ordine (MAFO-…) come causale. Non appena
+          il denaro ci è pervenuto, spediamo.
+        </p>
+        <p>
+          Per bonifici dalla Germania o dall'Austria: l'importo è in franchi svizzeri. La tua
+          banca può applicare spese per i bonifici esteri o il cambio.
+        </p>
+
+        <h2 id="rechnung">Fattura</h2>
+        <p>
+          Non offriamo direttamente l'acquisto su fattura. Se desideri pagare più tardi, puoi
+          scegliere Klarna, se Klarna ti offre questa possibilità.
+        </p>
+
+        <h2 id="sicherheit">Sicurezza</h2>
+        <p>
+          Il nostro sito è interamente cifrato (HTTPS). I pagamenti con carta, TWINT e Klarna
+          passano tramite Stripe; inserisci i dati della carta solo da Stripe. Noi non li vediamo
+          e non li salviamo. Stripe è certificato secondo lo standard di sicurezza dell'industria
+          delle carte (PCI DSS). Maggiori informazioni nella nostra
+          <a href="datenschutz.html">informativa sulla protezione dei dati</a>.
+        </p>
+
+        <h2 id="erstattung">Rimborsi</h2>
+        <p>
+          Se restituisci qualcosa, rimborsiamo l'importo con lo stesso metodo di pagamento
+          utilizzato. In caso di pagamento anticipato lo bonifichiamo sul tuo conto. Tutto sui
+          resi in <a href="rueckgabe.html">Resi e problemi</a>.
+        </p>
+
+        <h2>Domande?</h2>
+        <p>
+          Scrivici a <a href="mailto:info@mafo-pet.ch">info@mafo-pet.ch</a>.
+        </p>
+        </template>
+        <template data-sprache="en" data-fuer="inhalt">
+        <h1>Payment methods</h1>
+        <p>
+          At MAFO you pay securely in Swiss francs (CHF). We ship your order as soon as your
+          payment has arrived.
+        </p>
+        <p class="legal-meta">Last updated: October 2026</p>
+
+        <h2 id="karte">Credit or debit card</h2>
+        <div class="marken marken-gross" role="img" aria-label="Visa, Mastercard, American Express">
+          <span class="marke marke-visa" aria-hidden="true">VISA</span>
+          <span class="marke marke-mc" aria-hidden="true"><svg viewBox="0 0 32 20" width="30" height="19"><circle cx="12" cy="10" r="7.5" fill="#eb001b"/><circle cx="20" cy="10" r="7.5" fill="#f79e1b"/><path d="M16 3.6a7.5 7.5 0 0 1 0 12.8a7.5 7.5 0 0 1 0-12.8z" fill="#ff5f00"/></svg></span>
+          <span class="marke marke-amex" aria-hidden="true">AMEX</span>
+        </div>
+        <p>You pay on the secure payment page of our payment provider Stripe with one of the following cards:</p>
+        <ul class="legal-liste">
+          <li>Visa</li>
+          <li>Mastercard</li>
+          <li>American Express</li>
+        </ul>
+        <p>
+          Debit cards with a Visa or Mastercard function (for example Visa Debit or Debit
+          Mastercard) also work. Depending on your bank, you also confirm the payment in your
+          banking app. The amount is charged when you order.
+        </p>
+
+        <h2 id="twint">TWINT</h2>
+        <div class="marken marken-gross" role="img" aria-label="TWINT">
+          <span class="marke marke-twint" aria-hidden="true">TWINT</span>
+        </div>
+        <p>
+          Choose TWINT at checkout. On Stripe's payment page you select TWINT and confirm the
+          payment directly in your TWINT app. Your order is then paid immediately. TWINT is only
+          available for delivery to Switzerland.
+        </p>
+
+        <h2 id="wallet">Apple Pay and Google Pay</h2>
+        <div class="marken marken-gross" role="img" aria-label="Apple Pay, Google Pay">
+          <span class="marke marke-apple" aria-hidden="true">Apple&nbsp;Pay</span>
+          <span class="marke marke-google" aria-hidden="true"><b style="color:#4285f4">G</b>&nbsp;Pay</span>
+        </div>
+        <p>
+          On supported devices the payment page offers Apple Pay (for example on an iPhone with
+          Safari) or Google Pay (for example on Android with Chrome). You then confirm the
+          payment with Face ID, Touch ID or your device lock.
+        </p>
+
+        <h2 id="klarna">Klarna</h2>
+        <div class="marken marken-gross" role="img" aria-label="Klarna">
+          <span class="marke marke-klarna" aria-hidden="true">Klarna.</span>
+        </div>
+        <p>
+          You also choose Klarna on Stripe's payment page. Which options Klarna offers you, for
+          example paying later, is decided by Klarna after its own assessment and on its own
+          terms. For questions about a Klarna payment, the Klarna app and
+          <a href="https://www.klarna.com/ch/" rel="noopener" target="_blank">klarna.com</a> can help.
+        </p>
+
+        <h2 id="vorauskasse">Payment in advance (bank transfer)</h2>
+        <p>
+          With your order confirmation you receive our bank details (IBAN) by email. Please
+          transfer the amount using your order number (MAFO-…) as the reference. As soon as the
+          money has arrived, we ship.
+        </p>
+        <p>
+          For transfers from Germany or Austria: the amount is in Swiss francs. Your bank may
+          charge fees for international transfers or currency exchange.
+        </p>
+
+        <h2 id="rechnung">Invoice</h2>
+        <p>
+          We do not offer purchase on invoice directly. If you want to pay later, you can choose
+          Klarna, provided Klarna offers you this option.
+        </p>
+
+        <h2 id="sicherheit">Security</h2>
+        <p>
+          Our website is fully encrypted (HTTPS). Card, TWINT and Klarna payments are processed
+          by Stripe; you enter your card details only with Stripe. We do not see or store them.
+          Stripe is certified to the card industry's security standard (PCI DSS). More in our
+          <a href="datenschutz.html">privacy policy</a>.
+        </p>
+
+        <h2 id="erstattung">Refunds</h2>
+        <p>
+          If you return something, we refund the amount using the same payment method you used.
+          For payment in advance we transfer it to your account. Everything about returns under
+          <a href="rueckgabe.html">Returns and problems</a>.
+        </p>
+
+        <h2>Questions?</h2>
+        <p>
+          Write to us at <a href="mailto:info@mafo-pet.ch">info@mafo-pet.ch</a>.
+        </p>
+        </template>
 
         <p class="legal-back"><a href="index.html" data-i18n="footer.back">Zurück zur Startseite</a></p>
       </div>
@@ -217,10 +606,10 @@
     </div>
   </footer>
 
-  <script src="script.js?v=20261019"></script>
+  <script src="script.js?v=20261020"></script>
   <!-- Cookiefreie Zugriffsstatistik (Vercel Web Analytics) -->
   <script defer src="/_vercel/insights/script.js"></script>
-  <script src="i18n.js?v=20261019"></script>
-  <script src="chat.js?v=20261019"></script>
+  <script src="i18n.js?v=20261020"></script>
+  <script src="chat.js?v=20261020"></script>
 </body>
 </html>
