@@ -1,4 +1,5 @@
 import { schluesselArt, stripeSchluessel, webhookGeheimnis } from "./_stripe.js";
+import { willkommensCode } from "./_rabatt.js";
 
 // Sagt der Kasse, ob die Kartenzahlung eingerichtet ist. Ohne Stripe-Schlüssel
 // in Vercel bleibt die Option unsichtbar und der Shop läuft wie bisher.
@@ -21,6 +22,8 @@ export default function handler(request, response) {
     // Nur mit echtem Geheimschlüssel anbieten, sonst sähen Kunden bloss eine Fehlermeldung
     karte: webhook && (modus === "live" || (modus === "test" && testErlaubt)),
     modus,
+    // Willkommensrabatt: nur ob es ihn gibt und wie viel, nie den Code selbst
+    willkommen: willkommensCode() ? willkommensCode().prozent : 0,
     schluessel,
     webhook,
     umgebung,
