@@ -18,8 +18,12 @@ export const PLZ_RE = { CH: /^\d{4}$/, AT: /^\d{4}$/, DE: /^\d{5}$/ };
 // dazu. Müssen mit der Website übereinstimmen; der Betrag in den Mails wird
 // hier berechnet, nie aus dem Browser übernommen.
 export const ARTIKEL = [
-  { feld: "anzahlCar", name: "MAFO", preis: 5900 },
-  { feld: "anzahlWalk", name: "MAFO WALK", preis: 3990 },
+  { feld: "anzahlCar", name: "MAFO TRAVEL", preis: 5900 },
+  { feld: "anzahlWalkBordeaux", name: "MAFO WALK Bordeaux", preis: 3990 },
+  { feld: "anzahlWalkCreme", name: "MAFO WALK Crème", preis: 3990 },
+  { feld: "anzahlWalkSalbei", name: "MAFO WALK Salbeigrün", preis: 3990 },
+  // Seiten von vor der Farbauswahl schicken MAFO WALK ohne Farbe
+  { feld: "anzahlWalk", name: "MAFO WALK (Farbe bitte erfragen)", preis: 3990 },
 ];
 const MAX_PRO_ARTIKEL = 10;
 
@@ -244,7 +248,7 @@ export function bestaetigungsText({ nummer, name, strasse, plz, ort, land, posit
     .map(
       (p) => `
         <tr>
-          <td style="padding:6px 0;font-size:15px;color:#f3ede1;">${p.menge}× ${escapeHtml(p.name)}</td>
+          <td style="padding:6px 0;font-size:15px;color:#f3ede1;">${p.menge}× ${escapeHtml(t.produkte[p.feld] || p.name)}</td>
           <td style="padding:6px 0;font-size:15px;color:#f3ede1;text-align:right;white-space:nowrap;">${chf(p.summe)}</td>
         </tr>`,
     )

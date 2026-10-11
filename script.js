@@ -9,7 +9,11 @@
  */
 const ARTIKEL = {
   car: { preis: 5900, name: "order.optCar", feld: "anzahlCar" },
-  walk: { preis: 3990, name: "order.optWalk", feld: "anzahlWalk" },
+  walkBordeaux: { preis: 3990, name: "order.optWalkBordeaux", feld: "anzahlWalkBordeaux" },
+  walkCreme: { preis: 3990, name: "order.optWalkCreme", feld: "anzahlWalkCreme" },
+  walkSalbei: { preis: 3990, name: "order.optWalkSalbei", feld: "anzahlWalkSalbei" },
+  // Aus der Zeit vor der Farbauswahl: bleibt im Warenkorb, die Farbe klären wir per E-Mail
+  walk: { preis: 3990, name: "order.optWalkOffen", feld: "anzahlWalk" },
 };
 // Versand in Rappen, pauschal pro Bestellung; muss mit api/reserve.js übereinstimmen
 const VERSAND = { CH: 0, DE: 1200, AT: 1200 };
@@ -241,9 +245,51 @@ function baueWarenkorbFenster() {
 }
 
 /* ---------- Kaufbox auf den Produktseiten ---------- */
+// Farbauswahl (MAFO WALK): Knöpfe mit data-art; der gewählte bestimmt den
+// Artikel und tauscht das Produktbild, das mit data-farbbild verbunden ist
+function baueFarbwahl(gruppe, beiWechsel) {
+  const knoepfe = [...gruppe.querySelectorAll("[data-art]")];
+  const name = gruppe.querySelector("[data-farbname]");
+  const waehle = (knopf) => {
+    knoepfe.forEach((k) => k.setAttribute("aria-checked", k === knopf ? "true" : "false"));
+    knoepfe.forEach((k) => { k.tabIndex = k === knopf ? 0 : -1; });
+    if (name) {
+      name.dataset.i18n = knopf.dataset.farbe;
+      name.textContent = sagt(knopf.dataset.farbe) || name.textContent;
+    }
+    gruppe.dataset.gewaehlt = knopf.dataset.art;
+    if (beiWechsel) beiWechsel(knopf);
+  };
+  knoepfe.forEach((knopf, i) => {
+    knopf.addEventListener("click", () => waehle(knopf));
+    knopf.addEventListener("keydown", (e) => {
+      const schritt = e.key === "ArrowRight" || e.key === "ArrowDown" ? 1 : e.key === "ArrowLeft" || e.key === "ArrowUp" ? -1 : 0;
+      if (!schritt) return;
+      e.preventDefault();
+      const ziel = knoepfe[(i + schritt + knoepfe.length) % knoepfe.length];
+      waehle(ziel);
+      ziel.focus();
+    });
+  });
+  waehle(knoepfe.find((k) => k.getAttribute("aria-checked") === "true") || knoepfe[0]);
+  return () => gruppe.dataset.gewaehlt;
+}
+
 function baueKaufboxen() {
   document.querySelectorAll(".kaufbox").forEach((box) => {
-    const art = box.dataset.art;
+    let art = box.dataset.art;
+    const farben = box.querySelector(".farbwahl");
+    if (farben) {
+      const bild = document.querySelector(farben.dataset.farbbild || "none");
+      baueFarbwahl(farben, (knopf) => {
+        art = knopf.dataset.art;
+        if (bild) {
+          bild.src = knopf.dataset.bild;
+          bild.dataset.i18nAlt = knopf.dataset.alt;
+          bild.alt = sagt(knopf.dataset.alt) || bild.alt;
+        }
+      });
+    }
     const knopf = box.querySelector(".kaufbox-knopf");
     const platz = box.querySelector(".kaufbox-menge");
     let gewuenscht = 1;
@@ -321,9 +367,20 @@ function baueShop() {
   }
 
   // In den Warenkorb direkt von der Karte
+  // Farbauswahl auf der Karte tauscht das Kartenbild
+  liste.querySelectorAll(".farbwahl").forEach((gruppe) => {
+    const bild = gruppe.closest(".produktkarte").querySelector(".produktkarte-bild img");
+    baueFarbwahl(gruppe, (knopf) => {
+      bild.src = knopf.dataset.karte;
+      bild.dataset.i18nAlt = knopf.dataset.alt;
+      bild.alt = sagt(knopf.dataset.alt) || bild.alt;
+    });
+  });
+
   liste.querySelectorAll("[data-in-warenkorb]").forEach((knopf) => {
     knopf.addEventListener("click", () => {
-      const art = knopf.dataset.inWarenkorb;
+      const farben = knopf.closest(".produktkarte").querySelector(".farbwahl");
+      const art = farben ? farben.dataset.gewaehlt : knopf.dataset.inWarenkorb;
       Warenkorb.setze(art, Warenkorb.lesen()[art] + 1);
       knopf.textContent = `✓ ${sagt("cart.added")}`;
       knopf.classList.add("ist-drin");
@@ -632,8 +689,8 @@ function baueKasse(form) {
     const inhalt = Warenkorb.lesen();
     const daten = {
       ...adresse(),
-      anzahlCar: inhalt.car,
-      anzahlWalk: inhalt.walk,
+      // Mengen je Artikel und Farbe, z. B. anzahlWalkSalbei
+      ...Object.fromEntries(Object.keys(ARTIKEL).map((art) => [ARTIKEL[art].feld, inhalt[art]])),
       bonuscode: bonus ? bonus.code : "",
       zahlung: zahlungsart(),
       // Bestätigung in der Sprache, in der bestellt wird

@@ -191,9 +191,6 @@ a {
     background: url("media/hero-poster.jpg") center / cover no-repeat;
   }
 
-  .hero-video-walk {
-    background-image: url("media/walk-poster.jpg");
-  }
 }
 
 .hero-grid {
@@ -1315,6 +1312,85 @@ a {
 .shop-leer .shop-zuruecksetzen {
   display: block;
   margin: 0.6rem auto 0;
+}
+
+/* MAFO WALK: Kopfbereich mit der echten Flasche */
+.hero-walk {
+  padding: 3.5rem 0 4.5rem;
+}
+
+.hero-walk-bild {
+  margin: 0;
+}
+
+.hero-walk-bild img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 1.1rem;
+  background: #fff;
+}
+
+.hero-walk-bild figcaption {
+  margin-top: 0.7rem;
+  text-align: center;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+}
+
+/* Farbauswahl */
+.farbwahl {
+  margin: 0.4rem 0 1.1rem;
+}
+
+.farbwahl-titel {
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  margin-bottom: 0.55rem;
+}
+
+.farbwahl-titel strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.farbwahl-knoepfe {
+  display: flex;
+  gap: 0.7rem;
+}
+
+.farbe {
+  width: 2.4rem;
+  height: 2.4rem;
+  padding: 0;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: var(--farbe);
+  box-shadow: inset 0 0 0 3px var(--surface);
+  cursor: pointer;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.farbe:hover {
+  transform: scale(1.06);
+}
+
+.farbe[aria-checked="true"] {
+  border-color: var(--accent);
+}
+
+.farbe:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.farbwahl-klein .farbe {
+  width: 2rem;
+  height: 2rem;
+}
+
+.farbwahl-klein {
+  margin: 0 0 0.9rem;
 }
 
 /* Rechtsseiten */

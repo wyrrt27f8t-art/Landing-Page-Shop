@@ -1,6 +1,7 @@
 import Stripe from "stripe";
 import { LAENDER, bestellnummer, pruefeBestellung } from "./_bestellung.js";
 import { schluesselArt, stripeSchluessel, webhookGeheimnis } from "./_stripe.js";
+import { mailtexte } from "./_mailtexte.js";
 
 // Kartenzahlung über Stripe Checkout (gehostete Bezahlseite). Die Beträge
 // rechnet der Server aus den Mengen, nie der Browser. Die Bestellmails gehen
@@ -55,6 +56,8 @@ export default async function handler(request, response) {
 
   // Mit Rabatt eine Sammelzeile, damit der Betrag in Stripe auf den Rappen
   // dem Total entspricht; sonst eine Zeile pro Artikel.
+  // Artikelnamen auf der Bezahlseite in der Sprache der Kundschaft
+  const produktName = (p) => mailtexte(d.sprache).produkte[p.feld] || p.name;
   const position = (name, betrag, menge = 1, beschreibung) => ({
     quantity: menge,
     price_data: {
@@ -69,10 +72,10 @@ export default async function handler(request, response) {
           `MAFO Bestellung ${nummer}`,
           d.ware,
           1,
-          `${d.positionen.map((p) => `${p.menge}× ${p.name}`).join(", ")} · Bonuscode −${d.rabatt.prozent} %`,
+          `${d.positionen.map((p) => `${p.menge}× ${produktName(p)}`).join(", ")} · Bonuscode −${d.rabatt.prozent} %`,
         ),
       ]
-    : d.positionen.map((p) => position(p.name, p.preis, p.menge));
+    : d.positionen.map((p) => position(produktName(p), p.preis, p.menge));
   if (d.versand) zeilen.push(position(`Versand nach ${LAENDER[d.land]}`, d.versand));
 
   const mengen = Object.fromEntries(d.positionen.map((p) => [p.feld, p.menge]));
@@ -97,6 +100,9 @@ export default async function handler(request, response) {
         ort: d.ort,
         land: d.land,
         car: String(mengen.anzahlCar || 0),
+        wb: String(mengen.anzahlWalkBordeaux || 0),
+        wc: String(mengen.anzahlWalkCreme || 0),
+        ws: String(mengen.anzahlWalkSalbei || 0),
         walk: String(mengen.anzahlWalk || 0),
         code: d.rabatt ? d.rabatt.code : "",
         wahl,
