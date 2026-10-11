@@ -757,13 +757,23 @@ document.querySelectorAll(".rundum-viewer").forEach((viewer) => {
   const ruhig = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const knopf = (name) => viewer.querySelector(".rundum-" + name);
 
-  const fertig = (im) => im && im.complete && im.naturalWidth > 0;
+  // Erst wechseln, wenn das Bild fertig dekodiert ist; sonst blitzt am PC kurz
+  // ein leeres Bild auf, während der Browser das nächste Einzelbild auspackt.
+  const fertig = (im) => im && im.complete && im.naturalWidth > 0 && im.dekodiert;
+  const dekodieren = (im) => {
+    const ok = () => { im.dekodiert = true; };
+    if (im.decode) im.decode().then(ok, ok);
+    else ok();
+  };
 
   function laden() {
     for (let i = 0; i < anzahl; i++) {
       const im = new Image();
       im.decoding = "async";
-      im.addEventListener("load", () => { geladen++; });
+      im.addEventListener("load", () => {
+        dekodieren(im);
+        geladen++;
+      });
       im.src = quelle(i, false);
       klein.push(im);
     }
@@ -787,7 +797,11 @@ document.querySelectorAll(".rundum-viewer").forEach((viewer) => {
     if (!gross[i]) {
       const im = new Image();
       im.decoding = "async";
-      im.addEventListener("load", () => { if (zoom > 1 && index === i) bild.src = im.src; });
+      im.addEventListener("load", () => {
+        const zeigen = () => { im.dekodiert = true; if (zoom > 1 && index === i) bild.src = im.src; };
+        if (im.decode) im.decode().then(zeigen, zeigen);
+        else zeigen();
+      });
       im.src = quelle(i, true);
       gross[i] = im;
     }
