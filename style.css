@@ -1040,6 +1040,283 @@ a {
   justify-self: start;
 }
 
+/* Shop: alle Produkte mit Filterleiste links */
+.shop {
+  padding: 2.5rem 0 4.5rem;
+}
+
+.shop-kopf {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+  margin-bottom: 1.75rem;
+}
+
+.shop h1 {
+  font-size: clamp(2rem, 4vw, 2.6rem);
+}
+
+.shop-anzahl {
+  margin-top: 0.3rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.shop-sortierung select {
+  min-width: 13rem;
+  padding: 0.7rem 2.4rem 0.7rem 0.9rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--text-muted) 50%),
+                    linear-gradient(135deg, var(--text-muted) 50%, transparent 50%);
+  background-position: right 1.1rem center, right 0.8rem center;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+}
+
+.shop-raster {
+  display: grid;
+  gap: 1.5rem;
+}
+
+@media (min-width: 900px) {
+  .shop-raster {
+    grid-template-columns: 15.5rem 1fr;
+    gap: 2.5rem;
+    align-items: start;
+  }
+
+  .shop-filter {
+    position: sticky;
+    top: 5.5rem;
+  }
+}
+
+.shop-filter {
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  background: var(--surface);
+  padding: 0.25rem 1.1rem;
+}
+
+.filter-gruppe + .filter-gruppe {
+  border-top: 1px solid var(--border);
+}
+
+.filter-gruppe summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 0.95rem 1.5rem 0.95rem 0;
+  position: relative;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.filter-gruppe summary::-webkit-details-marker {
+  display: none;
+}
+
+.filter-gruppe summary::after {
+  content: "";
+  position: absolute;
+  right: 0.3rem;
+  top: 1.2rem;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-right: 2px solid var(--accent);
+  border-bottom: 2px solid var(--accent);
+  transform: rotate(45deg);
+  transition: transform 0.15s ease;
+}
+
+.filter-gruppe[open] summary::after {
+  transform: rotate(-135deg);
+  top: 1.4rem;
+}
+
+.filter-option {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.4rem 0;
+  cursor: pointer;
+  color: var(--text);
+  font-size: 0.95rem;
+}
+
+.filter-option:last-child {
+  padding-bottom: 1rem;
+}
+
+.filter-option input {
+  width: 1.15rem;
+  height: 1.15rem;
+  accent-color: var(--accent);
+  flex: none;
+}
+
+.filter-anzahl {
+  margin-left: auto;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.shop-zuruecksetzen {
+  margin: 0.4rem 0 1rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--accent);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.shop-zuruecksetzen[hidden] {
+  display: none;
+}
+
+.shop-produkte {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15.5rem, 1fr));
+  gap: 1.5rem;
+}
+
+.produktkarte {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: 0.9rem;
+  overflow: hidden;
+  background: var(--surface);
+  transition: border-color 0.15s ease;
+}
+
+.produktkarte:hover {
+  border-color: var(--accent);
+}
+
+.produktkarte[hidden] {
+  display: none;
+}
+
+.produktkarte-bild {
+  display: block;
+  background: #fff;
+}
+
+.produktkarte-bild img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+}
+
+.produktkarte-text {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 1.1rem 1.2rem 1.3rem;
+}
+
+.produktkarte-kategorie {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.produktkarte h2 {
+  font-size: 1.4rem;
+  margin: 0.25rem 0 0.15rem;
+}
+
+.produktkarte h2 a {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.produktkarte-unter {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.produktkarte-fakten {
+  list-style: none;
+  margin: 0.9rem 0 1rem;
+  display: grid;
+  gap: 0.4rem;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+}
+
+.produktkarte-fakten li {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+.produktkarte-fakten svg {
+  color: var(--accent);
+  flex: none;
+  margin-top: 0.2rem;
+}
+
+.produktkarte-preis {
+  margin-top: auto;
+  font-family: var(--font-display);
+  font-size: 1.7rem;
+  color: var(--text);
+}
+
+.produktkarte-hinweis {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+.produktkarte-knoepfe {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem 1rem;
+}
+
+.produktkarte-details {
+  color: var(--accent);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.shop-leer {
+  grid-column: 1 / -1;
+  padding: 2rem;
+  border: 1px dashed var(--border);
+  border-radius: 0.9rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.shop-leer[hidden] {
+  display: none;
+}
+
+.shop-leer .shop-zuruecksetzen {
+  display: block;
+  margin: 0.6rem auto 0;
+}
+
 /* Rechtsseiten */
 .legal {
   padding: 3.5rem 0 4.5rem;

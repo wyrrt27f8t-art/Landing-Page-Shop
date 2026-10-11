@@ -266,6 +266,78 @@ function baueKaufboxen() {
   });
 }
 
+/* ---------- Shop: alle Produkte mit Filtern links ---------- */
+// Innerhalb einer Filtergruppe genügt ein Treffer (oder), zwischen den Gruppen
+// müssen alle passen (und). Ohne Häkchen in einer Gruppe zählt sie nicht.
+function baueShop() {
+  const liste = document.getElementById("shop-produkte");
+  if (!liste) return;
+  const karten = [...liste.querySelectorAll(".produktkarte")];
+  const leer = document.getElementById("shop-leer");
+  const zahl = document.querySelector("[data-shop-zahl]");
+  const sortierung = document.getElementById("shop-sortierung");
+  const kaestchen = [...document.querySelectorAll('.shop-filter input[type="checkbox"]')];
+  const zuruecksetzen = document.querySelectorAll("#shop-zuruecksetzen, [data-zuruecksetzen]");
+  const preisBereich = { bis40: (p) => p <= 4000, "40bis60": (p) => p > 4000 && p <= 6000 };
+
+  function passt(karte, gruppe, werte) {
+    if (!werte.length) return true;
+    if (gruppe === "preis") return werte.some((w) => preisBereich[w](Number(karte.dataset.preis)));
+    return werte.includes(karte.dataset[gruppe]);
+  }
+
+  function anwenden() {
+    const gewaehlt = {};
+    for (const k of kaestchen) if (k.checked) (gewaehlt[k.name] ||= []).push(k.value);
+    let sichtbar = 0;
+    for (const karte of karten) {
+      const ok = ["kategorie", "typ", "preis"].every((g) => passt(karte, g, gewaehlt[g] || []));
+      karte.hidden = !ok;
+      if (ok) sichtbar++;
+    }
+    zahl.textContent = String(sichtbar);
+    leer.hidden = sichtbar > 0;
+    const aktiv = kaestchen.some((k) => k.checked);
+    document.getElementById("shop-zuruecksetzen").hidden = !aktiv;
+  }
+
+  function sortieren() {
+    const art = sortierung.value;
+    const wert = (k) => (art === "beliebt" ? Number(k.dataset.reihe) : Number(k.dataset.preis));
+    const richtung = art === "preis-ab" ? -1 : 1;
+    karten.sort((a, b) => (wert(a) - wert(b)) * richtung).forEach((k) => liste.insertBefore(k, leer));
+  }
+
+  kaestchen.forEach((k) => k.addEventListener("change", anwenden));
+  sortierung.addEventListener("change", sortieren);
+  zuruecksetzen.forEach((knopf) => knopf.addEventListener("click", () => {
+    kaestchen.forEach((k) => { k.checked = false; });
+    anwenden();
+  }));
+
+  // Am Handy die Filtergruppen zu Beginn zuklappen, damit die Produkte gleich sichtbar sind
+  if (matchMedia("(max-width: 899px)").matches) {
+    document.querySelectorAll(".shop-filter details").forEach((d) => { d.open = false; });
+  }
+
+  // In den Warenkorb direkt von der Karte
+  liste.querySelectorAll("[data-in-warenkorb]").forEach((knopf) => {
+    knopf.addEventListener("click", () => {
+      const art = knopf.dataset.inWarenkorb;
+      Warenkorb.setze(art, Warenkorb.lesen()[art] + 1);
+      knopf.textContent = `✓ ${sagt("cart.added")}`;
+      knopf.classList.add("ist-drin");
+      setTimeout(() => {
+        knopf.textContent = sagt("cart.add");
+        knopf.classList.remove("ist-drin");
+      }, 1800);
+      if (fenster) fenster.oeffnen();
+    });
+  });
+
+  anwenden();
+}
+
 /* ---------- Kasse ---------- */
 function baueKasse(form) {
   const SCHRITTE = ["warenkorb", "adresse", "zahlung", "pruefen", "danke"];
@@ -696,6 +768,7 @@ document.addEventListener("DOMContentLoaded", () => {
     fenster = baueWarenkorbFenster();
     document.querySelectorAll(".topbar-warenkorb").forEach((k) => k.addEventListener("click", fenster.oeffnen));
     baueKaufboxen();
+    baueShop();
   }
 });
 
