@@ -13,7 +13,7 @@ const STANDARD = "de";
 
 const TEXTE = {
   de: {
-    "nav.car": "MAFO",
+    "nav.car": "MAFO TRAVEL",
     "nav.walk": "MAFO WALK",
 
     "hero.kicker": "MAFO — Dog Travel Organizer",
@@ -234,7 +234,7 @@ const TEXTE = {
   },
 
   fr: {
-    "nav.car": "MAFO",
+    "nav.car": "MAFO TRAVEL",
     "nav.walk": "MAFO WALK",
 
     "hero.kicker": "MAFO — Organiseur de voyage pour chien",
@@ -455,7 +455,7 @@ const TEXTE = {
   },
 
   it: {
-    "nav.car": "MAFO",
+    "nav.car": "MAFO TRAVEL",
     "nav.walk": "MAFO WALK",
 
     "hero.kicker": "MAFO — Organizer da viaggio per cani",
@@ -676,7 +676,7 @@ const TEXTE = {
   },
 
   en: {
-    "nav.car": "MAFO",
+    "nav.car": "MAFO TRAVEL",
     "nav.walk": "MAFO WALK",
 
     "hero.kicker": "MAFO — Dog Travel Organizer",
