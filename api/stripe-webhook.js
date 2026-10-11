@@ -59,7 +59,17 @@ export default async function handler(request, response) {
   const m = sitzung.metadata || {};
   const nummer = m.nummer || sitzung.client_reference_id || sitzung.id;
   const email = sitzung.customer_email || (sitzung.customer_details && sitzung.customer_details.email) || "";
-  const rechnung = berechne({ anzahlCar: Number(m.car) || 0, anzahlWalk: Number(m.walk) || 0 }, m.land, m.code);
+  const rechnung = berechne(
+    {
+      anzahlCar: Number(m.car) || 0,
+      anzahlWalkBordeaux: Number(m.wb) || 0,
+      anzahlWalkCreme: Number(m.wc) || 0,
+      anzahlWalkSalbei: Number(m.ws) || 0,
+      anzahlWalk: Number(m.walk) || 0,
+    },
+    m.land,
+    m.code,
+  );
 
   if (rechnung.fehler || !email) {
     // Neu aufbauen geht nicht (zum Beispiel Code inzwischen ungültig). Ein erneuter
@@ -67,7 +77,7 @@ export default async function handler(request, response) {
     await sendeInternHinweis(
       `Kartenzahlung bezahlt, Bestellung ${nummer} prüfen`,
       `<p>Die Zahlung ist bei Stripe eingegangen (${escapeHtml(chf(sitzung.amount_total || 0))}), die Bestellung liess sich aber nicht automatisch aufbauen: ${escapeHtml(rechnung.fehler || "E-Mail fehlt")}.</p>
-       <p>Name: ${escapeHtml(m.name || "")}<br>Adresse: ${escapeHtml(m.strasse || "")}, ${escapeHtml(m.plz || "")} ${escapeHtml(m.ort || "")} (${escapeHtml(m.land || "")})<br>E-Mail: ${escapeHtml(email)}<br>Anzahl MAFO: ${escapeHtml(String(m.car || 0))}, MAFO WALK: ${escapeHtml(String(m.walk || 0))}<br>Code: ${escapeHtml(m.code || "")}</p>`,
+       <p>Name: ${escapeHtml(m.name || "")}<br>Adresse: ${escapeHtml(m.strasse || "")}, ${escapeHtml(m.plz || "")} ${escapeHtml(m.ort || "")} (${escapeHtml(m.land || "")})<br>E-Mail: ${escapeHtml(email)}<br>Anzahl MAFO TRAVEL: ${escapeHtml(String(m.car || 0))}, MAFO WALK Bordeaux: ${escapeHtml(String(m.wb || 0))}, Crème: ${escapeHtml(String(m.wc || 0))}, Salbeigrün: ${escapeHtml(String(m.ws || 0))}, ohne Farbe: ${escapeHtml(String(m.walk || 0))}<br>Code: ${escapeHtml(m.code || "")}</p>`,
     );
     return response.status(200).json({ ok: true, manuell: true });
   }

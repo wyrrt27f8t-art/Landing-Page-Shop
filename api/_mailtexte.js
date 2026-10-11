@@ -12,6 +12,7 @@ export function leseSprache(wert) {
 
 const T = {
   de: {
+    produkte: { anzahlCar: "MAFO TRAVEL", anzahlWalkBordeaux: "MAFO WALK, Bordeaux", anzahlWalkCreme: "MAFO WALK, Crème", anzahlWalkSalbei: "MAFO WALK, Salbeigrün", anzahlWalk: "MAFO WALK" },
     laender: { CH: "Schweiz", DE: "Deutschland", AT: "Österreich" },
     zahlungsarten: { vorauskasse: "Vorauskasse (Banküberweisung)", twint: "TWINT", karte: "Online-Zahlung" },
     betreff: (nummer, vorname) => `Deine Bestellung ${nummer} ist eingegangen, ${vorname}`,
@@ -59,6 +60,7 @@ const T = {
     zeitformat: "de-CH",
   },
   fr: {
+    produkte: { anzahlCar: "MAFO TRAVEL", anzahlWalkBordeaux: "MAFO WALK, bordeaux", anzahlWalkCreme: "MAFO WALK, crème", anzahlWalkSalbei: "MAFO WALK, vert sauge", anzahlWalk: "MAFO WALK" },
     laender: { CH: "Suisse", DE: "Allemagne", AT: "Autriche" },
     zahlungsarten: { vorauskasse: "Paiement anticipé (virement bancaire)", twint: "TWINT", karte: "Paiement en ligne" },
     betreff: (nummer, vorname) => `Ta commande ${nummer} est bien arrivée, ${vorname}`,
@@ -104,6 +106,7 @@ const T = {
     zeitformat: "fr-CH",
   },
   it: {
+    produkte: { anzahlCar: "MAFO TRAVEL", anzahlWalkBordeaux: "MAFO WALK, bordeaux", anzahlWalkCreme: "MAFO WALK, crema", anzahlWalkSalbei: "MAFO WALK, verde salvia", anzahlWalk: "MAFO WALK" },
     laender: { CH: "Svizzera", DE: "Germania", AT: "Austria" },
     zahlungsarten: { vorauskasse: "Pagamento anticipato (bonifico bancario)", twint: "TWINT", karte: "Pagamento online" },
     betreff: (nummer, vorname) => `Il tuo ordine ${nummer} è arrivato, ${vorname}`,
@@ -149,6 +152,7 @@ const T = {
     zeitformat: "it-CH",
   },
   en: {
+    produkte: { anzahlCar: "MAFO TRAVEL", anzahlWalkBordeaux: "MAFO WALK, burgundy", anzahlWalkCreme: "MAFO WALK, cream", anzahlWalkSalbei: "MAFO WALK, sage green", anzahlWalk: "MAFO WALK" },
     laender: { CH: "Switzerland", DE: "Germany", AT: "Austria" },
     zahlungsarten: { vorauskasse: "Payment in advance (bank transfer)", twint: "TWINT", karte: "Online payment" },
     betreff: (nummer, vorname) => `Your order ${nummer} has been received, ${vorname}`,
