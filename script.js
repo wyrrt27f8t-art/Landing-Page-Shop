@@ -768,13 +768,18 @@ document.querySelectorAll(".rundum-viewer").forEach((viewer) => {
       klein.push(im);
     }
   }
+  let gestartet = false;
+  const starte = () => { if (!gestartet) { gestartet = true; laden(); } };
+  // In der Galerie ist der Betrachter zuerst versteckt und meldet sich beim Öffnen
+  viewer.addEventListener("mafo:sichtbar", starte);
   if ("IntersectionObserver" in window) {
     const io = new IntersectionObserver((eintraege) => {
-      if (eintraege.some((e) => e.isIntersecting)) { laden(); io.disconnect(); }
+      if (eintraege.some((e) => e.isIntersecting)) { starte(); io.disconnect(); }
     }, { rootMargin: "400px" });
-    io.observe(viewer);
+    // Versteckt in der Galerie: auf das Produktbild achten, damit die Bilder bereitliegen
+    io.observe(viewer.closest(".produktbild") || viewer);
   } else {
-    laden();
+    starte();
   }
 
   // Grosse Fassung eines Bilds holen; sie erscheint, sobald sie da ist
@@ -985,17 +990,29 @@ document.querySelectorAll(".rundum-viewer").forEach((viewer) => {
 });
 
 // Produktbilder: ein Klick auf ein kleines Bild zeigt es gross
+// Ein Daumen kann auch die 360-Grad-Ansicht öffnen: sie erscheint dann im grossen Bild
 document.querySelectorAll(".produktgalerie").forEach((galerie) => {
   const gross = galerie.querySelector(".galerie-gross");
+  const rundum = galerie.querySelector(".galerie-360");
+  const start = galerie.querySelector("[data-zeige-360]");
   const knoepfe = galerie.querySelectorAll(".galerie-knopf");
   knoepfe.forEach((knopf) => {
     knopf.addEventListener("click", () => {
-      gross.src = knopf.dataset.bild;
-      gross.dataset.i18nAlt = knopf.dataset.alt;
-      gross.alt = knopf.getAttribute("aria-label") || "";
+      const ist360 = knopf.dataset.ansicht === "360" && rundum;
+      if (rundum) rundum.hidden = !ist360;
+      gross.hidden = !!ist360;
+      if (start) start.hidden = !!ist360;
+      if (!ist360) {
+        gross.src = knopf.dataset.bild;
+        gross.dataset.i18nAlt = knopf.dataset.alt;
+        gross.alt = knopf.getAttribute("aria-label") || "";
+      } else {
+        rundum.dispatchEvent(new Event("mafo:sichtbar"));
+      }
       knoepfe.forEach((k) => k.setAttribute("aria-pressed", k === knopf ? "true" : "false"));
     });
   });
+  if (start) start.addEventListener("click", () => galerie.querySelector('.galerie-knopf[data-ansicht="360"]').click());
 });
 
 /* ---------- Hinweis zur Zahlung auf den Produktseiten ---------- */

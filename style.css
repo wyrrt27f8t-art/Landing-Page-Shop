@@ -628,6 +628,84 @@ a {
   height: auto;
 }
 
+.produktbild {
+  position: relative;
+}
+
+.produktbild img[hidden] {
+  display: none;
+}
+
+/* 360-Grad-Ansicht im grossen Produktbild */
+.produktbild .galerie-360 {
+  max-width: none;
+  margin: 0;
+  border-radius: 0;
+  aspect-ratio: 1 / 1;
+  background: #d7cfbe; /* Randfarbe der 360-Grad-Fotos */
+}
+
+.produktbild .galerie-360[hidden] {
+  display: none;
+}
+
+.produktbild .galerie-360 img {
+  height: 100%;
+  object-fit: contain;
+}
+
+.galerie-360-start {
+  position: absolute;
+  left: 0.8rem;
+  bottom: 0.8rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.55rem 1rem;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(23, 20, 15, 0.85);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.galerie-360-start:hover {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+.galerie-360-start[hidden] {
+  display: none;
+}
+
+.galerie-daumen-5 {
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.galerie-knopf-360 {
+  position: relative;
+  background: #e5dccb;
+}
+
+.galerie-knopf-360 img {
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+.galerie-360-marke {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 0.15rem 0;
+  background: rgba(23, 20, 15, 0.8);
+  color: var(--text);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
 /* Kaufbox auf den Produktseiten */
 .preorder {
   padding: 4.5rem 0;
