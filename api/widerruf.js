@@ -1,4 +1,5 @@
 import { EMAIL_RE, absenderAdresse, einzeilig, escapeHtml, sendeMail, text } from "./_bestellung.js";
+import { leseSprache, mailtexte, zeitText } from "./_mailtexte.js";
 
 // "Vertrag widerrufen" bzw. Rückgabe anmelden (rueckgabe.html / widerruf.html).
 // Für Kundschaft in Deutschland und Österreich verlangt das EU-Recht eine solche
@@ -32,10 +33,15 @@ export default async function handler(request, response) {
     console.error("RESEND_API_KEY ist nicht gesetzt.");
     return response.status(500).json({ error: "Server ist nicht korrekt konfiguriert." });
   }
+  const sprache = leseSprache(body.sprache);
+  const t = mailtexte(sprache);
   const zeitpunkt = new Date();
-  const zeit = zeitpunkt.toLocaleString("de-CH", { timeZone: "Europe/Zurich", dateStyle: "long", timeStyle: "short" });
+  const zeit = zeitText("de", zeitpunkt);
   const zeile = (k, v) => (v ? `<tr><td style="padding:4px 12px 4px 0;color:#666">${k}</td><td style="padding:4px 0">${escapeHtml(v)}</td></tr>` : "");
-  const tabelle = `<table style="border-collapse:collapse;font-size:15px">${zeile("Bestellnummer", nummer)}${zeile("Name", name)}${zeile("E-Mail", email)}${zeile("Artikel", artikel || "alle Artikel der Bestellung")}${zeile("Erhalten am", erhalten)}${zeile("Nachricht", nachricht)}${zeile("Eingegangen", zeit)}</table>`;
+  const tabelleIn = (f, z) =>
+    `<table style="border-collapse:collapse;font-size:15px">${zeile(f.nummer, nummer)}${zeile(f.name, name)}${zeile(f.email, email)}${zeile(f.artikel, artikel || f.alle)}${zeile(f.erhalten, erhalten)}${zeile(f.nachricht, nachricht)}${zeile(f.eingegangen, z)}</table>`;
+  const tabelle = tabelleIn(mailtexte("de").wrFelder, zeit) + (sprache !== "de" ? `<p>Sprache: ${sprache.toUpperCase()} – bitte in dieser Sprache antworten.</p>` : "");
+  const zeitKunde = zeitText(sprache, zeitpunkt);
   const toEmail = process.env.MAFO_TO_EMAIL || "info@mafo-pet.ch";
   const from = `MAFO <${absenderAdresse()}>`;
 
@@ -57,15 +63,14 @@ export default async function handler(request, response) {
       from,
       to: [email],
       reply_to: toEmail,
-      subject: einzeilig(`Eingangsbestätigung: Widerruf / Rückgabe ${nummer}`),
-      html: `<p>Hallo ${escapeHtml(name.split(/\s+/)[0])}</p>
-<p>wir haben deinen Widerruf bzw. deine Rückgabe am <strong>${escapeHtml(zeit)}</strong> erhalten. Das sind deine Angaben:</p>${tabelle}
-<p><strong>So geht es weiter:</strong> Schick die Ware bitte innert 14 Tagen an<br>Mafo Pet, Ausserdorfstrasse 22, 8918 Unterlunkhofen, Schweiz.<br>
-Die Kosten für die Rücksendung trägst du (ausser bei einem Defekt oder einer falschen Lieferung). Sobald die Ware bei uns ist, erstatten wir dir den bezahlten Betrag inklusive der ursprünglichen Versandkosten über die gleiche Zahlungsart, spätestens 14 Tage nach dieser Meldung. Bei Vorauskasse schick uns bitte deine IBAN.</p>
-<p>Fragen? Antworte einfach auf diese E-Mail.</p><p>Liebe Grüsse<br>MAFO · mafo-pet.ch</p>`,
+      subject: einzeilig(t.wrBetreff(nummer)),
+      html: `<p>${t.wrHallo(escapeHtml(name.split(/\s+/)[0]))}</p>
+<p>${t.wrErhalten(escapeHtml(zeitKunde))}</p>${tabelleIn(t.wrFelder, zeitKunde)}
+<p>${t.wrWeiter}</p>
+<p>${t.wrFragen}</p><p>${t.gruesse}</p>`,
     });
     if (!bestaetigung.ok) console.error("Resend error (Widerruf Bestätigung):", bestaetigung.status, bestaetigung.text);
-    return response.status(200).json({ ok: true, zeit, bestaetigt: bestaetigung.ok });
+    return response.status(200).json({ ok: true, zeit: zeitKunde, bestaetigt: bestaetigung.ok });
   } catch (fehler) {
     console.error("Unerwarteter Fehler beim Widerruf:", fehler);
     return response.status(500).json({ error: "Unerwarteter Fehler. Bitte schreib uns an info@mafo-pet.ch." });

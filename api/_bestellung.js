@@ -2,6 +2,7 @@ import { randomInt } from "node:crypto";
 import { bonusProzent, mitRabatt, normalerCode } from "./_rabatt.js";
 import { ZAHLUNGSARTEN } from "./_zahlung.js";
 import { zahlungsangaben, vollstaendig } from "./_zahlung.js";
+import { leseSprache, mailtexte } from "./_mailtexte.js";
 
 // Gemeinsame Bestelllogik für Vorkasse/TWINT (api/reserve.js) und Karte
 // (api/checkout.js + api/stripe-webhook.js). Dateien mit "_" vorne macht
@@ -59,7 +60,9 @@ export function pruefeBestellung(body, erlaubteZahlungen) {
   const rechnung = berechne(mengen, land, body.bonuscode);
   if (rechnung.fehler) return fehler(rechnung.fehler, rechnung.feld);
 
-  return { daten: { name, email, strasse, plz, ort, land, zahlungsart, ...rechnung } };
+  // Sprache der Website beim Bestellen: darin geht die Bestätigung an die Kundschaft
+  const sprache = leseSprache(body.sprache);
+  return { daten: { name, email, strasse, plz, ort, land, zahlungsart, sprache, ...rechnung } };
 }
 
 /**
@@ -127,7 +130,7 @@ export async function sendeBestellmails(bestellung, submittedAt, zusatz = "") {
       from: fromEmail,
       to: [email],
       reply_to: toEmail,
-      subject: `Deine Bestellung ${nummer} ist eingegangen, ${einzeilig(vorname(name))}`,
+      subject: einzeilig(mailtexte(bestellung.sprache).betreff(nummer, vorname(name))),
       html: bestaetigungsText(bestellung),
     });
     if (!bestaetigung.ok) {
@@ -196,7 +199,7 @@ export function chf(rappen) {
   return `CHF ${(rappen / 100).toFixed(2)}`;
 }
 
-export function internerText({ nummer, name, email, strasse, plz, ort, land, positionen, zwischensumme, rabatt, versand, total, zahlung }, submittedAt, zusatz = "") {
+export function internerText({ nummer, name, email, strasse, plz, ort, land, positionen, zwischensumme, rabatt, versand, total, zahlung, sprache }, submittedAt, zusatz = "") {
   const bezahlt = zahlung.art === "karte";
   const artikel = positionen
     .map((p) => `${p.menge}× ${escapeHtml(p.name)} – ${chf(p.summe)}`)
@@ -216,7 +219,8 @@ export function internerText({ nummer, name, email, strasse, plz, ort, land, pos
       <tr><td><strong>Versand</strong></td><td>${versand ? chf(versand) + " (" + escapeHtml(LAENDER[land]) + ", pauschal)" : "inklusive (Schweiz)"}</td></tr>
       <tr><td><strong>Total</strong></td><td>${chf(total)}</td></tr>
       <tr><td><strong>Name</strong></td><td>${escapeHtml(name)}</td></tr>
-      <tr><td><strong>E-Mail</strong></td><td>${escapeHtml(email)}</td></tr>
+      <tr><td><strong>E-Mail</strong></td><td>${escapeHtml(email)}</td></tr>${sprache && sprache !== "de" ? `
+      <tr><td><strong>Sprache</strong></td><td>${escapeHtml(sprache.toUpperCase())} – bitte in dieser Sprache antworten</td></tr>` : ""}
       <tr><td valign="top"><strong>Lieferadresse</strong></td><td>${escapeHtml(strasse)}<br>${escapeHtml(plz)} ${escapeHtml(ort)}<br>${escapeHtml(LAENDER[land])}</td></tr>
       <tr><td><strong>Zahlungsart</strong></td><td>${escapeHtml(ZAHLUNGSARTEN[zahlung.art])} – ${bezahlt ? "bezahlt" : "Zahlung ausstehend"}</td></tr>${bezahlt && zahlung.referenz ? `
       <tr><td><strong>Stripe</strong></td><td>${escapeHtml(zahlung.referenz)}</td></tr>` : ""}
@@ -233,7 +237,9 @@ export function internerText({ nummer, name, email, strasse, plz, ort, land, pos
   `.trim();
 }
 
-export function bestaetigungsText({ nummer, name, strasse, plz, ort, land, positionen, rabatt, versand, total, zahlung }) {
+export function bestaetigungsText({ nummer, name, strasse, plz, ort, land, positionen, rabatt, versand, total, zahlung, sprache }) {
+  const t = mailtexte(sprache);
+  const landName = t.laender[land] || LAENDER[land];
   const zeilen = positionen
     .map(
       (p) => `
@@ -247,7 +253,7 @@ export function bestaetigungsText({ nummer, name, strasse, plz, ort, land, posit
   const rabattZeile = rabatt
     ? `
           <tr>
-            <td style="padding:6px 0;font-size:15px;color:#c8945f;">Bonuscode ${escapeHtml(rabatt.code)} (−${rabatt.prozent} %)</td>
+            <td style="padding:6px 0;font-size:15px;color:#c8945f;">${escapeHtml(t.bonus(rabatt.code, rabatt.prozent))}</td>
             <td style="padding:6px 0;font-size:15px;color:#c8945f;text-align:right;white-space:nowrap;">−${chf(rabatt.betrag)}</td>
           </tr>`
     : "";
@@ -255,7 +261,7 @@ export function bestaetigungsText({ nummer, name, strasse, plz, ort, land, posit
   const versandZeile = versand
     ? `
           <tr>
-            <td style="padding:6px 0;font-size:15px;color:#f3ede1;">Versand nach ${escapeHtml(LAENDER[land])}</td>
+            <td style="padding:6px 0;font-size:15px;color:#f3ede1;">${escapeHtml(t.versandNach(landName))}</td>
             <td style="padding:6px 0;font-size:15px;color:#f3ede1;text-align:right;white-space:nowrap;">${chf(versand)}</td>
           </tr>`
     : "";
@@ -268,61 +274,58 @@ export function bestaetigungsText({ nummer, name, strasse, plz, ort, land, posit
     </div>
     <div style="padding:20px 28px 32px;color:#f3ede1;">
       <h1 style="margin:0 0 18px;font-size:24px;line-height:1.25;font-weight:600;">
-        Danke für deine Bestellung.
+        ${t.danke}
       </h1>
       <p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:#d5cbba;">
-        Hallo ${escapeHtml(vorname(name))}, deine Bestellung
-        <strong style="color:#f3ede1;">${escapeHtml(nummer)}</strong> ist bei uns eingegangen.
-        Diese E-Mail bestätigt den Eingang.
+        ${t.hallo(escapeHtml(vorname(name)), escapeHtml(nummer))}
       </p>
       <div style="margin:20px 0;padding:14px 16px;background:#221c14;border-radius:8px;">
         <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
           ${zeilen}${rabattZeile}${versandZeile}
           <tr>
-            <td style="padding:10px 0 0;border-top:1px solid #362c1e;font-size:15px;font-weight:600;color:#f3ede1;">Total</td>
+            <td style="padding:10px 0 0;border-top:1px solid #362c1e;font-size:15px;font-weight:600;color:#f3ede1;">${t.total}</td>
             <td style="padding:10px 0 0;border-top:1px solid #362c1e;font-size:15px;font-weight:600;color:#f3ede1;text-align:right;white-space:nowrap;">${chf(total)}</td>
           </tr>
         </table>
-        <p style="margin:8px 0 0;font-size:12px;line-height:1.5;color:#ab9f8c;">${versand ? "inkl. Versand (pauschal)" : "inkl. Versand in die Schweiz"}</p>
+        <p style="margin:8px 0 0;font-size:12px;line-height:1.5;color:#ab9f8c;">${versand ? t.inklVersandPauschal : t.inklVersandCh}</p>
       </div>
-      <p style="margin:0 0 6px;font-size:13px;color:#ab9f8c;">Lieferadresse</p>
+      <p style="margin:0 0 6px;font-size:13px;color:#ab9f8c;">${t.lieferadresse}</p>
       <p style="margin:0 0 20px;font-size:15px;line-height:1.5;color:#f3ede1;">
         ${escapeHtml(name)}<br>
         ${escapeHtml(strasse)}<br>
         ${escapeHtml(plz)} ${escapeHtml(ort)}<br>
-        ${escapeHtml(LAENDER[land])}
+        ${escapeHtml(landName)}
       </p>
-      ${zahlungsText(zahlung, nummer, total)}
+      ${zahlungsText(zahlung, nummer, total, t)}
       ${
         versand
-          ? `<p style="margin:0 0 16px;font-size:13px;line-height:1.6;color:#ab9f8c;">Hinweis für Lieferungen nach ${escapeHtml(LAENDER[land])}: Einfuhrumsatzsteuer und allfällige Zollgebühren werden vom Paketdienst bei der Zustellung erhoben und sind nicht im Betrag enthalten.</p>`
+          ? `<p style="margin:0 0 16px;font-size:13px;line-height:1.6;color:#ab9f8c;">${escapeHtml(t.zollHinweis(landName))}</p>`
           : ""
       }
       <p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:#d5cbba;">
-        ${zahlung.art === "karte" ? "Deine Zahlung ist eingegangen. Wir versenden bald und nennen dir den" : "Wir versenden, sobald die Zahlung eingegangen ist, und nennen dir dann den"}
-        <strong style="color:#f3ede1;">Liefertermin</strong>. Stimmt etwas nicht, zum
-        Beispiel die Adresse, antworte einfach auf diese E-Mail.
+        ${zahlung.art === "karte" ? t.weiterBezahlt : t.weiterOffen}
+        <strong style="color:#f3ede1;">${t.liefertermin}</strong>${t.stimmtWasNicht}
       </p>
       <p style="margin:0;font-size:15px;line-height:1.6;color:#d5cbba;">
-        Herzlich<br>Dein MAFO Team
+        ${t.gruss}
       </p>
     </div>
   </div>
   <p style="max-width:520px;margin:16px auto 0;font-size:12px;line-height:1.6;color:#8a8272;text-align:center;">
-    Mafo Pet · Ausserdorfstrasse 22 · 8918 Unterlunkhofen · Schweiz<br>
-    Du erhältst diese E-Mail, weil du auf mafo-pet.ch eine Bestellung aufgegeben hast.
+    Mafo Pet · Ausserdorfstrasse 22 · 8918 Unterlunkhofen · ${t.laender.CH}<br>
+    ${t.fuss}
   </p>
 </div>
   `.trim();
 }
 
 // Block "So bezahlst du" in der Bestätigung
-function zahlungsText(zahlung, nummer, total) {
+function zahlungsText(zahlung, nummer, total, t = mailtexte("de")) {
   if (zahlung.art === "karte") {
     return `
       <div style="margin:0 0 20px;padding:14px 16px;background:#221c14;border:1px solid #c8945f;border-radius:8px;">
-        <p style="margin:0 0 8px;font-size:15px;font-weight:600;color:#f3ede1;">Bezahlt</p>
-        <p style="margin:0;font-size:15px;line-height:1.5;color:#d5cbba;">${chf(total)} per Karte bezahlt. Den Beleg von Stripe hast du gegebenenfalls separat erhalten.</p>
+        <p style="margin:0 0 8px;font-size:15px;font-weight:600;color:#f3ede1;">${t.bezahlt}</p>
+        <p style="margin:0;font-size:15px;line-height:1.5;color:#d5cbba;">${t.bezahltText(chf(total))}</p>
       </div>`;
   }
   const zeile = (label, wert) =>
@@ -332,23 +335,23 @@ function zahlungsText(zahlung, nummer, total) {
           <td style="padding:5px 0;font-size:15px;color:#f3ede1;font-variant-numeric:tabular-nums;white-space:nowrap;">${escapeHtml(wert)}</td>
         </tr>`
       : "";
-  let zeilen = zeile("Zahlungsart", ZAHLUNGSARTEN[zahlung.art]) + zeile("Betrag", chf(total));
+  let zeilen = zeile(t.zahlungsart, t.zahlungsarten[zahlung.art]) + zeile(t.betrag, chf(total));
   if (zahlung.art === "twint") {
-    zeilen += zeile("TWINT-Nummer", zahlung.twint) + zeile("Mitteilung", nummer);
+    zeilen += zeile(t.twintNummer, zahlung.twint) + zeile(t.mitteilung, nummer);
   } else {
-    zeilen += zeile("IBAN", zahlung.iban) + zeile("Kontoinhaber", zahlung.inhaber) + zeile("Zahlungszweck", nummer);
+    zeilen += zeile(t.iban, zahlung.iban) + zeile(t.kontoinhaber, zahlung.inhaber) + zeile(t.zahlungszweck, nummer);
   }
   const qr =
     zahlung.art === "twint" && zahlung.qr
-      ? `<p style="margin:12px 0 0;font-size:14px;color:#d5cbba;">Oder scanne diesen QR-Code in der TWINT-App:</p>
+      ? `<p style="margin:12px 0 0;font-size:14px;color:#d5cbba;">${t.qr}</p>
          <img src="${escapeHtml(zahlung.qr)}" alt="TWINT QR-Code" width="180" style="display:block;margin:8px 0 0;background:#fff;padding:8px;border-radius:8px;">`
       : "";
   const hinweis = vollstaendig(zahlung)
     ? ""
-    : `<p style="margin:12px 0 0;font-size:14px;line-height:1.5;color:#d5cbba;">Die Zahlungsangaben senden wir dir in einer separaten E-Mail.</p>`;
+    : `<p style="margin:12px 0 0;font-size:14px;line-height:1.5;color:#d5cbba;">${t.angabenSeparat}</p>`;
   return `
       <div style="margin:0 0 20px;padding:14px 16px;background:#221c14;border:1px solid #c8945f;border-radius:8px;">
-        <p style="margin:0 0 8px;font-size:15px;font-weight:600;color:#f3ede1;">So bezahlst du</p>
+        <p style="margin:0 0 8px;font-size:15px;font-weight:600;color:#f3ede1;">${t.soBezahlst}</p>
         <table cellpadding="0" cellspacing="0" style="border-collapse:collapse;">${zeilen}</table>
         ${qr}${hinweis}
       </div>`;

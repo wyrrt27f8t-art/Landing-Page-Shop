@@ -564,6 +564,8 @@ function baueKasse(form) {
       anzahlWalk: inhalt.walk,
       bonuscode: bonus ? bonus.code : "",
       zahlung: zahlungsart(),
+      // Bestätigung in der Sprache, in der bestellt wird
+      sprache: document.documentElement.lang || "de",
       // Falle für Bots; bewusst kein Name wie "company", den der Browser automatisch ausfüllt
       mafo_falle: form.elements.mafo_falle.value,
     };
@@ -1100,6 +1102,7 @@ document.querySelectorAll(".produktgalerie").forEach((galerie) => {
     event.preventDefault();
     const daten = Object.fromEntries(["name", "email", "nummer", "artikel", "erhalten", "nachricht", "mafo_falle"].map((f) => [f, form.elements[f].value.trim()]));
     daten.nummer = daten.nummer.toUpperCase().replace(/\s+/g, "");
+    daten.sprache = document.documentElement.lang || "de";
     const fehler =
       daten.name.length < 2 ? sagt("wr.errName") :
       !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(daten.email) ? sagt("wr.errEmail") :
