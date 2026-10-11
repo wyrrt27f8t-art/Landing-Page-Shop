@@ -182,6 +182,27 @@ const TEXTE = {
 
     "footer.rights": "© 2026 MAFO, Schweiz",
     "footer.privacy": "Datenschutz",
+    "gallery.viewer": "MAFO Travel Organizer, 360-Grad-Ansicht. Mit den Pfeiltasten oder durch Ziehen drehbar, mit Plus und Minus vergrösserbar.",
+    "title.privacy": "Datenschutzerklärung — MAFO",
+    "title.payment": "Zahlungsarten — MAFO",
+    "title.returns": "Rückgaben und Probleme melden — MAFO",
+    "title.faq": "Häufige Fragen — MAFO",
+    "title.terms": "Allgemeine Geschäftsbedingungen — MAFO",
+    "title.imprint": "Impressum — MAFO",
+    "title.withdraw": "Vertrag widerrufen — MAFO",
+    "wr.name": "Name *",
+    "wr.email": "E-Mail-Adresse *",
+    "wr.number": "Bestellnummer *",
+    "wr.items": "Welche Artikel? (leer = ganze Bestellung)",
+    "wr.received": "Erhalten am (optional)",
+    "wr.message": "Nachricht (optional)",
+    "wr.submit": "Widerruf jetzt bestätigen",
+    "wr.errName": "Bitte gib deinen Namen an.",
+    "wr.errEmail": "Bitte gib eine gültige E-Mail-Adresse an.",
+    "wr.errNumber": "Bitte gib deine Bestellnummer an (MAFO- und 6 Zeichen, steht in der Bestätigung).",
+    "wr.sending": "Wird gesendet …",
+    "wr.done": "Erhalten am {zeit}. Deine Eingangsbestätigung haben wir an deine E-Mail-Adresse geschickt. Bitte schick die Ware innert 14 Tagen zurück.",
+    "wr.errSend": "Die Meldung konnte nicht gesendet werden. Bitte schreib uns an info@mafo-pet.ch.",
     "gallery.open360": "360° drehen",
     "gallery.thumb360": "360-Grad-Ansicht: Tasche drehen",
     "usp.label": "Deine Vorteile",
@@ -403,6 +424,27 @@ const TEXTE = {
 
     "footer.rights": "© 2026 MAFO, Suisse",
     "footer.privacy": "Confidentialité",
+    "gallery.viewer": "MAFO Travel Organizer, vue à 360°. Rotation avec les touches fléchées ou en faisant glisser, zoom avec plus et moins.",
+    "title.privacy": "Protection des données — MAFO",
+    "title.payment": "Modes de paiement — MAFO",
+    "title.returns": "Retours et problèmes — MAFO",
+    "title.faq": "Questions fréquentes — MAFO",
+    "title.terms": "Conditions générales — MAFO",
+    "title.imprint": "Mentions légales — MAFO",
+    "title.withdraw": "Résilier le contrat — MAFO",
+    "wr.name": "Nom *",
+    "wr.email": "Adresse e-mail *",
+    "wr.number": "Numéro de commande *",
+    "wr.items": "Quels articles ? (vide = toute la commande)",
+    "wr.received": "Reçu le (facultatif)",
+    "wr.message": "Message (facultatif)",
+    "wr.submit": "Confirmer la rétractation",
+    "wr.errName": "Merci d'indiquer ton nom.",
+    "wr.errEmail": "Merci d'indiquer une adresse e-mail valide.",
+    "wr.errNumber": "Merci d'indiquer ton numéro de commande (MAFO- et 6 caractères, il figure dans la confirmation).",
+    "wr.sending": "Envoi en cours …",
+    "wr.done": "Reçu le {zeit}. Nous avons envoyé l'accusé de réception à ton adresse e-mail. Merci de renvoyer la marchandise dans les 14 jours.",
+    "wr.errSend": "Le message n'a pas pu être envoyé. Merci de nous écrire à info@mafo-pet.ch.",
     "gallery.open360": "Tourner à 360°",
     "gallery.thumb360": "Vue à 360° : faire tourner le sac",
     "usp.label": "Tes avantages",
@@ -624,6 +666,27 @@ const TEXTE = {
 
     "footer.rights": "© 2026 MAFO, Svizzera",
     "footer.privacy": "Privacy",
+    "gallery.viewer": "MAFO Travel Organizer, vista a 360°. Si ruota con i tasti freccia o trascinando, si ingrandisce con più e meno.",
+    "title.privacy": "Protezione dei dati — MAFO",
+    "title.payment": "Metodi di pagamento — MAFO",
+    "title.returns": "Resi e problemi — MAFO",
+    "title.faq": "Domande frequenti — MAFO",
+    "title.terms": "Condizioni generali — MAFO",
+    "title.imprint": "Impressum — MAFO",
+    "title.withdraw": "Recedere dal contratto — MAFO",
+    "wr.name": "Nome *",
+    "wr.email": "Indirizzo e-mail *",
+    "wr.number": "Numero d'ordine *",
+    "wr.items": "Quali articoli? (vuoto = intero ordine)",
+    "wr.received": "Ricevuto il (facoltativo)",
+    "wr.message": "Messaggio (facoltativo)",
+    "wr.submit": "Conferma il recesso",
+    "wr.errName": "Indica il tuo nome.",
+    "wr.errEmail": "Indica un indirizzo e-mail valido.",
+    "wr.errNumber": "Indica il tuo numero d'ordine (MAFO- e 6 caratteri, è nella conferma).",
+    "wr.sending": "Invio in corso …",
+    "wr.done": "Ricevuto il {zeit}. Abbiamo inviato la conferma di ricezione al tuo indirizzo e-mail. Restituisci la merce entro 14 giorni.",
+    "wr.errSend": "Il messaggio non ha potuto essere inviato. Scrivici a info@mafo-pet.ch.",
     "gallery.open360": "Ruota a 360°",
     "gallery.thumb360": "Vista a 360°: ruota la borsa",
     "usp.label": "I tuoi vantaggi",
@@ -845,6 +908,27 @@ const TEXTE = {
 
     "footer.rights": "© 2026 MAFO, Switzerland",
     "footer.privacy": "Privacy",
+    "gallery.viewer": "MAFO Travel Organizer, 360° view. Rotate with the arrow keys or by dragging, zoom with plus and minus.",
+    "title.privacy": "Privacy policy — MAFO",
+    "title.payment": "Payment methods — MAFO",
+    "title.returns": "Returns and problems — MAFO",
+    "title.faq": "FAQ — MAFO",
+    "title.terms": "Terms and conditions — MAFO",
+    "title.imprint": "Imprint — MAFO",
+    "title.withdraw": "Withdraw from contract — MAFO",
+    "wr.name": "Name *",
+    "wr.email": "Email address *",
+    "wr.number": "Order number *",
+    "wr.items": "Which items? (empty = whole order)",
+    "wr.received": "Received on (optional)",
+    "wr.message": "Message (optional)",
+    "wr.submit": "Confirm withdrawal",
+    "wr.errName": "Please enter your name.",
+    "wr.errEmail": "Please enter a valid email address.",
+    "wr.errNumber": "Please enter your order number (MAFO- and 6 characters, it's in your confirmation).",
+    "wr.sending": "Sending …",
+    "wr.done": "Received on {zeit}. We've sent the acknowledgement of receipt to your email address. Please return the goods within 14 days.",
+    "wr.errSend": "The message could not be sent. Please write to us at info@mafo-pet.ch.",
     "gallery.open360": "Rotate 360°",
     "gallery.thumb360": "360° view: rotate the bag",
     "usp.label": "Your benefits",
@@ -919,6 +1003,23 @@ function setzeSprache(sprache) {
   const woerter = TEXTE[sprache] || TEXTE[STANDARD];
 
   document.documentElement.lang = sprache;
+
+  // Ganze Textblöcke je Sprache (Rechtsseiten): Die Fassungen liegen in
+  // <template data-sprache="…">. Gezeigt wird immer nur eine, damit Sprungmarken
+  // wie #paket eindeutig bleiben.
+  document.querySelectorAll("[data-sprachinhalt]").forEach((ziel) => {
+    const vorlage =
+      document.querySelector(`template[data-sprache="${sprache}"][data-fuer="${ziel.id}"]`) ||
+      document.querySelector(`template[data-sprache="de"][data-fuer="${ziel.id}"]`);
+    if (!vorlage || ziel.dataset.gezeigt === vorlage.dataset.sprache) return;
+    ziel.replaceChildren(vorlage.content.cloneNode(true));
+    ziel.dataset.gezeigt = vorlage.dataset.sprache;
+    // Sprungmarke aus der Adresse nach dem Wechsel wieder anfahren
+    if (location.hash) {
+      const anker = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+      if (anker && ziel.contains(anker)) anker.scrollIntoView();
+    }
+  });
 
   document.querySelectorAll("[data-i18n]").forEach((el) => {
     const text = woerter[el.dataset.i18n];

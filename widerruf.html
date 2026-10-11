@@ -24,7 +24,7 @@
   <meta name="twitter:card" content="summary_large_image">
 
   <link rel="stylesheet" href="fonts.css">
-  <link rel="stylesheet" href="style.css?v=20261019">
+  <link rel="stylesheet" href="style.css?v=20261020">
 </head>
 <body>
 
@@ -50,9 +50,10 @@
     </div>
   </header>
 
-  <main>
+  <main data-i18n-title="title.withdraw">
     <section class="legal">
       <div class="wrap legal-inner">
+        <div id="inhalt" data-sprachinhalt data-gezeigt="de">
         <h1>Vertrag widerrufen / Rückgabe anmelden</h1>
         <p>
           Hier widerrufst du deine Bestellung oder meldest eine Rückgabe an. Das geht innert
@@ -60,46 +61,117 @@
           Eingangsbestätigung per E-Mail. Alle Bedingungen findest du unter
           <a href="rueckgabe.html#rueckgabe">Rückgaberichtlinien</a>.
         </p>
+        </div>
+        <template data-sprache="de" data-fuer="inhalt">
+        <h1>Vertrag widerrufen / Rückgabe anmelden</h1>
+        <p>
+          Hier widerrufst du deine Bestellung oder meldest eine Rückgabe an. Das geht innert
+          <strong>14 Tagen</strong> ab Erhalt der Ware. Nach dem Absenden bekommst du sofort eine
+          Eingangsbestätigung per E-Mail. Alle Bedingungen findest du unter
+          <a href="rueckgabe.html#rueckgabe">Rückgaberichtlinien</a>.
+        </p>
+        </template>
+        <template data-sprache="fr" data-fuer="inhalt">
+        <h1>Résilier le contrat / annoncer un retour</h1>
+        <p>
+          Ici, tu te rétractes de ta commande ou annonces un retour. C'est possible dans les
+          <strong>14 jours</strong> suivant la réception de la marchandise. Après l'envoi, tu
+          reçois immédiatement un accusé de réception par e-mail. Toutes les conditions se
+          trouvent sous <a href="rueckgabe.html#rueckgabe">Directives de retour</a>.
+        </p>
+        </template>
+        <template data-sprache="it" data-fuer="inhalt">
+        <h1>Recedere dal contratto / comunicare un reso</h1>
+        <p>
+          Qui puoi recedere dal tuo ordine o comunicare un reso. È possibile entro
+          <strong>14 giorni</strong> dalla ricezione della merce. Dopo l'invio ricevi subito una
+          conferma di ricezione per e-mail. Tutte le condizioni si trovano in
+          <a href="rueckgabe.html#rueckgabe">Direttive sui resi</a>.
+        </p>
+        </template>
+        <template data-sprache="en" data-fuer="inhalt">
+        <h1>Withdraw from contract / register a return</h1>
+        <p>
+          Here you can withdraw from your order or register a return. This is possible within
+          <strong>14 days</strong> of receiving the goods. After submitting, you immediately
+          receive an acknowledgement of receipt by email. All conditions can be found under
+          <a href="rueckgabe.html#rueckgabe">Returns policy</a>.
+        </p>
+        </template>
 
         <form class="widerruf-form" id="widerruf-form" novalidate>
           <div class="field">
-            <label for="w-name">Name *</label>
+            <label for="w-name" data-i18n="wr.name">Name *</label>
             <input id="w-name" name="name" type="text" autocomplete="name" required maxlength="120">
           </div>
           <div class="field">
-            <label for="w-email">E-Mail-Adresse *</label>
+            <label for="w-email" data-i18n="wr.email">E-Mail-Adresse *</label>
             <input id="w-email" name="email" type="email" autocomplete="email" required maxlength="200">
           </div>
           <div class="field">
-            <label for="w-nummer">Bestellnummer *</label>
+            <label for="w-nummer" data-i18n="wr.number">Bestellnummer *</label>
             <input id="w-nummer" name="nummer" type="text" placeholder="MAFO-XXXXXX" required maxlength="20" autocapitalize="characters">
           </div>
           <div class="field">
-            <label for="w-artikel">Welche Artikel? (leer = ganze Bestellung)</label>
+            <label for="w-artikel" data-i18n="wr.items">Welche Artikel? (leer = ganze Bestellung)</label>
             <input id="w-artikel" name="artikel" type="text" maxlength="500">
           </div>
           <div class="field">
-            <label for="w-erhalten">Erhalten am (optional)</label>
+            <label for="w-erhalten" data-i18n="wr.received">Erhalten am (optional)</label>
             <input id="w-erhalten" name="erhalten" type="date">
           </div>
           <div class="field">
-            <label for="w-nachricht">Nachricht (optional)</label>
+            <label for="w-nachricht" data-i18n="wr.message">Nachricht (optional)</label>
             <textarea id="w-nachricht" name="nachricht" rows="3" maxlength="2000"></textarea>
           </div>
           <div class="field field-hidden" aria-hidden="true">
-            <label for="w-falle">Bitte leer lassen</label>
+            <label for="w-falle">-</label>
             <input id="w-falle" name="mafo_falle" type="text" tabindex="-1" autocomplete="off">
           </div>
-          <button class="btn btn-primary" type="submit">Widerruf jetzt bestätigen</button>
+          <button class="btn btn-primary" type="submit" data-i18n="wr.submit">Widerruf jetzt bestätigen</button>
           <p class="form-status" id="widerruf-status" role="status" aria-live="polite"></p>
         </form>
 
+        <div id="inhalt2" data-sprachinhalt data-gezeigt="de">
         <p>
           Lieber per E-Mail oder Brief? Das geht genauso:
           <a href="mailto:info@mafo-pet.ch?subject=Widerruf">info@mafo-pet.ch</a> oder Mafo Pet,
           Ausserdorfstrasse 22, 8918 Unterlunkhofen, Schweiz. Das Muster-Widerrufsformular
           findest du unter <a href="rueckgabe.html#widerruf">Widerrufsrecht</a>.
         </p>
+        </div>
+        <template data-sprache="de" data-fuer="inhalt2">
+        <p>
+          Lieber per E-Mail oder Brief? Das geht genauso:
+          <a href="mailto:info@mafo-pet.ch?subject=Widerruf">info@mafo-pet.ch</a> oder Mafo Pet,
+          Ausserdorfstrasse 22, 8918 Unterlunkhofen, Schweiz. Das Muster-Widerrufsformular
+          findest du unter <a href="rueckgabe.html#widerruf">Widerrufsrecht</a>.
+        </p>
+        </template>
+        <template data-sprache="fr" data-fuer="inhalt2">
+        <p>
+          Tu préfères par e-mail ou par lettre ? C'est tout aussi valable :
+          <a href="mailto:info@mafo-pet.ch?subject=R%C3%A9tractation">info@mafo-pet.ch</a> ou Mafo Pet,
+          Ausserdorfstrasse 22, 8918 Unterlunkhofen, Suisse. Le modèle de formulaire de
+          rétractation se trouve sous <a href="rueckgabe.html#widerruf">Droit de rétractation</a>.
+        </p>
+        </template>
+        <template data-sprache="it" data-fuer="inhalt2">
+        <p>
+          Preferisci per e-mail o per lettera? Vale allo stesso modo:
+          <a href="mailto:info@mafo-pet.ch?subject=Recesso">info@mafo-pet.ch</a> oppure Mafo Pet,
+          Ausserdorfstrasse 22, 8918 Unterlunkhofen, Svizzera. Il modulo tipo di recesso si trova
+          in <a href="rueckgabe.html#widerruf">Diritto di recesso</a>.
+        </p>
+        </template>
+        <template data-sprache="en" data-fuer="inhalt2">
+        <p>
+          Prefer email or a letter? That works just as well:
+          <a href="mailto:info@mafo-pet.ch?subject=Withdrawal">info@mafo-pet.ch</a> or Mafo Pet,
+          Ausserdorfstrasse 22, 8918 Unterlunkhofen, Switzerland. The model withdrawal form can be
+          found under <a href="rueckgabe.html#widerruf">Right of withdrawal</a>.
+        </p>
+        </template>
 
         <p class="legal-back"><a href="index.html" data-i18n="footer.back">Zurück zur Startseite</a></p>
       </div>
@@ -167,10 +239,10 @@
     </div>
   </footer>
 
-  <script src="script.js?v=20261019"></script>
+  <script src="script.js?v=20261020"></script>
   <!-- Cookiefreie Zugriffsstatistik (Vercel Web Analytics) -->
   <script defer src="/_vercel/insights/script.js"></script>
-  <script src="i18n.js?v=20261019"></script>
-  <script src="chat.js?v=20261019"></script>
+  <script src="i18n.js?v=20261020"></script>
+  <script src="chat.js?v=20261020"></script>
 </body>
 </html>

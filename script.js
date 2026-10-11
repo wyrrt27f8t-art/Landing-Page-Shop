@@ -1101,9 +1101,9 @@ document.querySelectorAll(".produktgalerie").forEach((galerie) => {
     const daten = Object.fromEntries(["name", "email", "nummer", "artikel", "erhalten", "nachricht", "mafo_falle"].map((f) => [f, form.elements[f].value.trim()]));
     daten.nummer = daten.nummer.toUpperCase().replace(/\s+/g, "");
     const fehler =
-      daten.name.length < 2 ? "Bitte gib deinen Namen an." :
-      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(daten.email) ? "Bitte gib eine gültige E-Mail-Adresse an." :
-      !/^MAFO-[A-HJ-NP-Z2-9]{6}$/.test(daten.nummer) ? "Bitte gib deine Bestellnummer an (MAFO- und 6 Zeichen, steht in der Bestätigung)." : "";
+      daten.name.length < 2 ? sagt("wr.errName") :
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(daten.email) ? sagt("wr.errEmail") :
+      !/^MAFO-[A-HJ-NP-Z2-9]{6}$/.test(daten.nummer) ? sagt("wr.errNumber") : "";
     if (fehler) {
       status.textContent = fehler;
       status.dataset.state = "error";
@@ -1111,14 +1111,15 @@ document.querySelectorAll(".produktgalerie").forEach((galerie) => {
     }
     const knopf = form.querySelector('button[type="submit"]');
     knopf.disabled = true;
-    status.textContent = "Wird gesendet …";
+    status.textContent = sagt("wr.sending");
     status.dataset.state = "";
     try {
       const antwort = await fetch("/api/widerruf", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(daten) });
       const ergebnis = await antwort.json().catch(() => ({}));
-      if (!antwort.ok) throw new Error(ergebnis.error || "Die Meldung konnte nicht gesendet werden. Bitte schreib uns an info@mafo-pet.ch.");
+      if (!antwort.ok) throw new Error(sagt("wr.errSend"));
       form.reset();
-      status.textContent = `Erhalten am ${ergebnis.zeit || "heute"}. Deine Eingangsbestätigung haben wir an deine E-Mail-Adresse geschickt. Bitte schick die Ware innert 14 Tagen zurück.`;
+      const zeit = new Date().toLocaleString(`${document.documentElement.lang || "de"}-CH`, { dateStyle: "long", timeStyle: "short" });
+      status.textContent = sagt("wr.done").replace("{zeit}", zeit);
       status.dataset.state = "success";
     } catch (e) {
       status.textContent = e.message;
