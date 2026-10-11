@@ -1,5 +1,6 @@
 import Stripe from "stripe";
 import { stripeSchluessel, webhookGeheimnis } from "./_stripe.js";
+import { leseSprache } from "./_mailtexte.js";
 import { berechne, chf, escapeHtml, sendeBestellmails, sendeInternHinweis } from "./_bestellung.js";
 
 // Stripe meldet hierher, wenn eine Kartenzahlung durch ist. Erst jetzt gehen
@@ -86,6 +87,7 @@ export default async function handler(request, response) {
     land: m.land,
     ...rechnung,
     zahlung: { art: "karte", referenz },
+    sprache: leseSprache(m.sprache),
   };
 
   // Scheitert die interne Mail, soll Stripe es später nochmals versuchen

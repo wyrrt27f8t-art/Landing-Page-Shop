@@ -85,7 +85,8 @@ export default async function handler(request, response) {
       line_items: zeilen,
       customer_email: d.email,
       client_reference_id: nummer,
-      locale: "auto",
+      // Bezahlseite in der Sprache der Website (Stripe kennt de, fr, it, en)
+      locale: d.sprache,
       integration_identifier: INTEGRATION,
       // Alles, was der Webhook für die Bestellmails braucht (jeder Wert höchstens 500 Zeichen)
       metadata: {
@@ -99,6 +100,7 @@ export default async function handler(request, response) {
         walk: String(mengen.anzahlWalk || 0),
         code: d.rabatt ? d.rabatt.code : "",
         wahl,
+        sprache: d.sprache,
       },
       payment_intent_data: {
         description: `MAFO Bestellung ${nummer}`,

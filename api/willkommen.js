@@ -1,5 +1,6 @@
 import { EMAIL_RE, absenderAdresse, einzeilig, escapeHtml, sendeMail, text } from "./_bestellung.js";
 import { willkommensCode } from "./_rabatt.js";
+import { leseSprache, mailtexte } from "./_mailtexte.js";
 
 // Willkommensrabatt: Wer seine E-Mail-Adresse angibt, bekommt den Code per Mail.
 // Da der Code an die eingegebene Adresse geht, ist die Adresse damit bestätigt.
@@ -18,7 +19,8 @@ export default async function handler(request, response) {
   const email = text(body.email, 200);
   if (!EMAIL_RE.test(email)) return response.status(400).json({ error: "Bitte gib eine gültige E-Mail-Adresse an.", feld: "email" });
   if (body.einwilligung !== true) return response.status(400).json({ error: "Bitte bestätige die Einwilligung.", feld: "einwilligung" });
-  const sprache = ["de", "fr", "it", "en"].includes(body.sprache) ? body.sprache : "de";
+  const sprache = leseSprache(body.sprache);
+  const t = mailtexte(sprache);
 
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
@@ -33,13 +35,13 @@ export default async function handler(request, response) {
       from,
       to: [email],
       reply_to: toEmail,
-      subject: einzeilig(`Dein Willkommensrabatt: ${angebot.prozent} % bei MAFO`),
-      html: `<p>Hallo und willkommen bei MAFO 🐾</p>
-<p>Hier ist dein Code für <strong>${angebot.prozent} % Rabatt</strong> auf deine Bestellung:</p>
+      subject: einzeilig(t.wkBetreff(angebot.prozent)),
+      html: `<p>${t.wkHallo}</p>
+<p>${t.wkCode(angebot.prozent)}</p>
 <p style="font-size:24px;font-weight:bold;letter-spacing:2px;padding:12px 18px;border:2px dashed #c8945f;display:inline-block">${escapeHtml(angebot.code)}</p>
-<p>Gib ihn auf <a href="https://mafo-pet.ch">mafo-pet.ch</a> im Warenkorb ein.</p>
-<p>Ab und zu schicken wir dir Neuigkeiten von MAFO. Möchtest du keine Mails mehr, antworte einfach mit «Abmelden».</p>
-<p>Liebe Grüsse<br>MAFO · mafo-pet.ch</p>`,
+<p>${t.wkEingeben}</p>
+<p>${t.wkAbmelden}</p>
+<p>${t.gruesse}</p>`,
     });
     if (!mail.ok) {
       console.error("Resend error (Willkommen):", mail.status, mail.text);
