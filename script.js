@@ -1012,3 +1012,88 @@ document.querySelectorAll(".produktgalerie").forEach((galerie) => {
     })
     .catch(() => {});
 })();
+
+/* ---------- Willkommensrabatt (Startseite, MAFO WALK) ---------- */
+// Erscheint nur, wenn in Vercel ein Willkommenscode eingerichtet ist (api/zahlarten.js)
+(function () {
+  const bereich = document.getElementById("willkommen");
+  if (!bereich) return;
+  const form = document.getElementById("willkommen-form");
+  const status = document.getElementById("willkommen-status");
+  const melde = (schluessel, zustand) => {
+    status.textContent = sagt(schluessel);
+    status.dataset.state = zustand || "";
+  };
+  fetch("/api/zahlarten", { cache: "no-store" })
+    .then((a) => (a.ok ? a.json() : {}))
+    .then((j) => {
+      if (!(j.willkommen > 0)) return;
+      bereich.querySelector("[data-willkommen-prozent]").textContent = String(j.willkommen);
+      bereich.hidden = false;
+    })
+    .catch(() => {});
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const email = form.elements.email.value.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return melde("welcome.invalid", "error");
+    if (!form.elements.einwilligung.checked) return melde("welcome.noConsent", "error");
+    const knopf = form.querySelector('button[type="submit"]');
+    knopf.disabled = true;
+    melde("welcome.sending", "");
+    try {
+      const antwort = await fetch("/api/willkommen", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, einwilligung: true, sprache: document.documentElement.lang, mafo_falle: form.elements.mafo_falle.value }),
+      });
+      if (!antwort.ok) throw new Error(String(antwort.status));
+      form.reset();
+      melde("welcome.sent", "success");
+    } catch (e) {
+      melde("welcome.error", "error");
+    } finally {
+      knopf.disabled = false;
+    }
+  });
+})();
+
+/* ---------- Vertrag widerrufen / Rückgabe anmelden (widerruf.html) ---------- */
+(function () {
+  const form = document.getElementById("widerruf-form");
+  if (!form) return;
+  const status = document.getElementById("widerruf-status");
+  // Bestellnummer aus dem Link übernehmen, z. B. widerruf.html?nr=MAFO-ABC234
+  const nr = new URLSearchParams(location.search).get("nr");
+  if (nr && /^MAFO-[A-HJ-NP-Z2-9]{6}$/i.test(nr)) form.elements.nummer.value = nr.toUpperCase();
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const daten = Object.fromEntries(["name", "email", "nummer", "artikel", "erhalten", "nachricht", "mafo_falle"].map((f) => [f, form.elements[f].value.trim()]));
+    daten.nummer = daten.nummer.toUpperCase().replace(/\s+/g, "");
+    const fehler =
+      daten.name.length < 2 ? "Bitte gib deinen Namen an." :
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(daten.email) ? "Bitte gib eine gültige E-Mail-Adresse an." :
+      !/^MAFO-[A-HJ-NP-Z2-9]{6}$/.test(daten.nummer) ? "Bitte gib deine Bestellnummer an (MAFO- und 6 Zeichen, steht in der Bestätigung)." : "";
+    if (fehler) {
+      status.textContent = fehler;
+      status.dataset.state = "error";
+      return;
+    }
+    const knopf = form.querySelector('button[type="submit"]');
+    knopf.disabled = true;
+    status.textContent = "Wird gesendet …";
+    status.dataset.state = "";
+    try {
+      const antwort = await fetch("/api/widerruf", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(daten) });
+      const ergebnis = await antwort.json().catch(() => ({}));
+      if (!antwort.ok) throw new Error(ergebnis.error || "Die Meldung konnte nicht gesendet werden. Bitte schreib uns an info@mafo-pet.ch.");
+      form.reset();
+      status.textContent = `Erhalten am ${ergebnis.zeit || "heute"}. Deine Eingangsbestätigung haben wir an deine E-Mail-Adresse geschickt. Bitte schick die Ware innert 14 Tagen zurück.`;
+      status.dataset.state = "success";
+    } catch (e) {
+      status.textContent = e.message;
+      status.dataset.state = "error";
+    } finally {
+      knopf.disabled = false;
+    }
+  });
+})();

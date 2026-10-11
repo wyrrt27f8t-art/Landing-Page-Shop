@@ -50,6 +50,7 @@ Environment Variables in Vercel (Settings → Environments → Production):
 | `MAFO_TWINT_NUMMER` | Handynummer, an die per TWINT bezahlt wird |
 | `MAFO_TWINT_QR` | Optional: Adresse (https://…) eines Bilds mit dem TWINT-QR-Code |
 | `MAFO_BONUSCODES` | Bonuscodes, durch Komma getrennt. `CODE` gibt 30 % Rabatt, `CODE:20` einen eigenen Satz. Leer oder nicht gesetzt: kein Code gilt. |
+| `MAFO_WILLKOMMENSCODE` | Optional. Name eines Codes aus `MAFO_BONUSCODES` (z. B. `WILLKOMMEN10`). Ist er gesetzt, erscheint auf den Produktseiten der Willkommensrabatt: Wer seine E-Mail-Adresse einträgt, bekommt den Code per Mail, und die Anmeldung kommt an info@. |
 
 Die Bonuscodes stehen absichtlich nur in Vercel und nicht im Code, weil dieses
 Repository öffentlich ist. Der Rabatt gilt auf den ganzen Bestellbetrag und wird

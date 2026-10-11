@@ -26,3 +26,11 @@ export function bonusProzent(code) {
 export function mitRabatt(rappen, prozent) {
   return Math.round((rappen * (100 - prozent)) / 100 / 5) * 5;
 }
+
+// Willkommensrabatt (api/willkommen.js). MAFO_WILLKOMMENSCODE nennt einen Code,
+// der auch in MAFO_BONUSCODES steht (z. B. WILLKOMMEN10). Sonst gibt es keinen.
+export function willkommensCode() {
+  const code = normalerCode(process.env.MAFO_WILLKOMMENSCODE || "");
+  const prozent = code ? bonusProzent(code) : 0;
+  return prozent ? { code, prozent } : null;
+}
