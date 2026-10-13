@@ -1152,14 +1152,12 @@ document.querySelectorAll(".rundum-viewer").forEach((viewer) => {
 document.querySelectorAll(".produktgalerie").forEach((galerie) => {
   const gross = galerie.querySelector(".galerie-gross");
   const rundum = galerie.querySelector(".galerie-360");
-  const start = galerie.querySelector("[data-zeige-360]");
   const knoepfe = galerie.querySelectorAll(".galerie-knopf");
   knoepfe.forEach((knopf) => {
     knopf.addEventListener("click", () => {
       const ist360 = knopf.dataset.ansicht === "360" && rundum;
       if (rundum) rundum.hidden = !ist360;
       gross.hidden = !!ist360;
-      if (start) start.hidden = !!ist360;
       if (!ist360) {
         gross.src = knopf.dataset.bild;
         gross.dataset.i18nAlt = knopf.dataset.alt;
@@ -1170,7 +1168,6 @@ document.querySelectorAll(".produktgalerie").forEach((galerie) => {
       knoepfe.forEach((k) => k.setAttribute("aria-pressed", k === knopf ? "true" : "false"));
     });
   });
-  if (start) start.addEventListener("click", () => galerie.querySelector('.galerie-knopf[data-ansicht="360"]').click());
 });
 
 /* ---------- Hinweis zur Zahlung auf den Produktseiten ---------- */

@@ -883,33 +883,6 @@ a {
   object-fit: contain;
 }
 
-.galerie-360-start {
-  position: absolute;
-  left: 0.8rem;
-  bottom: 0.8rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  padding: 0.55rem 1rem;
-  border: 0;
-  border-radius: 999px;
-  background: rgba(23, 20, 15, 0.85);
-  color: var(--text);
-  font-family: var(--font-body);
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.galerie-360-start:hover {
-  background: var(--accent);
-  color: var(--bg);
-}
-
-.galerie-360-start[hidden] {
-  display: none;
-}
-
 .galerie-daumen-5 {
   grid-template-columns: repeat(5, 1fr);
 }
