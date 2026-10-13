@@ -146,30 +146,15 @@ a {
     linear-gradient(180deg, #0f0d0a 0%, var(--bg) 75%);
 }
 
-.hero-3d-canvas {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-  display: block;
-}
-
-/* echtes Produktfoto, bis die 3D-Ansicht bereit ist (oder ohne WebGL) */
-.hero-3d-ersatz {
+/* Das Set als freigestelltes Produktfoto rechts; Schein und Schatten sind im Bild */
+.hero-bild {
   position: absolute;
   z-index: -1;
-  right: 6%;
+  right: 2%;
   top: 50%;
-  width: min(36vw, 460px);
+  width: min(48vw, 680px);
   height: auto;
   transform: translateY(-50%);
-  filter: drop-shadow(0 30px 40px rgba(0, 0, 0, 0.55));
-  transition: opacity 0.6s ease;
-}
-
-.hero-3d-bereit .hero-3d-ersatz {
-  opacity: 0;
 }
 
 .hero-3d .hero-inner {
@@ -191,15 +176,15 @@ a {
   .hero-3d {
     min-height: 0;
     align-items: flex-start;
-    padding: 3rem 0 min(108vw, 470px);
+    padding: 3rem 0 min(96vw, 480px);
   }
 
-  .hero-3d-ersatz {
+  .hero-bild {
     right: auto;
     left: 50%;
     top: auto;
-    bottom: 1.5rem;
-    width: min(76vw, 360px);
+    bottom: 0;
+    width: min(96vw, 480px);
     transform: translateX(-50%);
   }
 }
