@@ -11,7 +11,7 @@
   if (!window.THREE) return;
 
   const CONFIG = {
-    fotos: { anzahl: 72, pfad: (i) => "media/rundum-frei/" + String(i).padStart(2, "0") + ".webp", b: 640, h: 708 },
+    fotos: { anzahl: 72, pfad: (i) => "media/rundum-frei/" + String(i).padStart(2, "0") + ".webp", b: 1000, h: 1106 },
     foto: { boden: 18 / 1106, oeffnung: 0.61, mitteX: -0.15, hoehe: 6.39 },
     farben: {
       kupfer: 0xc8945f, lila: 0x9c86e0,
