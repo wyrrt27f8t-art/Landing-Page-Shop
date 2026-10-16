@@ -25,7 +25,7 @@
   <meta name="twitter:card" content="summary_large_image">
 
   <link rel="stylesheet" href="fonts.css">
-  <link rel="stylesheet" href="style.css?v=20261029">
+  <link rel="stylesheet" href="style.css?v=20261030">
   <!-- Strukturierte Daten für Google (Preis, Versand, Rückgabe) -->
   <script type="application/ld+json">
 {
@@ -203,7 +203,6 @@
         </p>
         <div class="hero-knoepfe">
           <a class="btn btn-primary" href="#reservieren" data-i18n="hero.cta">Jetzt bestellen</a>
-          <a class="btn btn-secondary" href="#spiel" data-i18n="hero.mehr">Was passt rein?</a>
         </div>
       </div>
     </section>
@@ -353,37 +352,6 @@
         </form>
       </div>
     </section>
-    <!-- Kleines Spiel: Sachen antippen, sie fliegen in die Tasche (hero3d.js) -->
-    <section class="spiel" id="spiel">
-      <div class="wrap">
-        <div class="spiel-kopf">
-          <div>
-            <p class="kicker" data-i18n="spiel.eyebrow">Kleines Spiel</p>
-            <h2 data-i18n="spiel.title">Alles drin: Packe deine Tasche</h2>
-            <p class="lead" data-i18n="spiel.lead">Tippe auf die Sachen, dann fliegen sie in die Tasche. Passen alle neun rein?</p>
-          </div>
-          <div class="spiel-knoepfe">
-            <button class="btn btn-secondary" type="button" id="spiel-alle" data-i18n="spiel.alle">Alles einpacken</button>
-            <button class="btn btn-secondary" type="button" id="spiel-neu" data-i18n="spiel.neu" disabled>Nochmal</button>
-          </div>
-        </div>
-        <div class="spiel-buehne" id="spiel-buehne">
-          <canvas id="spiel-3d" role="img" data-i18n-label="spiel.label" aria-label="Pack-Spiel: Sachen antippen, um sie in die Tasche zu packen"></canvas>
-          <div class="spiel-overlay">
-            <p class="spiel-zaehler" aria-live="polite">
-              <span class="spiel-zahl" id="spiel-zahl">0</span>
-              <span class="spiel-von" data-i18n="spiel.von">/ 9 drin</span>
-              <span class="spiel-name" id="spiel-name" data-i18n="spiel.start">Tipp eine Sache an</span>
-            </p>
-            <div class="spiel-fertig" id="spiel-fertig" hidden>
-              <p class="spiel-gross" data-i18n="spiel.fertig">Alles drin.</p>
-              <p class="spiel-klein" data-i18n="spiel.fertigText">9 Sachen, 1 Tasche, und sie geht noch zu.</p>
-              <a class="btn btn-primary" href="#reservieren" data-i18n="hero.cta">Jetzt bestellen</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
   </main>
 
   <footer class="footer">
@@ -448,12 +416,12 @@
     </div>
   </footer>
 
-  <script src="script.js?v=20261029"></script>
+  <script src="script.js?v=20261030"></script>
   <!-- Cookiefreie Zugriffsstatistik (Vercel Web Analytics) -->
   <script defer src="/_vercel/insights/script.js"></script>
-  <script src="i18n.js?v=20261029"></script>
-  <script src="chat.js?v=20261029"></script>
+  <script src="i18n.js?v=20261030"></script>
+  <script src="chat.js?v=20261030"></script>
   <script defer src="vendor/three.r128.min.js"></script>
-  <script defer src="hero3d.js?v=20261029"></script>
+  <script defer src="hero3d.js?v=20261030"></script>
 </body>
 </html>
